@@ -17,7 +17,7 @@ If you're not using [Bower](http://bower.io/) download the source from the dist 
 Include the script on your webpage (or use [RequireJS](http://requirejs.org/)/[Browserify](http://browserify.org/))
 ```html
 ...
-<script type="text/javascript" src="bower_components/backbone-component/backbone-component-min.js"></script>
+<script type="text/javascript" src="path_to_script/backbone-react-component-min.js"></script>
 ...
 ```
 
