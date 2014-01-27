@@ -7,7 +7,7 @@ exports = module.exports = function (grunt) {
       },
       build: {
         files: {
-          'dist/backbone-component-min.js': ['lib/component.js']
+          'dist/backbone-react-component-min.js': ['lib/component.js']
         }
       }
     }

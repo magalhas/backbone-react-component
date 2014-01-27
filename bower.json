@@ -1,12 +1,12 @@
 {
-  "name": "backbone-component",
+  "name": "backbone-react-component",
   "version": "0.1.0",
-  "homepage": "https://github.com/magalhas/backbone-component",
+  "homepage": "https://github.com/magalhas/backbone-react-component",
   "authors": [
     "magalhas <magalhas@github.com>"
   ],
-  "description": "Backbone.Component is an extendable wrapper for React.Component and brings all the power of Facebook's React to Backbone.js",
-  "main": "./lib/component.js",
+  "description": "Backbone.React.Component is an extendable wrapper for React.Component and brings all the power of Facebook's React to Backbone.js",
+  "main": "./dist/backbone-react-component.js",
   "dependencies": {
     "backbone": "*",
     "jquery": "*",
