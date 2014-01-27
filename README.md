@@ -22,7 +22,7 @@ Include the script on your webpage (or use [RequireJS](http://requirejs.org/)/[B
 ```
 
 ### Using Backbone.React.Component
-It follows all the principles behind React.Component, though it binds models to the component's props and also automatically
+It follows all the principles behind [React.Component](http://facebook.github.io/react/docs/component-api.html), though it binds models to the component's props and also automatically
 mounts the component into the component's $el.
 ```js
 /** @jsx React.DOM */
@@ -58,7 +58,7 @@ newComponent.renderComponent();
 ```
 
 ### API
-Besides inherting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
+Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
 
 #### new Backbone.React.Component(options)
 options is a hash and may contain el and model properties. Any other property gets stored inside this.options.
