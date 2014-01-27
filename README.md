@@ -12,7 +12,7 @@ Using [Bower](http://bower.io/)
 ```shell
 bower install backbone-component
 ```
-If you're not using [Bower](http://bower.io/) downlooad the source from the dist folder.
+If you're not using [Bower](http://bower.io/) download the source from the dist folder.
 
 Include the script on your webpage (or use [RequireJS](http://requirejs.org/)/[Browserify](http://browserify.org/))
 ```html
@@ -52,7 +52,7 @@ model.set("test", "Hello world!");
 ```
 The Component will listen to any model changes, making it automatically refresh (and mount if needed) using React's virtual DOM capabilities.
 
-If you are not relying on models or simply want to mount the component on the DOM just do:
+If you are not relying on models or simply want to mount the component into the DOM just call:
 ```js
 newComponent.renderComponent();
 ```
@@ -64,9 +64,9 @@ Besides inherting all the methods from [React.Component](http://facebook.github.
 options is a hash and may contain el and model properties. Any other property gets stored inside this.options.
 
 #### renderComponent([$el = this.$el], [onRender])
-* $el {jQuery|DOMElement} it supports multiple element (if a jQuery object)
-* onRender {Callback}
-Mounts the component in the DOM and sets the component has rendered (this.isRendered = true).
+* $el (jQuery|DOMElement)
+* onRender (Callback)
+Mounts the component into the DOM and sets it has rendered (this.isRendered = true).
 
 #### remove()
-Stops component listeners, unmount the component from the DOM and then removes the DOM element.
+Stops component listeners, unmounts the component and then removes the DOM element.
