@@ -27,18 +27,6 @@ mounts the component into the component's $el.
 ```js
 /** @jsx React.DOM */
 var MyComponent = Backbone.React.Component.extend({
-  componentDidMount: function () {
-    this.$el = $(this.getDOMNode());
-  },
-  componentWillUnmount: function () {
-
-  },
-  getDefaultProps: function () {
-    return {};
-  },
-  getInitialState: function () {
-    return {};
-  },
   render: function () {
     return <div>{this.props.test}</div>;
   }
@@ -63,10 +51,14 @@ Besides inheriting all the methods from [React.Component](http://facebook.github
 #### new Backbone.React.Component(options)
 options is a hash and may contain el and model properties. Any other property gets stored inside this.options.
 
-#### renderComponent([$el = this.$el], [onRender])
-* $el (jQuery|DOMElement)
+#### renderComponent([el = this.el], [onRender])
+* el (DOMElement)
 * onRender (Callback)
 Mounts the component into the DOM and sets it has rendered (this.isRendered = true).
 
 #### remove()
 Stops component listeners, unmounts the component and then removes the DOM element.
+
+### TO DO
+* Support event delegation by using this.events like in Backbone.View
+* Any ideas?
