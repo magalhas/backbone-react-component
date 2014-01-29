@@ -51,10 +51,13 @@ Besides inheriting all the methods from [React.Component](http://facebook.github
 #### new Backbone.React.Component(options)
 options is a hash and may contain el and model properties. Any other property gets stored inside this.options.
 
-#### renderComponent([el = this.el], [onRender])
+#### mount([el = this.el], [onRender])
 * el (DOMElement)
 * onRender (Callback)
 Mounts the component into the DOM and sets it has rendered (this.isRendered = true).
+
+#### unmount()
+Unmounts the component.
 
 #### remove()
 Stops component listeners, unmounts the component and then removes the DOM element.
