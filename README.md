@@ -60,5 +60,4 @@ Mounts the component into the DOM and sets it has rendered (this.isRendered = tr
 Stops component listeners, unmounts the component and then removes the DOM element.
 
 ### TO DO
-* Support event delegation by using this.events like in Backbone.View
 * Any ideas?
