@@ -49,7 +49,7 @@ newComponent.renderComponent();
 Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
 
 #### new Backbone.React.Component(options)
-options is a hash and may contain el and model properties. Any other property gets stored inside this.options.
+options is a hash and may contain el, model and collection properties. Any other property gets stored inside this.options.
 
 #### getOwner()
 Gets the component owner (greatest parent component).
@@ -70,4 +70,3 @@ Stops component listeners, unmounts the component and then removes the DOM eleme
 
 ### TO DO
 * Any ideas?
-* Allow to pass a root collection to a component (it only works with models for the time being)
