@@ -42,7 +42,7 @@ The Component will listen to any model changes, making it automatically refresh 
 
 If you are not relying on models or simply want to mount the component into the DOM just call:
 ```js
-newComponent.renderComponent();
+newComponent.mount();
 ```
 
 ### API
@@ -51,11 +51,14 @@ Besides inheriting all the methods from [React.Component](http://facebook.github
 #### new Backbone.React.Component(options)
 options is a hash and may contain el, model and collection properties. Any other property gets stored inside this.options.
 
-#### getOwner()
-Gets the component owner (greatest parent component).
+#### getCollection()
+Gets the collection from the component's owner.
 
 #### getModel()
 Gets the model from the component's owner.
+
+#### getOwner()
+Gets the component owner (greatest parent component).
 
 #### mount([el = this.el], [onRender])
 * el (DOMElement)
