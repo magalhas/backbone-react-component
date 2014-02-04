@@ -70,3 +70,4 @@ Stops component listeners, unmounts the component and then removes the DOM eleme
 
 ### TO DO
 * Any ideas?
+* Allow to pass a root collection to a component (it only works with models for the time being)
