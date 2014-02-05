@@ -66,7 +66,7 @@ Gets the component owner (greatest parent component).
 Mounts the component into the DOM and sets it has rendered (this.isRendered = true).
 
 #### unmount()
-Unmounts the component.
+Unmounts the component. Throws an error if the component doesn't unmount successfully.
 
 #### remove()
 Stops component listeners, unmounts the component and then removes the DOM element.
