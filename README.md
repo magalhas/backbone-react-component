@@ -22,8 +22,9 @@ Include the script on your webpage (or use [RequireJS](http://requirejs.org/)/[B
 ```
 
 ### Using Backbone.React.Component
-It follows all the principles behind [React.Component](http://facebook.github.io/react/docs/component-api.html), though it binds models to the component's props and also automatically
-mounts the component into the component's $el.
+It follows all the principles behind [React.Component](http://facebook.github.io/react/docs/component-api.html), though it binds models to the component's props and also automatically mounts the component into the component's $el.
+
+#### Basic usage
 ```js
 /** @jsx React.DOM */
 var MyComponent = Backbone.React.Component.extend({
@@ -33,23 +34,73 @@ var MyComponent = Backbone.React.Component.extend({
 });
 var model = new Backbone.Model();
 var newComponent = new MyComponent({
-  el: $("body"),
+  el: $('body'),
   model: model
 });
-model.set("test", "Hello world!");
+model.set('test', 'Hello world!');
 ```
-The Component will listen to any model changes, making it automatically refresh (and mount if needed) using React's virtual DOM capabilities.
+The Component will listen to any model changes, making it automatically refresh using React's algorithm.
 
-If you are not relying on models or simply want to mount the component into the DOM just call:
+#### Mounting the component
 ```js
 newComponent.mount();
+```
+
+#### With a collection
+```js
+var newComponent = new MyComponent({
+  el: $('body'),
+  collection: new Backbone.Collection([{helloWorld: 'Hello world!'}])
+});
+```
+```js
+var MyComponent = Backbone.React.Component.extend({
+  createEntry: function (entry) {
+    return <div>{entry.helloWorld}</div>;
+  },
+  render: function () {
+    return <div>{this.props.collection.map(this.createEntry())}</div>;
+  }
+});
+```
+
+### With multiple models and collections
+```js
+var newComponent = new MyComponent({
+  el: $('body'),
+  model: {
+    firstModel: new Backbone.Model({helloWorld: 'Hello world!'}),
+    secondModel: new Backbone.Model({helloWorld: 'Hello world!'})
+  },
+  collection: {
+    firstCollection: new Backbone.Collection([{helloWorld: 'Hello world!'}]),
+    secondCollection: new Backbone.Collection([{helloWorld: 'Hello world!'}])
+  }
+});
+```
+```js
+var MyComponent = Backbone.React.Component.extend({
+  createEntry: function (entry) {
+    return <div>{entry.helloWorld}</div>;
+  },
+  render: function () {
+    return (
+      <div>
+        {this.props.firstModel.helloWorld}
+        {this.props.secondModel.helloWorld}
+        {this.props.firstCollection.map(this.createEntry())}
+        {this.props.secondCollection.map(this.createEntry())}
+      </div>;
+    )
+  }
+});
 ```
 
 ### API
 Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
 
 #### new Backbone.React.Component(options)
-options is a hash and may contain el, model and collection properties.
+options is a namespace and may contain el, model and collection properties. Model and collection properties may be multiple by passing a namespace.
 
 #### getCollection()
 Gets the collection from the component's owner.
