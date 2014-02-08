@@ -123,4 +123,6 @@ Unmounts the component. Throws an error if the component doesn't unmount success
 Stops component listeners, unmounts the component and then removes the DOM element.
 
 ### TO DO
+* Improve models/collections requests error handling
+* Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to setPropsCollection
 * Any ideas?
