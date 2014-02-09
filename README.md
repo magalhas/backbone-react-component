@@ -99,8 +99,8 @@ var MyComponent = Backbone.React.Component.extend({
 ### API
 Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
 
-#### new Backbone.React.Component(options)
-options is a namespace and may contain el, model and collection properties. Model and collection properties may be multiple by passing a namespace.
+#### new Backbone.React.Component(props)
+props is a namespace and may contain el, model and collection properties. Model and collection properties may be multiple by passing a namespace.
 
 #### getCollection()
 Gets the collection from the component's owner.
