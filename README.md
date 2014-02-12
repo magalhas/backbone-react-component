@@ -102,6 +102,9 @@ Besides inheriting all the methods from [React.Component](http://facebook.github
 #### new Backbone.React.Component(props)
 props is a namespace and may contain el, model and collection properties. Model and collection properties may be multiple by passing a namespace.
 
+#### $
+Inspired by Backbone.View, it's a shortcut to this.$el.find method.
+
 #### getCollection()
 Gets the collection from the component's owner.
 
