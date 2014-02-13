@@ -9,7 +9,6 @@
   "main": "./dist/backbone-react-component.js",
   "dependencies": {
     "backbone": "*",
-    "jquery": "*",
     "react": "*",
     "underscore": "*"
   },
