@@ -96,6 +96,12 @@ var MyComponent = Backbone.React.Component.extend({
 });
 ```
 
+### How it works
+Backbone.React.Component is nothing more nothing less than a bridge between [Backbone](http://backbonejs.org/) and [React](http://facebook.github.io/react/).
+
+The following diagram illustrates how the data binding is achieved between our models/collections and a React.Component:
+[Bridge between Backbone and React](http://yuml.me/ded0336c)
+
 ### API
 Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
 

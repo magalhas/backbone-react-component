@@ -1,0 +1,4 @@
+[Backbone.React.Component]-listens to changes<>[Backbone.Model]
+[Backbone.React.Component]-listens to changes<>[Backbone.Collection]
+[Backbone.React.Component]-sets props on models/collections changes>[React.Component]
+[Backbone.React.Component]-[note: It starts listening to model and collection changes when mounted and stops listening when dismounted]
