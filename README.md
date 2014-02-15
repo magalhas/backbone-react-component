@@ -125,6 +125,9 @@ Unmounts the component. Throws an error if the component doesn't unmount success
 #### remove()
 Stops component listeners, unmounts the component and then removes the DOM element.
 
+### Examples
+* [Typewriter](https://rawgithub.com/magalhas/backbone-react-component/master/examples/typewriter/index.html)
+
 ### TO DO
 * Improve models/collections requests error handling
 * Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to setPropsCollection
