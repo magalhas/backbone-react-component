@@ -100,6 +100,7 @@ var MyComponent = Backbone.React.Component.extend({
 Backbone.React.Component is nothing more nothing less than a bridge between [Backbone](http://backbonejs.org/) and [React](http://facebook.github.io/react/).
 
 The following diagram illustrates how the data binding is achieved between our models/collections and a React.Component:
+
 [Bridge between Backbone and React](http://yuml.me/ded0336c)
 
 ### API
@@ -131,10 +132,10 @@ Unmounts the component. Throws an error if the component doesn't unmount success
 #### remove()
 Stops component listeners, unmounts the component and then removes the DOM element.
 
-### Examples
+## Examples
 * [Typewriter](https://rawgithub.com/magalhas/backbone-react-component/master/examples/typewriter/index.html)
 
-### TO DO
+## TO DO
 * Improve models/collections requests error handling
 * Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to setPropsCollection
 * Any ideas?
