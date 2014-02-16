@@ -6,12 +6,20 @@
   "authors": [
     "magalhas <magalhas@github.com>"
   ],
-  "main": "./dist/backbone-react-component.js",
+  "main": "lib/component.js",
   "dependencies": {
     "backbone": "*",
     "react": "*",
     "underscore": "*"
   },
+  "ignore": [
+    "*.yml",
+    "Gruntfile.js"
+    "examples",
+    "dist",
+    "docs",
+    "test"
+  ],
   "keywords": [
     "backbone",
     "react",
