@@ -168,6 +168,7 @@ Stops component listeners, unmounts the component and then removes the DOM eleme
 Intended to be used on the server, passes to the callback an HTML string representation of the component. Check [React](http://facebook.github.io/react/) documentation for more information.
 
 ## Examples
+* [Blog](https://github.com/magalhas/backbone-react-component/tree/master/examples/blog)
 * [Typewriter](https://rawgithub.com/magalhas/backbone-react-component/master/examples/typewriter/index.html)
 
 ## TO DO

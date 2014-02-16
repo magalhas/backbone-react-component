@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "express": "*",
+    "backbone": "*",
+    "backbone-react-component": "*",
+    "react": "*",
+    "underscore": "*"
+  }
+}
