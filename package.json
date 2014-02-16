@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "grunt": "*",
+    "grunt-contrib-jasmine": "*",
     "grunt-contrib-uglify": "*"
   },
   "keywords": [
