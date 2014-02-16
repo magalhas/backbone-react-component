@@ -14,11 +14,13 @@
   },
   "ignore": [
     "*.yml",
-    "Gruntfile.js"
+    "bower_components",
+    "Gruntfile.js",
     "npm-shrinkwrap.json",
     "examples",
     "dist",
     "docs",
+    "node_modules",
     "test"
   ],
   "keywords": [
@@ -32,12 +34,5 @@
     "view",
     "views"
   ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+  "license": "MIT"
 }
