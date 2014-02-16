@@ -12,7 +12,7 @@ exports = module.exports = function (grunt) {
       }
     },
     jasmine: {
-      main: {
+      dev: {
         src: ['lib/**/*.js'],
         options: {
           specs: 'test/**/*.js',
@@ -27,6 +27,7 @@ exports = module.exports = function (grunt) {
   });
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.registerTask('default', ['uglify']);
-  grunt.registerTask('test', ['jasmine']);
+  grunt.registerTask('default', ['build']);
+  grunt.registerTask('build', ['uglify:build']);
+  grunt.registerTask('test', ['jasmine:dev']);
 };
