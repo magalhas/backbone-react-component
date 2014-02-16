@@ -132,6 +132,9 @@ Unmounts the component. Throws an error if the component doesn't unmount success
 #### remove()
 Stops component listeners, unmounts the component and then removes the DOM element.
 
+#### toString(callback)
+Intended to be used on the server, passes to the callback an HTML string representation of the component. Check [React](http://facebook.github.io/react/) documentation for more information.
+
 ## Examples
 * [Typewriter](https://rawgithub.com/magalhas/backbone-react-component/master/examples/typewriter/index.html)
 
