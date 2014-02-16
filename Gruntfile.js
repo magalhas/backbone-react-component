@@ -3,7 +3,8 @@ exports = module.exports = function (grunt) {
   grunt.initConfig({
     uglify: {
       options: {
-        compress: true
+        compress: true,
+        preserveComments: 'some'
       },
       build: {
         files: {

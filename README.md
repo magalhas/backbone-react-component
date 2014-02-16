@@ -12,7 +12,12 @@ Using [Bower](http://bower.io/)
 ```shell
 bower install backbone-react-component
 ```
-If you're not using [Bower](http://bower.io/) download the source from the dist folder.
+
+Using [Npm](https://npmjs.org/)
+```shell
+npm install backbone-react-component
+```
+If you're not using [Bower](http://bower.io/) nor [Npm](https://npmjs.org/) download the source from the dist folder or use [cdnJS](http://cdnjs.com/).
 
 Include the script on your webpage (or use [RequireJS](http://requirejs.org/)/[Browserify](http://browserify.org/))
 ```html
@@ -93,6 +98,33 @@ var MyComponent = Backbone.React.Component.extend({
       </div>;
     )
   }
+});
+```
+
+### Using Backbone.React.Component on the server (Node.js)
+```js
+var Backbone = require('backbone');
+var Component = require('backbone-react-component');
+var React = require('react');
+
+var model = new Backbone.Model({
+  helloWorld: 'Hello world!'
+});
+var HelloWorld = Component.extend({
+  render: function () {
+    return React.DOM.div({}, this.props.helloWorld);
+  }
+});
+var helloWorld = new HelloWorld({
+  model: model
+});
+helloWorld.toHTML(function (html) {
+  console.log(html);
+});
+// Updating the model
+model.set('helloWorld', 'Hi again!');
+helloWorld.toHTML(function (html) {
+  console.log(html);
 });
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "backbone-react-component",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Backbone.React.Component is an extendable wrapper for React.Component and brings all the power of Facebook's React to Backbone.js",
   "homepage": "https://github.com/magalhas/backbone-react-component",
   "authors": [
@@ -15,6 +15,7 @@
   "ignore": [
     "*.yml",
     "Gruntfile.js"
+    "npm-shrinkwrap.json",
     "examples",
     "dist",
     "docs",

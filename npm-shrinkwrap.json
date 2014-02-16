@@ -1,0 +1,44 @@
+{
+  "name": "backbone-react-component",
+  "version": "0.4.0",
+  "dependencies": {
+    "backbone": {
+      "version": "1.1.1",
+      "from": "backbone@*",
+      "resolved": "https://registry.npmjs.org/backbone/-/backbone-1.1.1.tgz"
+    },
+    "underscore": {
+      "version": "1.6.0",
+      "from": "underscore@*",
+      "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.6.0.tgz"
+    },
+    "react": {
+      "version": "0.8.0",
+      "from": "react@*",
+      "resolved": "https://registry.npmjs.org/react/-/react-0.8.0.tgz"
+    },
+    "envify": {
+      "version": "0.2.0",
+      "from": "envify@~0.2.0",
+      "resolved": "https://registry.npmjs.org/envify/-/envify-0.2.0.tgz",
+      "dependencies": {
+        "through": {
+          "version": "2.3.4",
+          "from": "through@~2.3.4"
+        },
+        "falafel": {
+          "version": "0.2.1",
+          "from": "falafel@~0.2.1",
+          "resolved": "https://registry.npmjs.org/falafel/-/falafel-0.2.1.tgz",
+          "dependencies": {
+            "esprima": {
+              "version": "1.1.0-dev",
+              "from": "git://github.com/substack/esprima#is-keyword",
+              "resolved": "git://github.com/substack/esprima#0a7f8489a11b44b019ce168506f535f22d0be290"
+            }
+          }
+        }
+      }
+    }
+  }
+}
