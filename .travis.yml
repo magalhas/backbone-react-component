@@ -3,3 +3,4 @@ node_js:
   - 0.8
 notifications:
   email: true
+before_install: npm install -g grunt-cli
