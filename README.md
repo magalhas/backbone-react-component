@@ -3,7 +3,7 @@
 Backbone.React.Component is a wrapper for React.Component and brings all the power of Facebook's React to Backbone.js.
 
 ## Dependencies
-* [Backbone](http://backbonejs.org/) ([jQuery](http://jquery.com/)/[Underscore](http://underscorejs.org/))
+* [Backbone](http://backbonejs.org/) ([Underscore](http://underscorejs.org/))
 * [React](http://facebook.github.io/react/)
 
 ## How To
@@ -95,8 +95,8 @@ var MyComponent = Backbone.React.Component.extend({
         {this.props.secondModel.helloWorld}
         {this.props.firstCollection.map(this.createEntry())}
         {this.props.secondCollection.map(this.createEntry())}
-      </div>;
-    )
+      </div>
+    );
   }
 });
 ```
@@ -173,5 +173,5 @@ Intended to be used on the server, passes to the callback an HTML string represe
 
 ## TO DO
 * Improve models/collections requests error handling
-* Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to setPropsCollection
+* Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to __setPropsBackbone__
 * Any ideas?
