@@ -69,7 +69,7 @@ var MyComponent = Backbone.React.Component.extend({
 });
 ```
 
-### With multiple models and collections
+#### With multiple models and collections
 ```js
 var newComponent = new MyComponent({
   el: $('body'),
@@ -135,7 +135,7 @@ The following diagram illustrates how the data binding is achieved between our m
 
 [Bridge between Backbone and React](http://yuml.me/ded0336c)
 
-### API
+## API
 Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
 
 #### new Backbone.React.Component(props)
