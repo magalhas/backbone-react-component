@@ -1,6 +1,6 @@
 /**
  * Backbone.React.Component
- * @version 0.4.0
+ * @version 0.4.1
  * @author "Magalhas" José Magalhães <magalhas@gmail.com>
  * @license MIT <http://opensource.org/licenses/MIT>
  */
@@ -114,7 +114,7 @@
     return ComponentFactory;
   };
   _.extend(Backbone.React.Component.prototype, Backbone.Events,
-  /** @lends Reactor.Component.prototype */
+  /** @lends Backbone.React.Component.prototype */
   {
     mixins: [{
       /**
@@ -269,7 +269,8 @@
      */
     __onRequest__: function () {
       // Set props only if there's no silent option
-      if (!arguments[arguments.length - 1].silent)
+      var lastArg = arguments[arguments.length - 1];
+      if (!lastArg || !lastArg.silent)
         this.__setProps__({isRequesting: true});
     },
     /**
@@ -283,7 +284,8 @@
      */
     __onSync__: function (modelOrCollection, key) {
       // Set props only if there's no silent option
-      if (!arguments[arguments.length - 1].silent) {
+      var lastArg = arguments[arguments.length - 1];
+      if (!lastArg || !lastArg.silent) {
         this.__setProps__({isRequesting: false});
         this.__setPropsBackbone__(modelOrCollection, key);
       }

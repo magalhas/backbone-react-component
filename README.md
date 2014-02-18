@@ -2,6 +2,8 @@
 
 Backbone.React.Component is a wrapper for React.Component and brings all the power of Facebook's React to Backbone.js.
 
+It works as a bridge between React and Backbone enabling data binding between models/collections and components both on the client and server sides.
+
 ## Dependencies
 * [Backbone](http://backbonejs.org/) ([Underscore](http://underscorejs.org/))
 * [React](http://facebook.github.io/react/)
@@ -27,7 +29,7 @@ Include the script on your webpage (or use [RequireJS](http://requirejs.org/)/[B
 ```
 
 ### Using Backbone.React.Component
-It follows all the principles behind [React.Component](http://facebook.github.io/react/docs/component-api.html), though it binds models to the component's props and also automatically mounts the component into the component's $el.
+It follows all the principles behind [React.Component](http://facebook.github.io/react/docs/component-api.html), though it binds models and collections to the component's props besides giving you a set of extra methods (extend, toHTML, getModel, getCollection, $, etc).
 
 #### Basic usage
 ```js
@@ -173,5 +175,5 @@ Intended to be used on the server, passes to the callback an HTML string represe
 
 ## TO DO
 * Improve models/collections requests error handling
-* Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to __setPropsBackbone__
+* Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to  setPropsBackbone
 * Any ideas?
