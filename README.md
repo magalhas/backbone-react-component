@@ -175,5 +175,4 @@ Intended to be used on the server, passes to the callback an HTML string represe
 
 ## TO DO
 * Improve models/collections requests error handling
-* Improve the way how to detect bulk inserts (collection.add([])) to avoid extra calls to  setPropsBackbone
 * Any ideas?
