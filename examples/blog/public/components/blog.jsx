@@ -64,14 +64,7 @@
       var id = event.target.parentNode.getAttribute('data-id');
       // This is how you get the real Backbone.Collection instance
       var collection = this.getCollection();
-      collection.get(id).destroy({
-        wait: true,
-        success: function () {
-          // Small hack because backbone is not triggering the sync event on a model destroy
-          // when inside a collection
-          collection.trigger('sync');
-        }
-      });
+      collection.get(id).destroy({wait: true});
     },
     // Save the new or existing post to the services
     handleSubmit: function (event) {
