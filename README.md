@@ -1,4 +1,5 @@
 # Backbone.React.Component
+[![Build Status](https://travis-ci.org/magalhas/backbone-react-component.png)](https://travis-ci.org/magalhas/backbone-react-component)
 
 Backbone.React.Component is a wrapper for React.Component and brings all the power of Facebook's React to Backbone.js.
 
