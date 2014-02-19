@@ -140,8 +140,11 @@ The following diagram illustrates how the data binding is achieved between our m
 ## API
 Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
 
-#### new Backbone.React.Component(props)
-props is a namespace and may contain el, model and collection properties. Model and collection properties may be multiple by passing a namespace.
+#### constructor(props, children)
+props is an object and may contain el, model and collection properties. Model and collection properties may be multiple by passing an object as their values. The usage of the new keyword is optional.
+
+#### extend(spec)
+Inspired by Backbone, it inherits a component definition (class) to a new one.
 
 #### $
 Inspired by Backbone.View, it's a shortcut to this.$el.find method.
