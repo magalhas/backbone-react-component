@@ -135,7 +135,7 @@ Backbone.React.Component is nothing more nothing less than a bridge between [Bac
 
 The following diagram illustrates how the data binding is achieved between our models/collections and a React.Component:
 
-[Bridge between Backbone and React](http://yuml.me/ded0336c)
+[Bridge between Backbone and React](http://yuml.me/88e7b7fd)
 
 ## API
 Besides inheriting all the methods from [React.Component](http://facebook.github.io/react/docs/component-api.html) and [Backbone.Events](http://backbonejs.org/#Events) you can find the following methods:
@@ -161,13 +161,13 @@ Gets the component owner (greatest parent component).
 #### mount([el = this.el], [onRender])
 * el (DOMElement)
 * onRender (Callback)
-Mounts the component into the DOM and sets it has rendered (this.isRendered = true).
+Mounts the component into the DOM.
 
 #### unmount()
 Unmounts the component. Throws an error if the component doesn't unmount successfully.
 
 #### remove()
-Stops component listeners, unmounts the component and then removes the DOM element.
+Stops component listeners and unmounts the component.
 
 #### toHTML(callback)
 Intended to be used on the server, passes to the callback an HTML string representation of the component. Check [React](http://facebook.github.io/react/) documentation for more information.
@@ -175,6 +175,9 @@ Intended to be used on the server, passes to the callback an HTML string represe
 ## Examples
 * [Blog](https://github.com/magalhas/backbone-react-component/tree/master/examples/blog)
 * [Typewriter](https://rawgithub.com/magalhas/backbone-react-component/master/examples/typewriter/index.html)
+
+## Tips
+* Remember your root components start listening to model and collection changes when created. To dispose of them call the remove method (mount/unmount no longer starts/stops listeners).
 
 ## TO DO
 * Improve models/collections requests error handling
