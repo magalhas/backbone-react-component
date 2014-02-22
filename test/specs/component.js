@@ -24,14 +24,13 @@ describe('Component', function () {
     collection1.stopListening();
     collection2.stopListening();
   });
-  // Not passing due to phantomjs polyfill? Need to confirm this
-  xit('renders', function () {
+  it('renders', function () {
     component = new Component({
       model: model1,
-      el: document.body
+      el: document.createElement('div')
     }).mount();
     expect(component.el.childNodes.length).toEqual(1);
-    expect(component.el.childNodes[0].tagName).toEqual('DIV');
+    expect(component.el.textContent).toEqual('A');
   });
   it('binds to a model', function () {
     component = new Component({model: model1});

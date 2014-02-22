@@ -16,8 +16,9 @@ exports = module.exports = function (grunt) {
       dev: {
         src: ['lib/**/*.js'],
         options: {
-          specs: 'test/**/*.js',
+          specs: 'test/specs/**/*.js',
           vendor: [
+            'test/helpers/polyfills.js',
             'bower_components/underscore/underscore.js',
             'bower_components/backbone/backbone.js',
             'bower_components/react/react.js'
