@@ -181,5 +181,4 @@ Intended to be used on the server, passes to the callback an HTML string represe
 * Remember your root components start listening to model and collection changes when created. To dispose of them call the remove method (mount/unmount no longer starts/stops listeners).
 
 ## TO DO
-* Improve models/collections requests error handling
 * Any ideas?
