@@ -17,7 +17,7 @@ httpd.get('/components/blog', function (req, res) {
   res.send({
     component: blogComponent.toHTML(),
     data: blogCollection.toJSON()
-    });
+  });
 });
 // Get collection
 httpd.get('/resources/blog', function (req, res) {
