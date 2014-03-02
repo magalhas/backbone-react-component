@@ -20,12 +20,12 @@ Using [Npm](https://npmjs.org/)
 ```shell
 npm install backbone-react-component
 ```
-If you're not using [Bower](http://bower.io/) nor [Npm](https://npmjs.org/) download the source from the dist folder or use [cdnJS](http://cdnjs.com/).
+If you're not using [Bower](http://bower.io/) nor [Npm](https://npmjs.org/) download the source from the dist folder or use [CDNJS](http://cdnjs.com/).
 
-Include the script on your webpage (or use [RequireJS](http://requirejs.org/)/[Browserify](http://browserify.org/))
+The fastest way to start is including the script on your webpage (or use [RequireJS](http://requirejs.org/)/[Browserify](http://browserify.org/))
 ```html
 ...
-<script type="text/javascript" src="path_to_script/backbone-react-component-min.js"></script>
+<script type="text/javascript" src="https//cdnjs.cloudflare.com/ajax/libs/backbone-react-component/0.5.0/backbone-react-component-min.js"></script>
 ...
 ```
 
@@ -172,6 +172,9 @@ Stops component listeners and unmounts the component.
 
 #### toHTML()
 Intended to be used on the server, returns an HTML string representation of the component.
+
+#### clone(props, children)
+Returns a clone of the component.
 
 ## Examples
 * [Blog](https://github.com/magalhas/backbone-react-component/tree/master/examples/blog)

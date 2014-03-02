@@ -12,6 +12,13 @@ exports = module.exports = function (grunt) {
         }
       }
     },
+    copy: {
+      build: {
+        files: [
+          {src: ['lib/component.js'], dest: 'dist/backbone-react-component.js'}
+        ]
+      }
+    },
     jasmine: {
       dev: {
         src: ['lib/**/*.js'],
@@ -27,9 +34,10 @@ exports = module.exports = function (grunt) {
       }
     }
   });
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['uglify:build']);
+  grunt.registerTask('build', ['copy:build', 'uglify:build']);
   grunt.registerTask('test', ['jasmine:dev']);
 };

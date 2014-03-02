@@ -1,6 +1,6 @@
 /**
  * Backbone.React.Component
- * @version 0.4.2
+ * @version 0.5.0
  * @author "Magalhas" José Magalhães <magalhas@gmail.com>
  * @license MIT <http://opensource.org/licenses/MIT>
  */
@@ -17,8 +17,8 @@
     factory(root.React, root.Backbone, root._);
 }(this, function (React, Backbone, _) {
   /**
-   * @class Backbone.React.Component
-   * @extends React.Component
+   * @namespace Backbone.React.Component
+   * @mixes React.Component
    * @mixes Backbone.Events
    * @desc The Reactor.Component is a React.Component wrapper to serve
    as a bridge between the React and Backbone worlds. Besides some extra members
@@ -28,6 +28,8 @@
    When bound to a model, the component gets automatically mounted/rendered on
    the DOM as the model changes. If already rendered it just updates the element
    by using {@link http://facebook.github.io/react/|React} virtual DOM engine.
+   <br />
+   Here lies the public API available on each component.
    * @example
    // Instancing a component
    var myComponent = new Backbone.React.Component({
@@ -44,93 +46,9 @@
    });
    */
   if (!Backbone.React) Backbone.React = {};
-  Backbone.React.Component = function (props) {
-    props = props || {};
-    // Assign a component unique id, this is handy sometimes as a DOM attribute
-    this.cid = _.uniqueId();
-    // Check if props.el is a DOM element or a jQuery object
-    var el = props.el, model = props.model, collection = props.collection;
-    if (_.isElement(el) ||
-        Backbone.$ && el instanceof Backbone.$) {
-      this.setElement(el);
-      delete props.el;
-    }
-    // Check if props.model is a Backbone.Model or an array of them
-    if (model instanceof Backbone.Model ||
-        model instanceof Object && _.values(model)[0] instanceof Backbone.Model) {
-      /**
-       * The model or models bound to this component. It'll bind any changes
-       to this.props.
-       * @member
-       */
-      this.model = model;
-      delete props.model;
-      // Set model(s) attributes on props for the first render
-      this.__setPropsBackbone__(model, void 0, props);
-    }
-    // Check if props.collection is a Backbone.Collection or an array of them
-    if (collection instanceof Backbone.Collection ||
-        collection instanceof Object && _.values(collection)[0] instanceof Backbone.Collection) {
-      /**
-       * The collection or collections bound to this component. It'll bind any changes
-       to this.props.collection.
-       * @member
-       */
-      this.collection = collection;
-      delete props.collection;
-      // Set collection(s) models on props for the first render
-      this.__setPropsBackbone__(collection, void 0, props);
-    }
-  };
-  /**
-   * Wraps React.Component into Backbone.React.Component and extends to a new
-   class.
-   * @method extend
-   * @memberof Component
-   * @static
-   */
-  Backbone.React.Component.extend = function (Clazz) {
-    function Factory (props) {
-      var t = new Backbone.React.Component(props);
-      var component = Component.apply(this, arguments);
-      _.extend(component, t);
-      // Set the factory on the component if we want to instance a component of the same
-      // type in the future.
-      component.__factory__ = Factory;
-      // Call initialize if available
-      if (component.initialize) component.initialize(props);
-      // Start component listeners
-      component.__startModelListeners__();
-      component.__startCollectionListeners__();
-      return component;
-    }
-    Factory.extend = function () {
-      return Backbone.React.Component.extend(_.extend({}, Clazz, arguments[0]));
-    };
-    var Component = React.createClass(_.extend(
-      Factory.prototype,
-      Backbone.React.Component.prototype,
-      Clazz
-    ));
-    return Factory;
-  };
-  _.extend(Backbone.React.Component.prototype, Backbone.Events,
-  /** @lends Backbone.React.Component.prototype */
+  Backbone.React.Component =
+  /** @lends Backbone.React.Component */
   {
-    mixins: [{
-      /**
-       * Sets this.el and this.$el when the component mounts.
-       */
-      componentDidMount: function () {
-        this.setElement(this.getDOMNode());
-      },
-      /**
-       * Sets this.el and this.$el when the component updates.
-       */
-      componentDidUpdate: function () {
-        this.setElement(this.getDOMNode());
-      }
-    }],
     /**
      * Shortcut to this.$el.find. Inspired by Backbone.View.
      * @returns {Backbone.$}
@@ -140,17 +58,42 @@
         return this.$el.find.apply(this.$el, arguments);
     },
     /**
+     * Wraps React.Component into Backbone.React.Component and extends to a new
+     class.
+     * @method extend
+     * @memberof Component
+     * @static
+     */
+    extend: function (Clazz) {
+      function Factory (props, children) {
+        return (new Wrapper(Component, props, children)).virtualComponent;
+      }
+      // Allow deep extending
+      Factory.extend = function () {
+        return Backbone.React.Component.extend(_.extend({}, Clazz, arguments[0]));
+      };
+      // Apply mixin
+      if (Clazz.mixins) {
+        if (Clazz.mixins[0] !== mixin)
+          Clazz.mixins.splice(0, 0, mixin);
+      } else
+        Clazz.mixins = [mixin];
+      // Create the react component later used by Factory
+      var Component = React.createClass(_.extend(Factory.prototype, Clazz));
+      return Factory;
+    },
+    /**
      * Crawls to the owner of the component and gets the collection.
      */
     getCollection: function () {
-      return this.getOwner().collection;
+      return this.getOwner().wrapper.collection;
     },
     /**
      * Crawls to the owner of the component and gets the model.
      * @returns {Backbone.Model}
      */
     getModel: function () {
-      return this.getOwner().model;
+      return this.getOwner().wrapper.model;
     },
     /**
      * Crawls this.props.__owner__ recursively until it finds the owner of this
@@ -163,7 +106,7 @@
       return owner;
     },
     /**
-     * Renders/mounts the component through {@link http://facebook.github.io/react/|React}.
+     * Renders/mounts the component. It delegates to React.renderComponent.
      * @param {DOMElement} [el=this.el] The DOM element where we want to mount
      the component.
      * @param {Callback} [onRender] Callback to be executed when the component
@@ -174,14 +117,16 @@
     mount: function (el, onRender) {
       if (!(el || this.el)) throw new Error('No element to mount on');
       else if (!el) el = this.el;
-      React.renderComponent(this, el, onRender);
+      this.wrapper.component = React.renderComponent(this, el, onRender);
       return this;
     },
     /**
      * Stops all listeners and unmounts this component from the DOM.
      */
     remove: function () {
-      if (this.isMounted()) this.unmount();
+      if (this.wrapper.component && this.wrapper.component.isMounted())
+        this.unmount();
+      this.wrapper.stopListening();
       this.stopListening();
     },
     /**
@@ -204,15 +149,13 @@
     /**
      * Intended to be used on the server side (Nodejs), renders your component to
      a string ready to be used on the client side by delegating to React.renderComponentToString.
-     * @param {Function} callback Receives the HTML representation of this component as an
-     argument.
+     * @returns {String} The HTML representation of this component.
      */
-    toHTML: function (callback) {
-      if (!callback) throw new Error('Useless to call toHTML without a callback');
+    toHTML: function () {
       // Since we're only able to call renderComponentToString once, lets clone this component
       // and use it insteaad.
-      var clone = new this.__factory__(this.props);
-      React.renderComponentToString(clone, callback);
+      var clone = this.clone(this.props);
+      return React.renderComponentToString(clone);
     },
     /**
      * Unmount the component from the DOM.
@@ -223,49 +166,165 @@
       if (!React.unmountComponentAtNode(parentNode)) {
         throw new Error('There was an error unmounting the component');
       }
+      delete this.wrapper.component;
       this.setElement(parentNode);
-    },
+    }
+  };
+  /**
+   * Mixin used in all component instances.
+   * @mixin
+   */
+  var mixin = {
     /**
-     * Sets this.props.hasError when a model/collection request results in error.
-     * @private
-     * @listens Backbone.Model#error
-     * @listens Backbone.Collection#error
-     * @todo Improve error handling
+     * Sets this.el and this.$el when the component mounts.
      */
-    __onError__: function () {
-      // Set props only if there's no silent option
-      if (!arguments[arguments.length - 1].silent)
-        this.__setProps__({
-          isRequesting: false,
-          hasError: true
-        });
+    componentDidMount: function () {
+      this.setElement(this.getDOMNode());
     },
     /**
-     * Sets this.props.isRequesting when a model/collection request starts.
-     * @private
-     * @listens Backbone.Model#request
-     * @listens Backbone.Collection#request
+     * Sets this.el and this.$el when the component updates.
      */
-    __onRequest__: function () {
-      // Set props only if there's no silent option
-      var lastArg = arguments[arguments.length - 1];
-      if (!(lastArg && lastArg.silent))
-        this.__setProps__({isRequesting: true});
-    },
+    componentDidUpdate: function () {
+      this.setElement(this.getDOMNode());
+    }
+  };
+  /**
+   * Binds models and collections to a React.Component.
+   * @class Wrapper
+   * @mixes Backbone.Events
+   */
+  function Wrapper (Component, props) {
+    props = props || {};
+    var el, model = props.model, collection = props.collection;
+    // Check if props.el is a DOM element or a jQuery object
+    if (_.isElement(props.el) || Backbone.$ && props.el instanceof Backbone.$) {
+      el = props.el;
+      delete props.el;
+    }
+    // Check if props.model is a Backbone.Model or an hashmap of them
+    if (model instanceof Backbone.Model ||
+        model instanceof Object && _.values(model)[0] instanceof Backbone.Model) {
+      delete props.model;
+      /**
+       * The model or models bound to this component.
+       */
+      this.model = model;
+      // Set model(s) attributes on props for the first render
+      this.setPropsBackbone(model, void 0, props);
+    }
+    // Check if props.collection is a Backbone.Collection or an hashmap of them
+    if (collection instanceof Backbone.Collection ||
+        collection instanceof Object && _.values(collection)[0] instanceof Backbone.Collection) {
+      delete props.collection;
+      /**
+       * The collection or collections bound to this component.
+       */
+      this.collection = collection;
+      // Set collection(s) models on props for the first render
+      this.setPropsBackbone(collection, void 0, props);
+    }
+    // Instance the component mixing Backbone.Events, our public API and some special
+    // properties.
+    var component = this.virtualComponent = _.defaults(Component.apply(this, _.rest(arguments)),
+        Backbone.Events, Backbone.React.Component, {
+      /**
+       * Clones the component wrapper and returns the component.
+       * @returns {Backbone.React.Component}
+       */
+      clone: function (props, children) {
+        return (new Wrapper(Component, props, children)).virtualComponent;
+      },
+      // Assign a component unique id, this is handy sometimes as a DOM attribute
+      cid: _.uniqueId(),
+      // One to one relationship between the wrapper and the component
+      wrapper: this
+    });
+    // Set element
+    if (el) component.setElement(el);
+    // Call initialize if available
+    if (component.initialize) component.initialize(props);
+    // Start listeners
+    this.startModelListeners();
+    this.startCollectionListeners();
+  }
+  _.extend(Wrapper.prototype, Backbone.Events,
+  /** @lends Wrapper.prototype */
+  {
     /**
-     * Sets this.props. It delegates to this.__setPropsBackbone__.
+     * Sets this.props when a model/collection request results in error. It delegates to this.setProps.
      * @private
      * @param {Backbone.Model|Backbone.Collection} modelOrCollection The model or collection
      that was sync.
-     * @param {String} [key] The collection or model identifier.
+     * @param {Object} res The XHR error response.
+     * @param {Object} options
+     * @listens Backbone.Model#error
+     * @listens Backbone.Collection#error
+     */
+    onError: function (modelOrCollection, res, options) {
+      // Set props only if there's no silent option
+      if (!options.silent)
+        this.setProps({
+          isRequesting: false,
+          hasError: true,
+          error: res
+        });
+    },
+    /**
+     * Sets this.props when a model/collection request starts. It delegates to this.setProps.
+     * @private
+     * @param {Backbone.Model|Backbone.Collection} modelOrCollection The model or collection
+     that was sync.
+     * @param {XMLHttpRequest} xhr
+     * @param {Object} options
+     * @listens Backbone.Model#request
+     * @listens Backbone.Collection#request
+     */
+    onRequest: function (modelOrCollection, xhr, options) {
+      // Set props only if there's no silent option
+      if (!options.silent)
+        this.setProps({
+          isRequesting: true,
+          hasError: false
+        });
+    },
+    /**
+     * Sets this.props when a model/collection syncs. It delegates to this.setProps.
+     * @private
+     * @param {Backbone.Model|Backbone.Collection} modelOrCollection The model or collection
+     that was sync.
+     * @param {Object} res The XHR request response.
+     * @param {Object} options
      * @listens Backbone.Model#sync
      * @listens Backbone.Collection#sync
      */
-    __onSync__: function () {
+    onSync: function (modelOrCollection, res, options) {
       // Set props only if there's no silent option
-      var lastArg = arguments[arguments.length - 1];
-      if (!(lastArg && lastArg.silent))
-        this.__setProps__({isRequesting: false});
+      if (!options.silent)
+        this.setProps({isRequesting: false});
+    },
+    /**
+     * Used internally to set this.collection or this.model on this.props. Delegates to
+     this.setProps.
+     * @private
+     * @param {Backbone.Collection|Backbone.Model|Object} modelOrCollection The
+    model or collection or hashmap of them that we're delegating to this.setProps.
+     * @param {String} [key] In case of multiple collections a key is passed to identify
+     the collection.
+     * @param {Object} [target] Used by the constructor to set props for the component
+     first render.
+     * @listens Backbone.Collection#add
+     * @listens Backbone.Collection#remove
+     * @listens Backbone.Collection#change
+     * @listens Backbone.Model#change
+     */
+    setPropsBackbone: function (modelOrCollection, key, target) {
+      if (!(modelOrCollection instanceof Backbone.Collection ||
+            modelOrCollection instanceof Backbone.Model)) {
+        for (key in modelOrCollection)
+          this.setPropsBackbone(modelOrCollection[key], key, target);
+        return;
+      }
+      this.setProps.apply(this, arguments);
     },
     /**
      * Sets a model, collection or object into this.props by delegating to this.setProps.
@@ -276,11 +335,10 @@
      * @param {Object} [target] If we're setting the data on an object instead of
      delegating to this.setProps.
      */
-    __setProps__: function (modelOrCollection, key, target) {
+    setProps: function (modelOrCollection, key, target) {
       // If the component isn't rendered/mounted set target because you can't set props
-      // on an unmounted target. This hack was intended for the server but seems to bring
-      // no drawbacks on the client side.
-      if ((this.isMounted && !this.isMounted()) && !target) target = this.props;
+      // on an unmounted (virtual) component.
+      if (!target && !(this.component && this.component.isMounted())) target = this.virtualComponent.props;
       var props = {};
       var newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
 
@@ -288,85 +346,61 @@
         props[key] = newProps;
       else if (modelOrCollection instanceof Backbone.Collection)
         props.collection = newProps;
-      else
+      else // if (modelOrCollection instanceof Backbone.Model)
         props = newProps;
       
       if (target) _.extend(target, props);
       else {
-        this.__nextProps__ = _.extend(this.__nextProps__ || {}, props);
-        _.defer(function () {
-          if (this.__nextProps__) {
-            this.setProps(this.__nextProps__);
-            delete this.__nextProps__;
+        this.nextProps = _.extend(this.nextProps || {}, props);
+        _.defer(_.bind(function () {
+          if (this.nextProps) {
+            this.component.setProps(this.nextProps);
+            delete this.nextProps;
           }
-        }.bind(this));
+        }, this));
       }
-    },
-    /**
-     * Used internally to set this.collection or this.model on this.props. Delegates to
-     this.__setProps__.
-     * @private
-     * @param {Backbone.Collection|Backbone.Model|Object} modelOrCollection The
-    model or collection or hashmap of them that we're delegating to this.__setProps__.
-     * @param {String} [key] In case of multiple collections a key is passed to identify
-     the collection.
-     * @param {Object} [target] Used by the constructor to set props for the component
-     first render.
-     * @listens Backbone.Collection#add
-     * @listens Backbone.Collection#remove
-     * @listens Backbone.Collection#change
-     * @listens Backbone.Model#change
-     */
-    __setPropsBackbone__: function (modelOrCollection, key, target) {
-      if (!(modelOrCollection instanceof Backbone.Collection) &&
-          !(modelOrCollection instanceof Backbone.Model)) {
-        for (key in modelOrCollection)
-          this.__setPropsBackbone__(modelOrCollection[key], key, target);
-        return;
-      }
-      this.__setProps__.apply(this, arguments);
     },
     /**
      * Binds this.props.collection to any this.collection changes, making the component
      to get instantly rerendered. This has high performance since it uses the
      {@link http://facebook.github.io/react/|React} virtual DOM.
      * @param {Backbone.Collection|Object} [collection=this.collection] In case of being
-     an object it calls __startCollectionListeners__ for each entry.
+     an object it calls startCollectionListeners for each entry.
      * @param {String} [key] In case of multiple collections a key is passed to identify
      the collection.
      */
-    __startCollectionListeners__: function (collection, key) {
+    startCollectionListeners: function (collection, key) {
       if (!collection) collection = this.collection;
       if (collection instanceof Backbone.Collection)
         this
-          .listenTo(collection, 'add remove change sort', this.__setPropsBackbone__.bind(this, collection, key, void 0))
-          .listenTo(collection, 'error', this.__onError__.bind(this, collection, key))
-          .listenTo(collection, 'request', this.__onRequest__.bind(this, collection, key))
-          .listenTo(collection, 'sync', this.__onSync__.bind(this, collection, key));
+          .listenTo(collection, 'add remove change sort', _.partial(this.setPropsBackbone, collection, key, void 0))
+          .listenTo(collection, 'error', this.onError)
+          .listenTo(collection, 'request', this.onRequest)
+          .listenTo(collection, 'sync', this.onSync);
       else if (collection)
         for (key in collection)
-          this.__startCollectionListeners__(collection[key], key);
+          this.startCollectionListeners(collection[key], key);
     },
     /**
      * Binds this.props to any this.model changes, making the screen component
      get instantly rerendered in the screen. This has high performance
      since it uses the {@link http://facebook.github.io/react/|React} virtual DOM.
      * @param {Backbone.Model|Object} [model=this.model] In case of being
-     an object it calls __startModelListeners__ for each entry.
+     an object it calls startModelListeners for each entry.
      * @param {String} [key] In case of multiple models a key is passed to identify
      the model.
      */
-    __startModelListeners__: function (model, key) {
+    startModelListeners: function (model, key) {
       if (!model) model = this.model;
       if (model instanceof Backbone.Model)
         this
-          .listenTo(model, 'change', this.__setPropsBackbone__.bind(this, model, key, void 0))
-          .listenTo(model, 'error', this.__onError__.bind(this, model, key))
-          .listenTo(model, 'request', this.__onRequest__.bind(this, model, key))
-          .listenTo(model, 'sync', this.__onSync__.bind(this, model, key));
+          .listenTo(model, 'change', _.partial(this.setPropsBackbone, model, key, void 0))
+          .listenTo(model, 'error', this.onError)
+          .listenTo(model, 'request', this.onRequest)
+          .listenTo(model, 'sync', this.onSync);
       else if (model)
         for (key in model)
-          this.__startModelListeners__(model[key], key);
+          this.startModelListeners(model[key], key);
     }
   });
 
