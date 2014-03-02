@@ -49,6 +49,14 @@ describe('Component', function () {
     expect(clone.getModel()).toEqual(model2);
     clone.remove();
   });
+  it('allows extending', function () {
+    var NewComponent = Component.extend({
+      test: function () {}
+    });
+    expect(NewComponent).toBeDefined();
+    var newComponent = new NewComponent({el: document.createElement('div')}).mount();
+    expect(newComponent.test).toBeDefined();
+  });
   it('binds to a model', function () {
     component = new Component({model: model1});
     expect(component.props.test).toEqual('A');
