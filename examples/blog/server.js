@@ -14,12 +14,10 @@ httpd.use(express.json());
 httpd.use(express.urlencoded());
 // Get component first render and collection
 httpd.get('/components/blog', function (req, res) {
-  blogComponent.toHTML(function (html) {
-    res.send({
-      component: html,
-      data: blogCollection.toJSON()
+  res.send({
+    component: blogComponent.toHTML(),
+    data: blogCollection.toJSON()
     });
-  });
 });
 // Get collection
 httpd.get('/resources/blog', function (req, res) {

@@ -170,8 +170,8 @@ Unmounts the component. Throws an error if the component doesn't unmount success
 #### remove()
 Stops component listeners and unmounts the component.
 
-#### toHTML(callback)
-Intended to be used on the server, passes to the callback an HTML string representation of the component. Check [React](http://facebook.github.io/react/) documentation for more information.
+#### toHTML()
+Intended to be used on the server, returns an HTML string representation of the component.
 
 ## Examples
 * [Blog](https://github.com/magalhas/backbone-react-component/tree/master/examples/blog)
