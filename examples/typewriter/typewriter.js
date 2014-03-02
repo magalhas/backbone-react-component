@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   var Typewriter = Backbone.React.Component.extend({
+    displayName: 'Typewriter',
     createParagraph: function (paragraph, index) {
       return <p key={index}>{paragraph.content}</p>;
     },
