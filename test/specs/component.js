@@ -7,12 +7,8 @@ describe('Component', function () {
   });
   var component, model1, model2, collection1, collection2;
   beforeEach(function () {
-    model1 = new Backbone.Model({
-      test: 'A'
-    });
-    model2 = new Backbone.Model({
-      otherTest: 'B'
-    });
+    model1 = new Backbone.Model({test: 'A'});
+    model2 = new Backbone.Model({otherTest: 'B'});
     collection1 = new Backbone.Collection([model1, model2]);
     collection2 = new Backbone.Collection([model2, model1]);
   });
@@ -24,13 +20,34 @@ describe('Component', function () {
     collection1.stopListening();
     collection2.stopListening();
   });
-  it('renders', function () {
+  it('mounts and renders', function () {
     component = new Component({
       model: model1,
       el: document.createElement('div')
     }).mount();
     expect(component.el.childNodes.length).toEqual(1);
     expect(component.el.textContent).toEqual('A');
+  });
+  it('unmounts', function () {
+    component = new Component({el: document.createElement('div')});
+    component.mount();
+    component.unmount();
+    expect(component.el.childNodes.length).toEqual(0);
+  });
+  it('gets the model(s)', function () {
+    component = new Component({model: model1});
+    expect(component.getModel()).toEqual(model1);
+  });
+  it('gets the collection(s)', function () {
+    component = new Component({collection: collection1});
+    expect(component.getCollection()).toEqual(collection1);
+  });
+  it('is clonable', function () {
+    component = new Component({model: model1});
+    var clone = component.clone({model: model2});
+    expect(clone).toBeDefined();
+    expect(clone.getModel()).toEqual(model2);
+    clone.remove();
   });
   it('binds to a model', function () {
     component = new Component({model: model1});
