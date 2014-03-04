@@ -46,26 +46,6 @@ describe('Component', function () {
     component = new Component({el: document.createElement('div')});
     component.mount();
     expect(component.getOwner()).toEqual(component);
-    var NewComponent = Component.extend({
-      render: function () {
-        return SubComponent();
-      }
-    });
-    var checkOwnerSpy = jasmine.createSpy();
-    var SubComponent = Component.extend({
-      checkOwner: function () {
-        checkOwnerSpy();
-        expect(this.getOwner()).toEqual(newComponent);
-      },
-      render: function () {
-        this.checkOwner();
-        return React.DOM.div();
-      }
-    });
-    var newComponent = new NewComponent({el: document.createElement('div')});
-    newComponent.mount();
-    expect(checkOwnerSpy).toHaveBeenCalled();
-    newComponent.remove();
   });
   it('is clonable', function () {
     component = new Component({model: model1});
@@ -122,5 +102,45 @@ describe('Component', function () {
     expect(component.props.firstCollection[2].test).toEqual('C');
     collection2.add({otherTest: 'C'});
     expect(component.props.secondCollection[2].otherTest).toEqual('C');
+  });
+  describe('Child Component', function () {
+    var newComponent, NewComponent, SubComponent, childComponentSpy;
+    beforeEach(function () {
+      NewComponent = Component.extend({
+        render: function () {
+          return SubComponent({model: this.getCollection().at(0)});
+        }
+      });
+      SubComponent = Component.extend({
+        render: function () {
+          childComponentSpy.call(this);
+          return React.DOM.div();
+        }
+      });
+      newComponent = new NewComponent({
+        collection: collection1,
+        el: document.createElement('div')
+      });
+    });
+    afterEach(function () {
+      newComponent.mount();
+      expect(childComponentSpy).toHaveBeenCalled();
+      newComponent.remove();
+    });
+    it('gets the owner', function () {
+      childComponentSpy = jasmine.createSpy().and.callFake(function () {
+        expect(this.getOwner()).toEqual(newComponent);
+      });
+    });
+    it('gets the model(s)', function () {
+      childComponentSpy = jasmine.createSpy().and.callFake(function () {
+        expect(this.getModel()).toEqual(collection1.at(0));
+      });
+    });
+    it('gets the collection(s)', function () {
+      childComponentSpy = jasmine.createSpy().and.callFake(function () {
+        expect(this.getCollection()).toEqual(collection1);
+      });
+    });
   });
 });
