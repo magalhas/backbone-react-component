@@ -1,6 +1,6 @@
 /**
  * Backbone.React.Component
- * @version 0.5.0
+ * @version 0.5.1
  * @author "Magalhas" José Magalhães <magalhas@gmail.com>
  * @license MIT <http://opensource.org/licenses/MIT>
  */
@@ -8,7 +8,7 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd)
     define(['react', 'backbone', 'underscore'], factory);
-  else if (typeof module !== 'undefined') {
+  else if (typeof module !== 'undefined' && module.exports) {
     var React = require('react');
     var Backbone = require('backbone');
     var _ = require('underscore');
@@ -83,17 +83,21 @@
       return Factory;
     },
     /**
-     * Crawls to the owner of the component and gets the collection.
+     * Crawls to the owner of the component searching for a collection.
      */
     getCollection: function () {
-      return this.getOwner().wrapper.collection;
+      var owner = this;
+      while (!(owner.wrapper && owner.wrapper.collection)) owner = owner._owner;
+      return owner.wrapper.collection;
     },
     /**
-     * Crawls to the owner of the component and gets the model.
+     * Crawls to the owner of the component searching for a model.
      * @returns {Backbone.Model}
      */
     getModel: function () {
-      return this.getOwner().wrapper.model;
+      var owner = this;
+      while (!(owner.wrapper && owner.wrapper.model)) owner = owner._owner;
+      return owner.wrapper.model;
     },
     /**
      * Crawls this.props.__owner__ recursively until it finds the owner of this
@@ -102,7 +106,7 @@
      */
     getOwner: function () {
       var owner = this;
-      while (owner.props.__owner__) owner = owner.props.__owner__;
+      while (owner._owner) owner = owner._owner;
       return owner;
     },
     /**
@@ -243,9 +247,11 @@
     if (el) component.setElement(el);
     // Call initialize if available
     if (component.initialize) component.initialize(props);
-    // Start listeners
-    this.startModelListeners();
-    this.startCollectionListeners();
+    // Start listeners if this is a root node
+    if (!component._owner) {
+      this.startModelListeners();
+      this.startCollectionListeners();
+    }
   }
   _.extend(Wrapper.prototype, Backbone.Events,
   /** @lends Wrapper.prototype */
