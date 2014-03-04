@@ -42,6 +42,31 @@ describe('Component', function () {
     component = new Component({collection: collection1});
     expect(component.getCollection()).toEqual(collection1);
   });
+  it('gets the owner', function () {
+    component = new Component({el: document.createElement('div')});
+    component.mount();
+    expect(component.getOwner()).toEqual(component);
+    var NewComponent = Component.extend({
+      render: function () {
+        return SubComponent();
+      }
+    });
+    var checkOwnerSpy = jasmine.createSpy();
+    var SubComponent = Component.extend({
+      checkOwner: function () {
+        checkOwnerSpy();
+        expect(this.getOwner()).toEqual(newComponent);
+      },
+      render: function () {
+        this.checkOwner();
+        return React.DOM.div();
+      }
+    });
+    var newComponent = new NewComponent({el: document.createElement('div')});
+    newComponent.mount();
+    expect(checkOwnerSpy).toHaveBeenCalled();
+    newComponent.remove();
+  });
   it('is clonable', function () {
     component = new Component({model: model1});
     var clone = component.clone({model: model2});
