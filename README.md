@@ -151,10 +151,10 @@ Inspired by Backbone, it inherits a component definition (class) to a new one.
 Inspired by Backbone.View, it's a shortcut to this.$el.find method.
 
 #### getCollection()
-Gets the collection from the component's owner.
+Crawls to the owner of the component searching for a collection.
 
 #### getModel()
-Gets the model from the component's owner.
+Crawls to the owner of the component searching for a model.
 
 #### getOwner()
 Gets the component owner (greatest parent component).
