@@ -121,14 +121,10 @@ var HelloWorld = Component.extend({
 var helloWorld = new HelloWorld({
   model: model
 });
-helloWorld.toHTML(function (html) {
-  console.log(html);
-});
+helloWorld.toHTML();
 // Updating the model
 model.set('helloWorld', 'Hi again!');
-helloWorld.toHTML(function (html) {
-  console.log(html);
-});
+helloWorld.toHTML(); 
 ```
 
 ### How it works
