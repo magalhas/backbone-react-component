@@ -3,8 +3,7 @@ exports = module.exports = function (grunt) {
   grunt.initConfig({
     uglify: {
       options: {
-        compress: true,
-        preserveComments: 'some'
+        compress: true
       },
       build: {
         files: {
@@ -17,6 +16,14 @@ exports = module.exports = function (grunt) {
         files: [
           {src: ['lib/component.js'], dest: 'dist/backbone-react-component.js'}
         ]
+      }
+    },
+    docco: {
+      doc: {
+        src: ['lib/component.js'],
+        options: {
+          layout: 'parallel'
+        }
       }
     },
     jasmine: {
@@ -37,7 +44,9 @@ exports = module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-docco');
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['copy:build', 'uglify:build']);
+  grunt.registerTask('doc', ['docco']);
   grunt.registerTask('test', ['jasmine:dev']);
 };
