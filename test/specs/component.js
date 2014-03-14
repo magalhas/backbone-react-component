@@ -35,12 +35,16 @@ describe('Component', function () {
     expect(component.el.childNodes.length).toEqual(0);
   });
   it('gets the model(s)', function () {
-    component = new Component({model: model1});
+    component = new Component({el: document.createElement('div'), model: model1});
+    component.mount();
     expect(component.getModel()).toEqual(model1);
+    component.unmount();
   });
   it('gets the collection(s)', function () {
-    component = new Component({collection: collection1});
+    component = new Component({el: document.createElement('div'), collection: collection1});
+    component.mount();
     expect(component.getCollection()).toEqual(collection1);
+    component.unmount();
   });
   it('gets the owner', function () {
     component = new Component({el: document.createElement('div')});
@@ -49,7 +53,8 @@ describe('Component', function () {
   });
   it('is clonable', function () {
     component = new Component({model: model1});
-    var clone = component.clone({model: model2});
+    var clone = component.clone({el: document.createElement('div'), model: model2});
+    clone.mount();
     expect(clone).toBeDefined();
     expect(clone.getModel()).toEqual(model2);
     clone.remove();

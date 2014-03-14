@@ -36,8 +36,5 @@
     "model",
     "collection"
   ],
-  "license": "MIT",
-  "resolutions": {
-    "react": "~0.9.0"
-  }
+  "license": "MIT"
 }
