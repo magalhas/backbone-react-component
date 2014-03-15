@@ -1,6 +1,9 @@
 'use strict';
 exports = module.exports = function (grunt) {
   grunt.initConfig({
+    clean: {
+      doc: ['.tmp', '.grunt']
+    },
     uglify: {
       options: {
         compress: true
@@ -16,6 +19,12 @@ exports = module.exports = function (grunt) {
         files: [
           {src: ['lib/component.js'], dest: 'dist/backbone-react-component.js'}
         ]
+      },
+      doc: {
+        files: [
+          {cwd: 'docs', src: ['**', '!component.html', '!diagrams/**', '!diagrams'], dest: '.tmp', expand: true},
+          {src: ['docs/component.html'], dest: '.tmp/index.html'}
+        ]
       }
     },
     docco: {
@@ -24,6 +33,14 @@ exports = module.exports = function (grunt) {
         options: {
           layout: 'parallel'
         }
+      }
+    },
+    'gh-pages': {
+      doc: {
+        options: {
+          base: '.tmp'
+        },
+        src: ['**']
       }
     },
     jasmine: {
@@ -41,12 +58,15 @@ exports = module.exports = function (grunt) {
       }
     }
   });
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-docco');
+  grunt.loadNpmTasks('grunt-gh-pages');
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['copy:build', 'uglify:build']);
-  grunt.registerTask('doc', ['docco']);
+  grunt.registerTask('doc', ['docco:doc']);
+  grunt.registerTask('publish-doc', ['clean:doc', 'doc', 'copy:doc', 'gh-pages:doc', 'clean:doc']);
   grunt.registerTask('test', ['jasmine:dev']);
 };

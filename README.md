@@ -1,4 +1,4 @@
-# Backbone.React.Component [![Build Status](https://travis-ci.org/magalhas/backbone-react-component.png)](https://travis-ci.org/magalhas/backbone-react-component)
+# [Backbone.React.Component](http://magalhas.github.io/backbone-react-component/) [![Build Status](https://travis-ci.org/magalhas/backbone-react-component.png)](https://travis-ci.org/magalhas/backbone-react-component)
 
 Backbone.React.Component is a wrapper or mixin for React.Component and brings all the power of Facebook's React to Backbone.js.
 
@@ -12,7 +12,6 @@ It comes in two flavours, a ready to use React mixin or a wrapper class with an 
 
 - [Dependencies](#dependencies)
 - [How To](#how-to)
-	- [Downloading and including the script](#downloading-and-including-the-script)
 	- [Usage through the mixin](#usage-through-the-mixin)
 	- [Usage through the component](#usage-through-the-component)
 		- [Basic usage](#basic-usage)
@@ -45,24 +44,17 @@ It comes in two flavours, a ready to use React mixin or a wrapper class with an 
 * [React](http://facebook.github.io/react/)
 
 ## How To
-### Downloading and including the script
 Using [Bower](http://bower.io/)
-```shell
+```
 bower install backbone-react-component
 ```
 
 Using [Npm](https://npmjs.org/)
-```shell
+```
 npm install backbone-react-component
 ```
 If you're not using [Bower](http://bower.io/) nor [Npm](https://npmjs.org/) download the source from the dist folder or use [CDNJS](http://cdnjs.com/).
 
-The fastest way to start is including the script on your webpage (or use [RequireJS](http://requirejs.org/)/[Browserify](http://browserify.org/))
-```html
-...
-<script type="text/javascript" src="https//cdnjs.cloudflare.com/ajax/libs/backbone-react-component/0.5.1/backbone-react-component-min.js"></script>
-...
-```
 
 ### Usage through the mixin
 The usage of Backbone.React.Component.mixin is similar to Backbone.React.Component, though it relies on React top level API instead of wrapping it.
