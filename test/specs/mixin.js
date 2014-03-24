@@ -120,10 +120,10 @@ describe('Mixin', function () {
 
     it('gets the owner', function () {
       spy = jasmine.createSpy().and.callFake(function () {
-        expect(this.getOwner()).toEqual(component);
+        expect(this.getOwner()).toEqual(component.__realComponentInstance);
       });
       newSpy = jasmine.createSpy().and.callFake(function () {
-        expect(this.getOwner()).toEqual(component);
+        expect(this.getOwner()).toEqual(component.__realComponentInstance);
       });
     });
 

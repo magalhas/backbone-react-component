@@ -218,7 +218,7 @@
     if (Component.prototype) {
       // Instance the component mixing Backbone.Events, our public API and some special
       // properties.
-      component = this.virtualComponent = _.defaults(Component.apply(this, _.rest(arguments)),
+      component = this.virtualComponent = _.defaults(Component.apply(this, _.rest(arguments)).__realComponentInstance,
           Backbone.Events, _.omit(Backbone.React.Component, 'mixin'), {
         // Clones the component wrapper and returns the component.
         clone: function (props, children) {
