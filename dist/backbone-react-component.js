@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.6.1
+//     Backbone.React.Component v0.6.2
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -297,7 +297,7 @@
         props.collection = newProps;
       else
         props = newProps;
-      
+
       if (target) _.extend(target, props);
       else {
         this.nextProps = _.extend(this.nextProps || {}, props);
@@ -315,7 +315,7 @@
       if (collection) {
         if (collection.models)
           this
-            .listenTo(collection, 'add remove change sort',
+            .listenTo(collection, 'add remove change sort reset',
               _.partial(this.setPropsBackbone, collection, key, void 0))
             .listenTo(collection, 'error', this.onError)
             .listenTo(collection, 'request', this.onRequest)

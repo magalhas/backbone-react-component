@@ -34,7 +34,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <pre><code>Backbone.React.Component v0<span class="hljs-number">.6</span><span class="hljs-number">.1</span>
+              <pre><code>Backbone.React.Component v0<span class="hljs-number">.6</span><span class="hljs-number">.2</span>
 
 (c) <span class="hljs-number">2014</span> <span class="hljs-string">"Magalhas"</span> José Magalhães &lt;magalhas@gmail.com&gt;
 Backbone.React.Component can be freely distributed under the MIT license.
@@ -936,7 +936,7 @@ on an unmounted (virtual) component.</p>
         props.collection = newProps;
       <span class="hljs-keyword">else</span>
         props = newProps;
-      
+
       <span class="hljs-keyword">if</span> (target) _.extend(target, props);
       <span class="hljs-keyword">else</span> {
         <span class="hljs-keyword">this</span>.nextProps = _.extend(<span class="hljs-keyword">this</span>.nextProps || {}, props);
@@ -967,7 +967,7 @@ on an unmounted (virtual) component.</p>
       <span class="hljs-keyword">if</span> (collection) {
         <span class="hljs-keyword">if</span> (collection.models)
           <span class="hljs-keyword">this</span>
-            .listenTo(collection, <span class="hljs-string">'add remove change sort'</span>,
+            .listenTo(collection, <span class="hljs-string">'add remove change sort reset'</span>,
               _.partial(<span class="hljs-keyword">this</span>.setPropsBackbone, collection, key, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>))
             .listenTo(collection, <span class="hljs-string">'error'</span>, <span class="hljs-keyword">this</span>.onError)
             .listenTo(collection, <span class="hljs-string">'request'</span>, <span class="hljs-keyword">this</span>.onRequest)
