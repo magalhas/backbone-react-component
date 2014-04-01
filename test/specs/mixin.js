@@ -98,6 +98,19 @@ describe('Mixin', function () {
     });
   });
 
+  it('updates on collection reset', function (done) {
+    component = Component({
+        collection: collection1
+    });
+    mountedComponent = React.renderComponent(component, el);
+    expect(mountedComponent.props.collection[0].hello).toEqual('world!');
+    collection1.reset({hello: 'other world!'});
+    _.defer(function () {
+      expect(mountedComponent.props.collection[0].hello).toEqual('other world!');
+      done();
+    });
+  });
+
   describe('Child Component', function () {
     var newComponent, newSpy;
     var NewComponent = React.createClass({
