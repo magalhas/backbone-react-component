@@ -110,7 +110,7 @@ var MyComponent = Backbone.React.Component.extend({
     return <div>{entry.helloWorld}</div>;
   },
   render: function () {
-    return <div>{this.props.collection.map(this.createEntry())}</div>;
+    return <div>{this.props.collection.map(this.createEntry)}</div>;
   }
 });
 ```
@@ -139,8 +139,8 @@ var MyComponent = Backbone.React.Component.extend({
       <div>
         {this.props.firstModel.helloWorld}
         {this.props.secondModel.helloWorld}
-        {this.props.firstCollection.map(this.createEntry())}
-        {this.props.secondCollection.map(this.createEntry())}
+        {this.props.firstCollection.map(this.createEntry)}
+        {this.props.secondCollection.map(this.createEntry)}
       </div>
     );
   }
