@@ -135,6 +135,15 @@ describe('Component', function () {
     });
   });
 
+  it('receives all children when instantiating', function() {
+    var child1 = new Component({});
+    var child2 = new Component({});
+    component = new Component({}, child1, child2);
+    expect(component.props.children.length).toEqual(2);
+    expect(component.props.children[0]).toEqual(child1);
+    expect(component.props.children[1]).toEqual(child2);
+  });
+
   describe('Child Component', function () {
     var newComponent, NewComponent, SubComponent, childComponentSpy;
 
