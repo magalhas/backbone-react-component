@@ -62,11 +62,11 @@ The usage of Backbone.React.Component.mixin is similar to Backbone.React.Compone
 var MyComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   render: function () {
-    return <div>{this.props.test}</div>;
+    return <div>{this.props.foo}</div>;
   }
 });
-var model = new Backbone.Model();
-var newComponent = MyComponent({model: model});
+var model = new Backbone.Model({foo: 'bar'});
+var myComponent = <MyComponent model={model} />;
 
 React.renderComponent(newComponent, document.body);
 model.set('test', 'Hello world!');
