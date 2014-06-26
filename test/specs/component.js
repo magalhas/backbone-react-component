@@ -135,13 +135,22 @@ describe('Component', function () {
     });
   });
 
-  it('receives all children when instantiating', function() {
+  it('receives all children when instantiating', function () {
     var child1 = new Component({});
     var child2 = new Component({});
     component = new Component({}, child1, child2);
     expect(component.props.children.length).toEqual(2);
     expect(component.props.children[0]).toEqual(child1);
     expect(component.props.children[1]).toEqual(child2);
+  });
+
+  it('does not set props if the component is dismounted', function () {
+    component = new Component({
+      el: document.createElement('div'),
+      model: model1
+    }).mount();
+    model1.set({test: 'B'});
+    component.unmount();
   });
 
   describe('Child Component', function () {
