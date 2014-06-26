@@ -60,7 +60,17 @@
     // class.
     extend: function (Clazz) {
       function Factory (props, children) {
-        return (new Wrapper(Component, props, children)).virtualComponent;
+        // there may be more than one child, i.e. more than two function arguments
+
+        // turn Arguments list into an array
+        var args = Array.prototype.slice.call(arguments);
+        // wrap Wrapper constructor to be able to apply arguments
+        var W = function() {
+          return Wrapper.apply(this, [Component].concat(args));
+        };
+        W.prototype = Wrapper.prototype;
+
+        return (new W()).virtualComponent;
       }
       // Allow deep extending
       Factory.extend = function () {
@@ -303,7 +313,7 @@
         this.nextProps = _.extend(this.nextProps || {}, props);
         _.defer(_.bind(function () {
           if (this.nextProps) {
-            this.component.setProps(this.nextProps);
+            this.component && this.component.setProps(this.nextProps);
             delete this.nextProps;
           }
         }, this));
