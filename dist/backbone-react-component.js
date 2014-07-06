@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.6.2
+//     Backbone.React.Component v0.6.5
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -37,7 +37,7 @@
 //       }
 //     });
 //     var model = new Backbone.Model({foo: 'bar'});
-//     React.renderComponent(<MyComponent el={document.body} model={model} />, document.body);
+//     React.renderComponent(<MyComponent model={model} />, document.body);
 
 'use strict';
 (function (root, factory) {
@@ -148,6 +148,20 @@
       if (this.wrapper && this.isBackboneMixin) {
         this.wrapper.stopListening();
         delete this.wrapper;
+      }
+    },
+    // In order to allow passing nested models as reference we filter `nextProps.model`.
+    componentWillReceiveProps: function (nextProps) {
+      var model = nextProps.model;
+      if (this.wrapper.model && model) {
+        delete nextProps.model;
+        if (this.wrapper.model.attributes) {
+          this.wrapper.setProps(model, void 0, nextProps);
+        } else {
+          for (var key in model) {
+            this.wrapper.setProps(model[key], key, nextProps);
+          }
+        }
       }
     },
     // Shortcut to this.$el.find. Inspired by Backbone.View.

@@ -66,7 +66,7 @@ exports = module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-gh-pages');
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['copy:build', 'uglify:build']);
-  grunt.registerTask('doc', ['docco:doc']);
-  grunt.registerTask('publish-doc', ['clean:doc', 'doc', 'copy:doc', 'gh-pages:doc', 'clean:doc']);
+  grunt.registerTask('doc', ['clean:doc', 'docco:doc']);
+  grunt.registerTask('publish-doc', ['doc', 'copy:doc', 'gh-pages:doc', 'clean:doc']);
   grunt.registerTask('test', ['jasmine:dev']);
 };
