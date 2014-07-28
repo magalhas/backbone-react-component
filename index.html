@@ -34,27 +34,16 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <pre><code>Backbone.React.Component v0<span class="hljs-number">.6</span><span class="hljs-number">.5</span>
+              <pre><code>Backbone.React.Component v0<span class="hljs-number">.7</span><span class="hljs-number">.0</span>
 
 (c) <span class="hljs-number">2014</span> <span class="hljs-string">"Magalhas"</span> José Magalhães &lt;magalhas@gmail.com&gt;
 Backbone.React.Component can be freely distributed under the MIT license.
-</code></pre><p><code>Backbone.React.Component</code> is a React.Component wrapper that serves
-as a bridge between the React and Backbone worlds. Besides some extra members
-that may be set by extending/instancing a component, it works pretty much the
-same way that <a href="http://facebook.github.io/react/">React</a> components do.</p>
-<p>When mounted (if using mixin mode) or created (wrapper mode) it starts listening
-to models and collections changes to automatically set your component props and
-achieve UI binding through reactive updates.</p>
-<p>Basic usage</p>
-<pre><code><span class="hljs-keyword">var</span> MyComponent = Backbone.React.Component.extend({
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{this.props.foo}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
-  }
-});
-<span class="hljs-keyword">var</span> model = <span class="hljs-keyword">new</span> Backbone.Model({foo: <span class="hljs-string">'bar'</span>});
-<span class="hljs-keyword">var</span> myComponent = <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyComponent</span> <span class="hljs-attribute">el</span>=<span class="hljs-value">{document.body}</span> <span class="hljs-attribute">model</span>=<span class="hljs-value">{model}</span> /&gt;</span>;</span>
-myComponent.mount();
-</code></pre><p>Mixin usage</p>
+</code></pre><p><code>Backbone.React.Component</code> is a mixin that glues <a href="http://backbonejs.org/">Backbone</a>
+models and collections into <a href="http://facebook.github.io/react/">React</a> components.</p>
+<p>When the component is mounted, a wrapper starts listening to models and
+collections changes to automatically set your component props and achieve UI
+binding through reactive updates.</p>
+<p>Basic Usage</p>
 <pre><code><span class="hljs-keyword">var</span> MyComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
@@ -92,7 +81,9 @@ React.renderComponent(<span class="xml"><span class="hljs-tag">&lt;<span class="
     module.exports = factory(React, Backbone, _);
   } <span class="hljs-keyword">else</span>
     factory(root.React, root.Backbone, root._);
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(React, Backbone, _)</span> {</span></pre></div></div>
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(React, Backbone, _)</span> {</span>
+  !Backbone.React &amp;&amp; (Backbone.React = {});
+  !Backbone.React.Component &amp;&amp; (Backbone.React.Component = {});</pre></div></div>
             
         </li>
         
@@ -103,13 +94,11 @@ React.renderComponent(<span class="xml"><span class="hljs-tag">&lt;<span class="
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Here lies the public API available on each component that runs through the wrapper
-instead of the mixin approach.</p>
+              <p>Mixin used in all component instances. Exported through <code>Backbone.React.Component.mixin</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (!Backbone.React) Backbone.React = {};
-  Backbone.React.Component = {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> mixin = Backbone.React.Component.mixin = {</pre></div></div>
             
         </li>
         
@@ -120,269 +109,7 @@ instead of the mixin approach.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Wraps <code>React.Component</code> into <code>Backbone.React.Component</code> and extends to a new
-class.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    extend: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(Clazz)</span> {</span>
-      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Factory</span> <span class="hljs-params">(props, children)</span> {</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>there may be more than one child, i.e. more than two function arguments</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>turn Arguments list into an array</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> args = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>wrap Wrapper constructor to be able to apply arguments</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> W = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-          <span class="hljs-keyword">return</span> Wrapper.apply(<span class="hljs-keyword">this</span>, [Component].concat(args));
-        };
-        W.prototype = Wrapper.prototype;
-
-        <span class="hljs-keyword">return</span> (<span class="hljs-keyword">new</span> W()).virtualComponent;
-      }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>Allow deep extending</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      Factory.extend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-        <span class="hljs-keyword">return</span> Backbone.React.Component.extend(_.extend({}, Clazz, <span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]));
-      };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>Apply mixin</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (Clazz.mixins) {
-        <span class="hljs-keyword">if</span> (Clazz.mixins[<span class="hljs-number">0</span>] !== mixin)
-          Clazz.mixins.splice(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, mixin);
-      } <span class="hljs-keyword">else</span>
-        Clazz.mixins = [mixin];</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>Create the react component later used by <code>Factory</code></p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> Component = React.createClass(_.extend(Factory.prototype, Clazz));
-      <span class="hljs-keyword">return</span> Factory;
-    },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-12">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-              <p>Renders/mounts the component. It delegates to <code>React.renderComponent</code>.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    mount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(el, onRender)</span> {</span>
-      <span class="hljs-keyword">if</span> (!(el || <span class="hljs-keyword">this</span>.el)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'No element to mount on'</span>);
-      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!el) el = <span class="hljs-keyword">this</span>.el;
-      <span class="hljs-keyword">this</span>.wrapper.component = React.renderComponent(<span class="hljs-keyword">this</span>, el, onRender);
-      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-    },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-13">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-              <p>Stops all listeners and unmounts this component from the DOM.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    remove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.component &amp;&amp; <span class="hljs-keyword">this</span>.wrapper.component.isMounted())
-        <span class="hljs-keyword">this</span>.unmount();
-      <span class="hljs-keyword">this</span>.wrapper.stopListening();
-      <span class="hljs-keyword">this</span>.stopListening();
-    },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-              <p>Intended to be used on the server side (Node.js), renders your component to a string
-ready to be used on the client side by delegating to <code>React.renderComponentToString</code>.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    toHTML: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-15">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
-              </div>
-              <p>Since we’re only able to call <code>renderComponentToString</code> once, lets clone this component
-and use it insteaad.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> clone = <span class="hljs-keyword">this</span>.clone(_.extend({}, <span class="hljs-keyword">this</span>.props, {
-        collection: <span class="hljs-keyword">this</span>.wrapper.collection,
-        model: <span class="hljs-keyword">this</span>.wrapper.model
-      }));</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <p>Return the html representation of the component.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> React.renderComponentToString(clone);
-    },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-17">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
-              <p>Unmount the component from the DOM.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    unmount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-      <span class="hljs-keyword">var</span> parentNode = <span class="hljs-keyword">this</span>.el.parentNode;
-      <span class="hljs-keyword">if</span> (!React.unmountComponentAtNode(parentNode)) {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p>Throw an error if there’s any unmounting the component.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'There was an error unmounting the component'</span>);
-      }
-      <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.wrapper.component;
-      <span class="hljs-keyword">this</span>.setElement(parentNode);
-    }
-  };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-19">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
-              </div>
-              <p>Mixin used in all component instances. Exported through <code>Backbone.React.Component.mixin</code>.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> mixin = Backbone.React.Component.mixin = {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>Sets this.el and this.$el when the component mounts.</p>
+              <p>Sets <code>this.el</code> and <code>this.$el</code> when the component mounts.</p>
 
             </div>
             
@@ -393,13 +120,13 @@ and use it insteaad.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Sets this.el and this.$el when the component updates.</p>
+              <p>Sets <code>this.el</code> and <code>this.$el</code> when the component updates.</p>
 
             </div>
             
@@ -410,21 +137,19 @@ and use it insteaad.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Checks if the component is running in mixin or wrapper mode when it mounts.
-If it’s a mixin set a flag for later use and instance a Wrapper to take care
-of models and collections binding.</p>
+              <p>When the component mounts, instance a <code>Wrapper</code> to take care
+of models and collections binding with <code>this.props</code>.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    componentWillMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
       <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.wrapper) {
-        <span class="hljs-keyword">this</span>.isBackboneMixin = <span class="hljs-literal">true</span>;
         <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">this</span>.props);
       }
     },</pre></div></div>
@@ -432,19 +157,19 @@ of models and collections binding.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>If running in mixin mode disposes of the wrapper that was created when the
-component mounted.</p>
+              <p>When the component unmounts, dispose listeners and delete
+<code>this.wrapper</code> reference.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    componentWillUnmount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper &amp;&amp; <span class="hljs-keyword">this</span>.isBackboneMixin) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper) {
         <span class="hljs-keyword">this</span>.wrapper.stopListening();
         <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.wrapper;
       }
@@ -453,13 +178,14 @@ component mounted.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>In order to allow passing nested models as reference we filter <code>nextProps.model</code>.</p>
+              <p>In order to allow passing nested models as reference we filter
+<code>nextProps.model</code>.</p>
 
             </div>
             
@@ -480,31 +206,30 @@ component mounted.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Shortcut to this.$el.find. Inspired by Backbone.View.</p>
+              <p>Shortcut to <code>this.$el.find</code>. Inspired by <code>Backbone.View</code>.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    $: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.$el)
-        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.$el.find.apply(<span class="hljs-keyword">this</span>.$el, <span class="hljs-built_in">arguments</span>);
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.$el &amp;&amp; <span class="hljs-keyword">this</span>.$el.find.apply(<span class="hljs-keyword">this</span>.$el, <span class="hljs-built_in">arguments</span>);
     },</pre></div></div>
             
         </li>
         
         
-        <li id="section-26">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Crawls to the owner of the component searching for a collection.</p>
+              <p>Crawls up to the owner of the component searching for a collection.</p>
 
             </div>
             
@@ -513,7 +238,9 @@ component mounted.</p>
       <span class="hljs-keyword">var</span> lookup = owner.wrapper;
       <span class="hljs-keyword">while</span> (!lookup.collection) {
         owner = owner._owner;
-        <span class="hljs-keyword">if</span> (!owner) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Collection not found'</span>);
+        <span class="hljs-keyword">if</span> (!owner) {
+          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Collection not found'</span>);
+        }
         lookup = owner.wrapper;
       }
       <span class="hljs-keyword">return</span> lookup.collection;
@@ -522,13 +249,13 @@ component mounted.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Crawls to the owner of the component searching for a model.</p>
+              <p>Crawls up to the owner of the component searching for a model.</p>
 
             </div>
             
@@ -537,7 +264,9 @@ component mounted.</p>
       <span class="hljs-keyword">var</span> lookup = owner.wrapper;
       <span class="hljs-keyword">while</span> (!lookup.model) {
         owner = owner._owner;
-        <span class="hljs-keyword">if</span> (!owner) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Model not found'</span>);
+        <span class="hljs-keyword">if</span> (!owner) {
+          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Model not found'</span>);
+        }
         lookup = owner.wrapper;
       }
       <span class="hljs-keyword">return</span> lookup.model;
@@ -546,31 +275,33 @@ component mounted.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Crawls <code>this._owner</code> recursively until it finds the owner of this
+              <p>Crawls <code>this._owner</code> recursively until it finds the owner of <code>this</code>
 component. In case of being a parent component (no owners) it returns itself.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    getOwner: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
       <span class="hljs-keyword">var</span> owner = <span class="hljs-keyword">this</span>;
-      <span class="hljs-keyword">while</span> (owner._owner) owner = owner._owner;
+      <span class="hljs-keyword">while</span> (owner._owner) {
+        owner = owner._owner;
+      }
       <span class="hljs-keyword">return</span> owner;
     },</pre></div></div>
             
         </li>
         
         
-        <li id="section-29">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Sets a DOM element to render/mount this component on this.el and this.$el.</p>
 
@@ -578,12 +309,14 @@ component. In case of being a parent component (no owners) it returns itself.</p
             
             <div class="content"><div class='highlight'><pre>    setElement: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(el)</span> {</span>
       <span class="hljs-keyword">if</span> (el &amp;&amp; Backbone.$ &amp;&amp; el <span class="hljs-keyword">instanceof</span> Backbone.$) {
-        <span class="hljs-keyword">if</span> (el.length &gt; <span class="hljs-number">1</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'You can only assign one element to a component'</span>);
+        <span class="hljs-keyword">if</span> (el.length &gt; <span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'You can only assign one element to a component'</span>);
+        }
         <span class="hljs-keyword">this</span>.el = el[<span class="hljs-number">0</span>];
         <span class="hljs-keyword">this</span>.$el = el;
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (el) {
         <span class="hljs-keyword">this</span>.el = el;
-        <span class="hljs-keyword">if</span> (Backbone.$) <span class="hljs-keyword">this</span>.$el = Backbone.$(el);
+        Backbone.$ &amp;&amp; (<span class="hljs-keyword">this</span>.$el = Backbone.$(el));
       }
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
     }
@@ -592,48 +325,30 @@ component. In case of being a parent component (no owners) it returns itself.</p
         </li>
         
         
-        <li id="section-30">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Binds models and collections to a React.Component. It mixes Backbone.Events.</p>
+              <p>Binds models and collections to a <code>React.Component</code>. It mixes <code>Backbone.Events</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Wrapper</span> <span class="hljs-params">(Component, props)</span> {</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Wrapper</span> <span class="hljs-params">(component, props)</span> {</span>
     props = props || {};
-    <span class="hljs-keyword">var</span> el, model = props.model, collection = props.collection;</pre></div></div>
+    <span class="hljs-keyword">var</span> model = props.model, collection = props.collection;</pre></div></div>
             
         </li>
         
         
-        <li id="section-31">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Check if props.el is a DOM element or a jQuery object</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (_.isElement(props.el) || Backbone.$ &amp;&amp; props.el <span class="hljs-keyword">instanceof</span> Backbone.$) {
-      el = props.el;
-      <span class="hljs-keyword">delete</span> props.el;
-    }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-32">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
-              </div>
-              <p>Check if props.model is a Backbone.Model or an hashmap of them</p>
+              <p>Check if <code>props.model</code> is a <code>Backbone.Model</code> or an hashmap of them</p>
 
             </div>
             
@@ -644,11 +359,11 @@ component. In case of being a parent component (no owners) it returns itself.</p
         </li>
         
         
-        <li id="section-33">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>The model(s) bound to this component</p>
 
@@ -659,13 +374,13 @@ component. In case of being a parent component (no owners) it returns itself.</p
         </li>
         
         
-        <li id="section-34">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>Set model(s) attributes on props for the first render</p>
+              <p>Set model(s) attributes on <code>props</code> for the first render</p>
 
             </div>
             
@@ -675,13 +390,13 @@ component. In case of being a parent component (no owners) it returns itself.</p
         </li>
         
         
-        <li id="section-35">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Check if props.collection is a Backbone.Collection or an hashmap of them</p>
+              <p>Check if <code>props.collection</code> is a <code>Backbone.Collection</code> or an hashmap of them</p>
 
             </div>
             
@@ -692,11 +407,11 @@ component. In case of being a parent component (no owners) it returns itself.</p
         </li>
         
         
-        <li id="section-36">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>The collection(s) bound to this component</p>
 
@@ -707,119 +422,48 @@ component. In case of being a parent component (no owners) it returns itself.</p
         </li>
         
         
-        <li id="section-37">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Set collection(s) models on props for the first render</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setPropsBackbone(collection, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, props);
-    }
-    <span class="hljs-keyword">var</span> component;
-    <span class="hljs-keyword">if</span> (Component.prototype) {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-38">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
-              </div>
-              <p>Instance the component mixing Backbone.Events, our public API and some special
-properties.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      component = <span class="hljs-keyword">this</span>.virtualComponent = _.defaults(Component.apply(<span class="hljs-keyword">this</span>, _.rest(<span class="hljs-built_in">arguments</span>)).__realComponentInstance,
-          Backbone.Events, _.omit(Backbone.React.Component, <span class="hljs-string">'mixin'</span>), {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-39">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
-              </div>
-              <p>Clones the component wrapper and returns the component.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        clone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(props, children)</span> {</span>
-          <span class="hljs-keyword">return</span> (<span class="hljs-keyword">new</span> Wrapper(Component, props, children)).virtualComponent;
-        },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-40">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
-              </div>
-              <p>Assign a component unique id, this is handy sometimes as a DOM attribute</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        cid: _.uniqueId(),</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-41">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
-              </div>
-              <p>One to one relationship between the wrapper and the component</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        wrapper: <span class="hljs-keyword">this</span>
-      });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-42">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
-              </div>
-              <p>Set element</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (el) mixin.setElement.call(component, el);
-    } <span class="hljs-keyword">else</span> {
-      component = Component;
-      <span class="hljs-keyword">this</span>.component = component;
     }</pre></div></div>
             
         </li>
         
         
-        <li id="section-43">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>Start listeners if this is a root node</p>
+              <p>1:1 relation with the <code>component</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (!component._owner) {
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.component = component;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Start listeners if this is a root node and if there’s DOM</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (!component._owner &amp;&amp; <span class="hljs-keyword">typeof</span> document !== <span class="hljs-string">'undefined'</span>) {
       <span class="hljs-keyword">this</span>.startModelListeners();
       <span class="hljs-keyword">this</span>.startCollectionListeners();
     }
@@ -828,11 +472,11 @@ properties.</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Mixing <code>Backbone.Events</code> into <code>Wrapper.prototype</code></p>
 
@@ -843,13 +487,13 @@ properties.</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <p>Sets this.props when a model/collection request results in error. It delegates
+              <p>Sets <code>this.props</code> when a model/collection request results in error. It delegates
 to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> and <code>Backbone.Collection#error</code>.</p>
 
             </div>
@@ -859,11 +503,11 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-46">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Set props only if there’s no silent option</p>
 
@@ -880,13 +524,13 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-47">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>Sets this.props when a model/collection request starts. It delegates to
+              <p>Sets <code>this.props</code> when a model/collection request starts. It delegates to
 <code>this.setProps</code>. It listens to <code>Backbone.Model#request</code> and <code>Backbone.Collection#request</code>.</p>
 
             </div>
@@ -896,11 +540,11 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-48">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Set props only if there’s no silent option</p>
 
@@ -916,13 +560,13 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-49">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>Sets this.props when a model/collection syncs. It delegates to <code>this.setProps</code>.
+              <p>Sets <code>this.props</code> when a model/collection syncs. It delegates to <code>this.setProps</code>.
 It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#sync</code></p>
 
             </div>
@@ -932,11 +576,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-50">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Set props only if there’s no silent option</p>
 
@@ -949,15 +593,15 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-51">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-51">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>Used internally to set this.collection or this.model on this.props. Delegates to
-<code>this.setProps</code>. It listens to <code>Backbone.Collection#add</code>, <code>Backbone.Collection#remove</code>,
-<code>Backbone.Collection#change</code> and <code>Backbone.Model#change</code>.</p>
+              <p>Used internally to set <code>this.collection</code> or <code>this.model</code> on <code>this.props</code>. Delegates to
+<code>this.setProps</code>. It listens to <code>Backbone.Collection</code> events such as <code>add</code>, <code>remove</code>,
+<code>change</code>, <code>sort</code>, <code>reset</code> and to <code>Backbone.Model</code> <code>change</code>.</p>
 
             </div>
             
@@ -973,46 +617,31 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-52">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Sets a model, collection or object into props by delegating to <code>React.Component#setProps</code>.</p>
+              <p>Sets a model, collection or object into props by delegating to <code>this.setProps</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> {</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-53">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
-              </div>
-              <p>If the component isn’t rendered/mounted set target because you can’t set props
-on an unmounted (virtual) component.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!target &amp;&amp; !(<span class="hljs-keyword">this</span>.component &amp;&amp; <span class="hljs-keyword">this</span>.component.isMounted()))
-        target = <span class="hljs-keyword">this</span>.virtualComponent.props;
+            <div class="content"><div class='highlight'><pre>    setProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> {</span>
       <span class="hljs-keyword">var</span> props = {};
       <span class="hljs-keyword">var</span> newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
 
-      <span class="hljs-keyword">if</span> (key)
+      <span class="hljs-keyword">if</span> (key) {
         props[key] = newProps;
-      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (modelOrCollection <span class="hljs-keyword">instanceof</span> Backbone.Collection)
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (modelOrCollection <span class="hljs-keyword">instanceof</span> Backbone.Collection) {
         props.collection = newProps;
-      <span class="hljs-keyword">else</span>
+      } <span class="hljs-keyword">else</span> {
         props = newProps;
+      }
 
-      <span class="hljs-keyword">if</span> (target) _.extend(target, props);
-      <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">if</span> (target) {
+        _.extend(target, props);
+      } <span class="hljs-keyword">else</span> {
         <span class="hljs-keyword">this</span>.nextProps = _.extend(<span class="hljs-keyword">this</span>.nextProps || {}, props);
         _.defer(_.bind(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
           <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.nextProps) {
@@ -1026,11 +655,11 @@ on an unmounted (virtual) component.</p>
         </li>
         
         
-        <li id="section-54">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Binds the component to any collection changes.</p>
 
@@ -1056,11 +685,11 @@ on an unmounted (virtual) component.</p>
         </li>
         
         
-        <li id="section-55">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Binds the component to any model changes.</p>
 
@@ -1086,27 +715,27 @@ on an unmounted (virtual) component.</p>
         </li>
         
         
-        <li id="section-56">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
-              <p>Expose <code>Backbone.React.Component</code>.</p>
+              <p>Expose <code>Backbone.React.Component.mixin</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> Backbone.React.Component;
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">return</span> Backbone.React.Component.mixin;
 }));</pre></div></div>
             
         </li>
         
         
-        <li id="section-57">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p><a href="https://github.com/magalhas/backbone-react-component"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
 
