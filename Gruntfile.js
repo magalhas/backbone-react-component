@@ -22,7 +22,7 @@ exports = module.exports = function (grunt) {
       },
       doc: {
         files: [
-          {cwd: 'docs', src: ['**', '!component.html', '!diagrams/**', '!diagrams'], dest: '.tmp', expand: true},
+          {cwd: 'docs', src: ['**', '!component.html'], dest: '.tmp', expand: true},
           {src: ['docs/component.html'], dest: '.tmp/index.html'}
         ]
       }
