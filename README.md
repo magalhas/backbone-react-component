@@ -123,7 +123,7 @@ var HelloWorld = React.createClass({
     return React.DOM.div({}, this.props.helloWorld);
   }
 });
-var helloWorld = new HelloWorld({
+var helloWorld = HelloWorld({
   model: model
 });
 // Render to an HTML string
