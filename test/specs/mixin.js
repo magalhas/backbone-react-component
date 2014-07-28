@@ -131,15 +131,6 @@ describe('Mixin', function () {
       if (spy) expect(spy).toHaveBeenCalled();
     });
 
-    it('gets the owner', function () {
-      spy = jasmine.createSpy().and.callFake(function () {
-        expect(this.getOwner()).toEqual(component.__realComponentInstance);
-      });
-      newSpy = jasmine.createSpy().and.callFake(function () {
-        expect(this.getOwner()).toEqual(component.__realComponentInstance);
-      });
-    });
-
     it('gets the model(s)', function () {
       spy = jasmine.createSpy().and.callFake(function () {
         expect(this.getModel()).toEqual(model1);
