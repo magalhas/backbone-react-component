@@ -4,15 +4,15 @@
     var _ = require('underscore');
     var Backbone = require('backbone');
     var React = require('react');
-    var Component = require('backbone-react-component');
-    module.exports = factory(_, Backbone, React, Component);
+    module.exports = factory(_, Backbone, React, require('backbone-react-component'));
   } else
-    root.BlogComponent = factory(this._, this.Backbone, this.React, this.Backbone.React.Component);
-}(this, function (_, Backbone, React, Component) {
+    root.BlogComponent = factory(this._, this.Backbone, this.React, this.Backbone.React.Component.mixin);
+}(this, function (_, Backbone, React, backboneMixin) {
   'use strict';
   // In a better implementation this would be splited into multiple components.
   // Keeping this under one component for the sake of the example. Remember composition :)
-  var BlogComponent = Component.extend({
+  var BlogComponent = React.createClass({
+    mixins: [backboneMixin],
     getInitialState: function () {
       return {
         id: null,
@@ -78,8 +78,7 @@
         model.save(this.state, {wait: true});
       } else {
         // Create a new one
-        model = new Backbone.Model(this.state);
-        collection.create(model, {wait: true});
+        collection.create(this.state, {wait: true});
       }
       // Set initial state
       this.replaceState(this.getInitialState());
@@ -88,7 +87,7 @@
     render: function () {
       return (
         <div>
-          {this.props.collection.map(this.createPost)}
+          {this.this.props.collection && props.collection.map(this.createPost)}
           {this.createForm()}
         </div>
       );

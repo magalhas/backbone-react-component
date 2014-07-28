@@ -4,15 +4,15 @@
     var _ = require('underscore');
     var Backbone = require('backbone');
     var React = require('react');
-    var Component = require('backbone-react-component');
-    module.exports = factory(_, Backbone, React, Component);
+    module.exports = factory(_, Backbone, React, require('backbone-react-component'));
   } else
-    root.BlogComponent = factory(this._, this.Backbone, this.React, this.Backbone.React.Component);
-}(this, function (_, Backbone, React, Component) {
+    root.BlogComponent = factory(this._, this.Backbone, this.React, this.Backbone.React.Component.mixin);
+}(this, function (_, Backbone, React, backboneMixin) {
   'use strict';
   // In a better implementation this would be splited into multiple components.
   // Keeping this under one component for the sake of the example. Remember composition :)
-  var BlogComponent = Component.extend({
+  var BlogComponent = React.createClass({
+    mixins: [backboneMixin],
     getInitialState: function () {
       return {
         id: null,
@@ -23,7 +23,7 @@
     // Form rendering
     createForm: function () {
       return (
-        React.DOM.form( {onSubmit:this.handleSubmit}, 
+        React.DOM.form( {onSubmit:this.handleSubmit},
           React.DOM.h2(null, this.state.id ? 'Edit Post' : 'Create Post'),
           React.DOM.input( {name:"id", type:"hidden", value:this.state.id} ),
           React.DOM.input( {name:"title", type:"text", value:this.state.title, onChange:this.handleChange} ),
@@ -35,7 +35,7 @@
     // Post rendering
     createPost: function (post) {
       return (
-        React.DOM.div( {key:post.id, 'data-id':post.id}, 
+        React.DOM.div( {key:post.id, 'data-id':post.id},
           React.DOM.h2(null, post.title),
           React.DOM.input( {type:"button", value:"Edit", onClick:this.handleEdit} ),
           React.DOM.input( {type:"button", value:"Remove", onClick:this.handleRemove} ),
@@ -78,8 +78,7 @@
         model.save(this.state, {wait: true});
       } else {
         // Create a new one
-        model = new Backbone.Model(this.state);
-        collection.create(model, {wait: true});
+        collection.create(this.state, {wait: true});
       }
       // Set initial state
       this.replaceState(this.getInitialState());
@@ -87,8 +86,8 @@
     // Go go react
     render: function () {
       return (
-        React.DOM.div(null, 
-          this.props.collection.map(this.createPost),
+        React.DOM.div(null,
+          this.props.collection && this.props.collection.map(this.createPost),
           this.createForm()
         )
       );

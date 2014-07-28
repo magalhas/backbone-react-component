@@ -3,9 +3,6 @@
   $.get('components/blog', function (componentAndData) {
     document.body.innerHTML = componentAndData.component;
     var blogCollection = new BlogCollection(componentAndData.data);
-    new BlogComponent({
-      el: document.body,
-      collection: blogCollection
-    }).mount();
+    React.renderComponent(BlogComponent({collection: blogCollection}), document.body);
   });
 }(this.BlogCollection, this.BlogComponent));

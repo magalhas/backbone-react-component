@@ -6,8 +6,7 @@ var express = require('express');
 var React = require('react');
 // Collection setup without dummy daya
 var blogCollection = new BlogCollection();
-// Component setup
-var blogComponent = new BlogComponent({collection: blogCollection});
+var blogComponent = BlogComponent({collection: blogCollection});
 // Httpd setup
 var httpd = express();
 httpd.use(express.json());
@@ -15,7 +14,7 @@ httpd.use(express.urlencoded());
 // Get component first render and collection
 httpd.get('/components/blog', function (req, res) {
   res.send({
-    component: blogComponent.toHTML(),
+    component: React.renderComponentToString(blogComponent),
     data: blogCollection.toJSON()
   });
 });
