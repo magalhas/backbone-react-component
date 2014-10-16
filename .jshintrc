@@ -22,6 +22,14 @@
     "module": true,
     "require": true,
     "exports": true,
-    "console": true
+    "console": true,
+    "Backbone": true,
+    "React": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "jasmine": true
   }
 }
