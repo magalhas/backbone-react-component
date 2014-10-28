@@ -1,4 +1,4 @@
-describe('Mixin', function () {
+describe('Parent Component', function () {
   'use strict';
   var Component = React.createClass({
     mixins: [Backbone.React.Component.mixin],
@@ -112,37 +112,70 @@ describe('Mixin', function () {
   });
 
   describe('Child Component', function () {
-    var newComponent, newSpy;
-    var NewComponent = React.createClass({
-      mixins: [Backbone.React.Component.mixin],
-      render: function () {
-        if (newSpy) newSpy.call(this);
-        return Component({model: this.getCollection().at(0)});
-      }
-    });
 
-    beforeEach(function () {
-      component = NewComponent({collection: collection1});
-    });
+    describe('with nested models', function () {
+      var newSpy;
+      var NewComponent = React.createClass({
+        mixins: [Backbone.React.Component.mixin],
+        render: function () {
+          if (newSpy) newSpy.call(this);
+          return Component({model: this.getCollection().at(0)});
+        }
+      });
 
-    afterEach(function () {
-      mountedComponent = React.renderComponent(component, el);
-      if (newSpy) expect(newSpy).toHaveBeenCalled();
-      if (spy) expect(spy).toHaveBeenCalled();
-    });
+      beforeEach(function () {
+        component = NewComponent({collection: collection1});
+      });
 
-    it('gets the model(s)', function () {
-      spy = jasmine.createSpy().and.callFake(function () {
-        expect(this.getModel()).toEqual(model1);
+      afterEach(function () {
+        mountedComponent = React.renderComponent(component, el);
+        if (newSpy) expect(newSpy).toHaveBeenCalled();
+        if (spy) expect(spy).toHaveBeenCalled();
+      });
+
+      it('gets the model when inside the child component', function () {
+        spy = jasmine.createSpy().and.callFake(function () {
+          expect(this.getModel()).toEqual(model1);
+        });
+      });
+
+      it('gets the same collection inside child and parent components', function () {
+        newSpy = jasmine.createSpy().and.callFake(function () {
+          expect(this.getCollection()).toEqual(collection1);
+        });
+        spy = jasmine.createSpy().and.callFake(function () {
+          expect(this.getCollection()).toEqual(collection1);
+        });
       });
     });
 
-    it('gets the collection(s)', function () {
-      newSpy = jasmine.createSpy().and.callFake(function () {
-        expect(this.getCollection()).toEqual(collection1);
+    describe('with nested collections', function () {
+      var newSpy;
+      var NewComponent = React.createClass({
+        mixins: [Backbone.React.Component.mixin],
+        render: function () {
+          if (newSpy) newSpy.call(this);
+          return Component({collection: collection2});
+        }
       });
-      spy = jasmine.createSpy().and.callFake(function () {
-        expect(this.getCollection()).toEqual(collection1);
+
+      beforeEach(function () {
+        component = NewComponent({collection: collection1});
+      });
+
+      afterEach(function () {
+        mountedComponent = React.renderComponent(component, el);
+        if (newSpy) expect(newSpy).toHaveBeenCalled();
+        if (spy) expect(spy).toHaveBeenCalled();
+      });
+
+      it('gets different collections depending on the component', function () {
+        newSpy = jasmine.createSpy().and.callFake(function () {
+          expect(this.getCollection()).toEqual(collection1);
+        });
+        spy = jasmine.createSpy().and.callFake(function () {
+          expect(this.getCollection()).toEqual(collection2);
+        });
       });
     });
   });
