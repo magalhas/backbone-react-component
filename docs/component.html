@@ -34,7 +34,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <pre><code>Backbone.React.Component v0<span class="hljs-number">.7</span><span class="hljs-number">.0</span>
+              <pre><code>Backbone.React.Component v0<span class="hljs-number">.7</span><span class="hljs-number">.1</span>
 
 (c) <span class="hljs-number">2014</span> <span class="hljs-string">"Magalhas"</span> José Magalhães &lt;magalhas@gmail.com&gt;
 Backbone.React.Component can be freely distributed under the MIT license.
@@ -46,7 +46,7 @@ binding through reactive updates.</p>
 <p>Basic Usage</p>
 <pre><code><span class="hljs-keyword">var</span> MyComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{this.props.foo}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
   }
 });
@@ -57,7 +57,7 @@ React.renderComponent(<span class="xml"><span class="hljs-tag">&lt;<span class="
             
             <div class="content"><div class='highlight'><pre><span class="hljs-pi">
 'use strict'</span>;
-(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root, factory)</span> {</span></pre></div></div>
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root, factory)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -74,14 +74,14 @@ React.renderComponent(<span class="xml"><span class="hljs-tag">&lt;<span class="
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span> &amp;&amp; define.amd)
     define([<span class="hljs-string">'react'</span>, <span class="hljs-string">'backbone'</span>, <span class="hljs-string">'underscore'</span>], factory);
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> module !== <span class="hljs-string">'undefined'</span> &amp;&amp; module.exports) {
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">module</span> !== <span class="hljs-string">'undefined'</span> &amp;&amp; <span class="hljs-built_in">module</span>.exports) {
     <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
     <span class="hljs-keyword">var</span> Backbone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'backbone'</span>);
     <span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>);
-    module.exports = factory(React, Backbone, _);
+    <span class="hljs-built_in">module</span>.exports = factory(React, Backbone, _);
   } <span class="hljs-keyword">else</span>
     factory(root.React, root.Backbone, root._);
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(React, Backbone, _)</span> {</span>
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(React, Backbone, _)</span> </span>{
   !Backbone.React &amp;&amp; (Backbone.React = {});
   !Backbone.React.Component &amp;&amp; (Backbone.React.Component = {});</pre></div></div>
             
@@ -98,7 +98,7 @@ React.renderComponent(<span class="xml"><span class="hljs-tag">&lt;<span class="
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> mixin = Backbone.React.Component.mixin = {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  Backbone.React.Component.mixin = {</pre></div></div>
             
         </li>
         
@@ -113,7 +113,7 @@ React.renderComponent(<span class="xml"><span class="hljs-tag">&lt;<span class="
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">this</span>.setElement(<span class="hljs-keyword">this</span>.getDOMNode());
     },</pre></div></div>
             
@@ -130,7 +130,7 @@ React.renderComponent(<span class="xml"><span class="hljs-tag">&lt;<span class="
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    componentDidUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    componentDidUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">this</span>.setElement(<span class="hljs-keyword">this</span>.getDOMNode());
     },</pre></div></div>
             
@@ -148,7 +148,7 @@ of models and collections binding with <code>this.props</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    componentWillMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    componentWillMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.wrapper) {
         <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">this</span>.props);
       }
@@ -168,7 +168,7 @@ of models and collections binding with <code>this.props</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    componentWillUnmount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    componentWillUnmount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper) {
         <span class="hljs-keyword">this</span>.wrapper.stopListening();
         <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.wrapper;
@@ -184,20 +184,34 @@ of models and collections binding with <code>this.props</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>In order to allow passing nested models as reference we filter
-<code>nextProps.model</code>.</p>
+              <p>In order to allow passing nested models and collections as reference we
+filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    componentWillReceiveProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(nextProps)</span> {</span>
+            <div class="content"><div class='highlight'><pre>    componentWillReceiveProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(nextProps)</span> </span>{
       <span class="hljs-keyword">var</span> model = nextProps.model;
+      <span class="hljs-keyword">var</span> collection = nextProps.collection;
+
+      <span class="hljs-keyword">var</span> key;
+
       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.model &amp;&amp; model) {
         <span class="hljs-keyword">delete</span> nextProps.model;
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.model.attributes) {
           <span class="hljs-keyword">this</span>.wrapper.setProps(model, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
         } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> model) {
+          <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> model) {
             <span class="hljs-keyword">this</span>.wrapper.setProps(model[key], key, nextProps);
+          }
+        }
+      }
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.collection &amp;&amp; collection &amp;&amp; !(collection <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>)) {
+        <span class="hljs-keyword">delete</span> nextProps.collection;
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.collection.models) {
+          <span class="hljs-keyword">this</span>.wrapper.setProps(collection, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> collection) {
+            <span class="hljs-keyword">this</span>.wrapper.setProps(collection[key], key, nextProps);
           }
         }
       }
@@ -216,7 +230,7 @@ of models and collections binding with <code>this.props</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    $: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    $: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.$el &amp;&amp; <span class="hljs-keyword">this</span>.$el.find.apply(<span class="hljs-keyword">this</span>.$el, <span class="hljs-built_in">arguments</span>);
     },</pre></div></div>
             
@@ -233,7 +247,7 @@ of models and collections binding with <code>this.props</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    getCollection: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    getCollection: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">var</span> owner = <span class="hljs-keyword">this</span>;
       <span class="hljs-keyword">var</span> lookup = owner.wrapper;
       <span class="hljs-keyword">while</span> (!lookup.collection) {
@@ -259,7 +273,7 @@ of models and collections binding with <code>this.props</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    getModel: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    getModel: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">var</span> owner = <span class="hljs-keyword">this</span>;
       <span class="hljs-keyword">var</span> lookup = owner.wrapper;
       <span class="hljs-keyword">while</span> (!lookup.model) {
@@ -286,7 +300,7 @@ component. In case of being a parent component (no owners) it returns itself.</p
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    getOwner: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>    getOwner: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">var</span> owner = <span class="hljs-keyword">this</span>;
       <span class="hljs-keyword">while</span> (owner._owner) {
         owner = owner._owner;
@@ -307,7 +321,7 @@ component. In case of being a parent component (no owners) it returns itself.</p
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setElement: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(el)</span> {</span>
+            <div class="content"><div class='highlight'><pre>    setElement: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(el)</span> </span>{
       <span class="hljs-keyword">if</span> (el &amp;&amp; Backbone.$ &amp;&amp; el <span class="hljs-keyword">instanceof</span> Backbone.$) {
         <span class="hljs-keyword">if</span> (el.length &gt; <span class="hljs-number">1</span>) {
           <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'You can only assign one element to a component'</span>);
@@ -335,7 +349,7 @@ component. In case of being a parent component (no owners) it returns itself.</p
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Wrapper</span> <span class="hljs-params">(component, props)</span> {</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Wrapper</span> <span class="hljs-params">(component, props)</span> </span>{
     props = props || {};
     <span class="hljs-keyword">var</span> model = props.model, collection = props.collection;</pre></div></div>
             
@@ -463,7 +477,7 @@ component. In case of being a parent component (no owners) it returns itself.</p
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (!component._owner &amp;&amp; <span class="hljs-keyword">typeof</span> document !== <span class="hljs-string">'undefined'</span>) {
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (!component._owner &amp;&amp; <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span> !== <span class="hljs-string">'undefined'</span>) {
       <span class="hljs-keyword">this</span>.startModelListeners();
       <span class="hljs-keyword">this</span>.startCollectionListeners();
     }
@@ -498,7 +512,7 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    onError: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    onError: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -535,7 +549,7 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    onRequest: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, xhr, options)</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    onRequest: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, xhr, options)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -571,7 +585,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    onSync: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    onSync: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -605,7 +619,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setPropsBackbone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> {</span>
+            <div class="content"><div class='highlight'><pre>    setPropsBackbone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> </span>{
       <span class="hljs-keyword">if</span> (!(modelOrCollection.models || modelOrCollection.attributes)) {
         <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> modelOrCollection)
             <span class="hljs-keyword">this</span>.setPropsBackbone(modelOrCollection[key], key, target);
@@ -627,7 +641,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> {</span>
+            <div class="content"><div class='highlight'><pre>    setProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> </span>{
       <span class="hljs-keyword">var</span> props = {};
       <span class="hljs-keyword">var</span> newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
 
@@ -643,7 +657,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         _.extend(target, props);
       } <span class="hljs-keyword">else</span> {
         <span class="hljs-keyword">this</span>.nextProps = _.extend(<span class="hljs-keyword">this</span>.nextProps || {}, props);
-        _.defer(_.bind(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+        _.defer(_.bind(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
           <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.nextProps) {
             <span class="hljs-keyword">this</span>.component &amp;&amp; <span class="hljs-keyword">this</span>.component.setProps(<span class="hljs-keyword">this</span>.nextProps);
             <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.nextProps;
@@ -665,7 +679,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    startCollectionListeners: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(collection, key)</span> {</span>
+            <div class="content"><div class='highlight'><pre>    startCollectionListeners: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(collection, key)</span> </span>{
       <span class="hljs-keyword">if</span> (!collection) collection = <span class="hljs-keyword">this</span>.collection;
       <span class="hljs-keyword">if</span> (collection) {
         <span class="hljs-keyword">if</span> (collection.models)
@@ -695,7 +709,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    startModelListeners: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model, key)</span> {</span>
+            <div class="content"><div class='highlight'><pre>    startModelListeners: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model, key)</span> </span>{
       <span class="hljs-keyword">if</span> (!model) model = <span class="hljs-keyword">this</span>.model;
       <span class="hljs-keyword">if</span> (model) {
         <span class="hljs-keyword">if</span> (model.attributes)

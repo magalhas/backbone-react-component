@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.7.0
+//     Backbone.React.Component v0.7.1
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -43,7 +43,7 @@
   !Backbone.React && (Backbone.React = {});
   !Backbone.React.Component && (Backbone.React.Component = {});
   // Mixin used in all component instances. Exported through `Backbone.React.Component.mixin`.
-  var mixin = Backbone.React.Component.mixin = {
+  Backbone.React.Component.mixin = {
     // Sets `this.el` and `this.$el` when the component mounts.
     componentDidMount: function () {
       this.setElement(this.getDOMNode());
@@ -67,17 +67,31 @@
         delete this.wrapper;
       }
     },
-    // In order to allow passing nested models as reference we filter
-    // `nextProps.model`.
+    // In order to allow passing nested models and collections as reference we
+    // filter `nextProps.model` and `nextProps.collection`.
     componentWillReceiveProps: function (nextProps) {
       var model = nextProps.model;
+      var collection = nextProps.collection;
+
+      var key;
+
       if (this.wrapper.model && model) {
         delete nextProps.model;
         if (this.wrapper.model.attributes) {
           this.wrapper.setProps(model, void 0, nextProps);
         } else {
-          for (var key in model) {
+          for (key in model) {
             this.wrapper.setProps(model[key], key, nextProps);
+          }
+        }
+      }
+      if (this.wrapper.collection && collection && !(collection instanceof Array)) {
+        delete nextProps.collection;
+        if (this.wrapper.collection.models) {
+          this.wrapper.setProps(collection, void 0, nextProps);
+        } else {
+          for (key in collection) {
+            this.wrapper.setProps(collection[key], key, nextProps);
           }
         }
       }
