@@ -161,20 +161,70 @@ describe('Parent Component', function () {
 
       beforeEach(function () {
         component = NewComponent({collection: collection1});
+        spy = newSpy = null;
       });
 
-      afterEach(function () {
-        mountedComponent = React.renderComponent(component, el);
-        if (newSpy) expect(newSpy).toHaveBeenCalled();
-        if (spy) expect(spy).toHaveBeenCalled();
-      });
-
-      it('gets different collections depending on the component', function () {
+      it('gets the right collection inside the parent component', function () {
         newSpy = jasmine.createSpy().and.callFake(function () {
           expect(this.getCollection()).toEqual(collection1);
         });
+        mountedComponent = React.renderComponent(component, el);
+        expect(newSpy).toHaveBeenCalled();
+      });
+
+      it('gets the right collection inside the child component', function () {
         spy = jasmine.createSpy().and.callFake(function () {
           expect(this.getCollection()).toEqual(collection2);
+        });
+        mountedComponent = React.renderComponent(component, el);
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it('has the right JSON data inside the parent props', function () {
+        newSpy = jasmine.createSpy().and.callFake(function () {
+          expect(this.props.collection instanceof Array).toBeTruthy();
+          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+        });
+        mountedComponent = React.renderComponent(component, el);
+        expect(newSpy).toHaveBeenCalled();
+      });
+
+      it('has the right JSON data inside the child props', function () {
+        spy = jasmine.createSpy().and.callFake(function () {
+          expect(this.props.collection instanceof Array).toBeTruthy();
+          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+        });
+        mountedComponent = React.renderComponent(component, el);
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it('has the right JSON data inside the parent props after collection changes', function (done) {
+        newSpy = jasmine.createSpy().and.callFake(function () {
+          expect(this.getCollection()).toEqual(collection1);
+          expect(this.props.collection instanceof Array).toBeTruthy();
+          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+        });
+        mountedComponent = React.renderComponent(component, el);
+        expect(newSpy).toHaveBeenCalled();
+        collection1.add(new Backbone.Model());
+        _.defer(function () {
+          expect(newSpy.calls.count()).toEqual(2);
+          done();
+        });
+      });
+
+      it('has the right JSON data inside the child props after collection changes', function (done) {
+        spy = jasmine.createSpy().and.callFake(function () {
+          expect(this.getCollection()).toEqual(collection2);
+          expect(this.props.collection instanceof Array).toBeTruthy();
+          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+        });
+        mountedComponent = React.renderComponent(component, el);
+        expect(spy).toHaveBeenCalled();
+        collection1.add(new Backbone.Model());
+        _.defer(function () {
+          expect(spy.calls.count()).toEqual(2);
+          done();
         });
       });
     });
