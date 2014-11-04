@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.7.1
+//     Backbone.React.Component v0.7.2
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -27,7 +27,6 @@
 //     var model = new Backbone.Model({foo: 'bar'});
 //     React.renderComponent(<MyComponent model={model} />, document.body);
 
-'use strict';
 (function (root, factory) {
   // Universal module definition
   if (typeof define === 'function' && define.amd)
@@ -40,6 +39,7 @@
   } else
     factory(root.React, root.Backbone, root._);
 }(this, function (React, Backbone, _) {
+  'use strict';
   !Backbone.React && (Backbone.React = {});
   !Backbone.React.Component && (Backbone.React.Component = {});
   // Mixin used in all component instances. Exported through `Backbone.React.Component.mixin`.
