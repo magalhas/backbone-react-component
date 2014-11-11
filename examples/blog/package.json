@@ -1,15 +1,16 @@
 {
   "dependencies": {
-    "express": "^3.4.8",
     "backbone": "^1.1.2",
     "backbone-react-component": "^0.7.0",
-    "react": "^0.11.1",
-    "underscore": "^1.6.0"
+    "express": "^3.18.3",
+    "react": "^0.12.0",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "grunt-jsx": "^0.1.5",
     "grunt": "^0.4.2",
-    "grunt-contrib-watch": "^0.5.3"
+    "grunt-contrib-watch": "^0.5.3",
+    "grunt-jsx": "^0.1.5",
+    "grunt-react": "^0.10.0"
   },
   "main": "server"
 }
