@@ -123,15 +123,13 @@ var HelloWorld = React.createClass({
     return React.DOM.div({}, this.props.helloWorld);
   }
 });
-var helloWorld = HelloWorld({
-  model: model
-});
+
 // Render to an HTML string
-React.renderComponentToString(helloWorld);
+React.renderToString(HelloWorld({model: model}));
 // Updating the model
 model.set('helloWorld', 'Hi again!');
 // Rendering to an HTML string again
-React.renderComponentToString(helloWorld);
+React.renderToString(HelloWorld({model: model}));
 ```
 
 ### API
