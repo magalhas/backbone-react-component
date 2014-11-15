@@ -54,7 +54,7 @@ var MyComponent = React.createClass({
 
 var model = new Backbone.Model({foo: 'bar'});
 
-React.renderComponent(<MyComponent model={model} />, document.body);
+React.render(<MyComponent model={model} />, document.body);
 // Update the UI
 model.set('foo', 'Hello world!');
 ```
@@ -73,7 +73,7 @@ var MyComponent = React.createClass({
 });
 var collection = new Backbone.Collection([{helloWorld: 'Hello world!'}]);
 
-React.renderComponent(<MyComponent collection={collection} />, document.body);
+React.render(<MyComponent collection={collection} />, document.body);
 ```
 
 #### Multiple models and collections
@@ -105,7 +105,7 @@ var newComponent = MyComponent({
     secondCollection: new Backbone.Collection([{helloWorld: 'Hello world!'}])
   }
 });
-React.renderComponent(newComponent, document.body);
+React.render(newComponent, document.body);
 ```
 
 ### Usage on the server (Node.js)
