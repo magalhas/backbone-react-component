@@ -39,7 +39,8 @@
     "models",
     "collections",
     "server",
-    "client"
+    "client",
+    "react-component"
   ],
   "main": "lib/component",
   "engines": {
