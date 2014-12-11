@@ -43,7 +43,7 @@ If you're not using [Bower](http://bower.io/) nor [Npm](https://npmjs.org/) down
 
 ### Usage
 
-The mixin only works if set on the root component. You can use it on child components as well, but it won't work nor __make a difference__ if the root component of those children is not using the mixin.
+The mixin only works if set on the root component. You can use it on child components as well, but it won't work nor _make a difference_ if the root component of those children is not using the mixin.
 
 #### One model
 ```js
