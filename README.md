@@ -97,7 +97,9 @@ var MyComponent = React.createClass({
   }
 });
 
-var newComponent = MyComponent({
+var MyFactory = React.createFactory(MyComponent);
+
+var newComponent = MyFactory({
   model: {
     firstModel: new Backbone.Model({helloWorld: 'Hello world!'}),
     secondModel: new Backbone.Model({helloWorld: 'Hello world!'})
@@ -125,13 +127,14 @@ var HelloWorld = React.createClass({
     return React.DOM.div({}, this.props.helloWorld);
   }
 });
+var HelloWorldFactory = React.createFactory(HelloWorld);
 
 // Render to an HTML string
-React.renderToString(HelloWorld({model: model}));
+React.renderToString(HelloWorldFactory({model: model}));
 // Updating the model
 model.set('helloWorld', 'Hi again!');
 // Rendering to an HTML string again
-React.renderToString(HelloWorld({model: model}));
+React.renderToString(HelloWorldFactory({model: model}));
 ```
 
 ### API
