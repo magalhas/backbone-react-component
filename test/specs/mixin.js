@@ -1,13 +1,13 @@
 /* global _:true, document:true */
 describe('Parent Component', function () {
   'use strict';
-  var Component = React.createClass({
+  var Component = React.createFactory(React.createClass({
     mixins: [Backbone.React.Component.mixin],
     render: function () {
       if (spy) spy.call(this);
       return React.DOM.div({}, this.props.hello);
     }
-  });
+  }));
 
   var component, el, mountedComponent, model1, model2, collection1, collection2, spy;
 
@@ -110,13 +110,13 @@ describe('Parent Component', function () {
 
     describe('with nested models', function () {
       var newSpy;
-      var NewComponent = React.createClass({
+      var NewComponent = React.createFactory(React.createClass({
         mixins: [Backbone.React.Component.mixin],
         render: function () {
           if (newSpy) newSpy.call(this);
           return Component({model: this.getCollection().at(0)});
         }
-      });
+      }));
 
       beforeEach(function () {
         component = NewComponent({collection: collection1});
@@ -146,13 +146,13 @@ describe('Parent Component', function () {
 
     describe('with nested collections', function () {
       var newSpy;
-      var NewComponent = React.createClass({
+      var NewComponent = React.createFactory(React.createClass({
         mixins: [Backbone.React.Component.mixin],
         render: function () {
           if (newSpy) newSpy.call(this);
           return Component({collection: collection2});
         }
-      });
+      }));
 
       beforeEach(function () {
         component = NewComponent({collection: collection1});
