@@ -144,13 +144,10 @@ The following API is under `Backbone.React.Component.mixin` (`require('backbone-
 Inspired by Backbone.View, it's a shortcut to this.$el.find method.
 
 #### getCollection()
-Crawls to the owner of the component searching for a collection.
+Grabs the component's collection(s) or from one of the parents.
 
 #### getModel()
-Crawls to the owner of the component searching for a model.
-
-#### getOwner()
-Gets the component owner (greatest parent component).
+Grabs the component's model(s) or from one of the parents.
 
 ## Examples
 * [Blog](https://github.com/magalhas/backbone-react-component/tree/master/examples/blog)

@@ -1,6 +1,6 @@
 {
   "name": "backbone-react-component",
-  "version": "0.7.2",
+  "version": "0.8.0-alpha.1",
   "filename": "backbone-react-component.js",
   "description": "Backbone.React.Component is a wrapper for React.Component and brings all the power of Facebook's React to Backbone.js",
   "author": {
@@ -15,18 +15,19 @@
     "backbone": "^1.1.2"
   },
   "dependencies": {
-    "react": "^0.12.0",
+    "react": "^0.13.0-alpha.1",
     "underscore": "^1.7.0"
   },
   "devDependencies": {
     "backbone": "^1.1.2",
-    "grunt-contrib-uglify": "^0.3.2",
     "grunt": "^0.4.2",
-    "grunt-contrib-jasmine": "^0.6.1",
+    "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-jasmine": "^0.6.1",
+    "grunt-contrib-uglify": "^0.3.2",
     "grunt-docco": "^0.3.3",
     "grunt-gh-pages": "^0.9.1",
-    "grunt-contrib-clean": "^0.5.0"
+    "jquery": "^2.1.3"
   },
   "scripts": {
     "test": "grunt test",

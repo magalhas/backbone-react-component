@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.7.2
+//     Backbone.React.Component v0.8.0-alpha.1
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -25,25 +25,49 @@
 //       }
 //     });
 //     var model = new Backbone.Model({foo: 'bar'});
-//     React.renderComponent(<MyComponent model={model} />, document.body);
+//     React.render(<MyComponent model={model} />, document.body);
 
 (function (root, factory) {
   // Universal module definition
-  if (typeof define === 'function' && define.amd)
+  if (typeof define === 'function' && define.amd) {
     define(['react', 'backbone', 'underscore'], factory);
-  else if (typeof module !== 'undefined' && module.exports) {
-    var React = require('react');
-    var Backbone = require('backbone');
-    var _ = require('underscore');
-    module.exports = factory(React, Backbone, _);
-  } else
+  } else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = factory(require('react'), require('backbone'), require('underscore'));
+  } else {
     factory(root.React, root.Backbone, root._);
+  }
 }(this, function (React, Backbone, _) {
   'use strict';
-  !Backbone.React && (Backbone.React = {});
-  !Backbone.React.Component && (Backbone.React.Component = {});
+  if (!Backbone.React) {
+    Backbone.React = {};
+  }
+  if (!Backbone.React.Component) {
+    Backbone.React.Component = {};
+  }
   // Mixin used in all component instances. Exported through `Backbone.React.Component.mixin`.
   Backbone.React.Component.mixin = {
+    // Types of the context passed to child components. Only
+    // `hasParentBackboneMixin` is required all of the others are optional.
+    childContextTypes: {
+      hasParentBackboneMixin: React.PropTypes.bool.isRequired,
+      parentModel: React.PropTypes.any,
+      parentCollection: React.PropTypes.any
+    },
+    // Types of the context received from the parent component. All of them are
+    // optional.
+    contextTypes: {
+      hasParentBackboneMixin: React.PropTypes.bool,
+      parentModel: React.PropTypes.any,
+      parentCollection: React.PropTypes.any
+    },
+    // Passes data to our child components.
+    getChildContext: function () {
+      return {
+        hasParentBackboneMixin: true,
+        parentModel: this.getModel(),
+        parentCollection: this.getCollection()
+      };
+    },
     // Sets `this.el` and `this.$el` when the component mounts.
     componentDidMount: function () {
       this.setElement(this.getDOMNode());
@@ -96,44 +120,17 @@
         }
       }
     },
-    // Shortcut to `this.$el.find`. Inspired by `Backbone.View`.
+    // Shortcut to `@$el.find`. Inspired by `Backbone.View`.
     $: function () {
       return this.$el && this.$el.find.apply(this.$el, arguments);
     },
-    // Crawls up to the owner of the component searching for a collection.
+    // Grabs the collection from `@wrapper.collection` or `@context.parentCollection`
     getCollection: function () {
-      var owner = this;
-      var lookup = owner.wrapper;
-      while (!lookup.collection) {
-        owner = owner._owner;
-        if (!owner) {
-          throw new Error('Collection not found');
-        }
-        lookup = owner.wrapper;
-      }
-      return lookup.collection;
+      return this.wrapper.collection || this.context.parentCollection;
     },
-    // Crawls up to the owner of the component searching for a model.
+    // Grabs the model from `@wrapper.model` or `@context.parentModel`
     getModel: function () {
-      var owner = this;
-      var lookup = owner.wrapper;
-      while (!lookup.model) {
-        owner = owner._owner;
-        if (!owner) {
-          throw new Error('Model not found');
-        }
-        lookup = owner.wrapper;
-      }
-      return lookup.model;
-    },
-    // Crawls `this._owner` recursively until it finds the owner of `this`
-    // component. In case of being a parent component (no owners) it returns itself.
-    getOwner: function () {
-      var owner = this;
-      while (owner._owner) {
-        owner = owner._owner;
-      }
-      return owner;
+      return this.wrapper.model || this.context.parentModel;
     },
     // Sets a DOM element to render/mount this component on this.el and this.$el.
     setElement: function (el) {
@@ -145,7 +142,9 @@
         this.$el = el;
       } else if (el) {
         this.el = el;
-        Backbone.$ && (this.$el = Backbone.$(el));
+        if (Backbone.$) {
+          this.$el = Backbone.$(el);
+        }
       }
       return this;
     }
@@ -175,7 +174,7 @@
     // 1:1 relation with the `component`
     this.component = component;
     // Start listeners if this is a root node and if there's DOM
-    if (!component._owner && typeof document !== 'undefined') {
+    if (!component.context.hasParentBackboneMixin && typeof document !== 'undefined') {
       this.startModelListeners();
       this.startCollectionListeners();
     }
@@ -185,9 +184,9 @@
     // Sets `this.props` when a model/collection request results in error. It delegates
     // to `this.setProps`. It listens to `Backbone.Model#error` and `Backbone.Collection#error`.
     onError: function (modelOrCollection, res, options) {
-      // Set props only if there's no silent option
+      // Set state only if there's no silent option
       if (!options.silent)
-        this.setProps({
+        this.component.setState({
           isRequesting: false,
           hasError: true,
           error: res
@@ -198,7 +197,7 @@
     onRequest: function (modelOrCollection, xhr, options) {
       // Set props only if there's no silent option
       if (!options.silent)
-        this.setProps({
+        this.component.setState({
           isRequesting: true,
           hasError: false
         });
@@ -208,7 +207,7 @@
     onSync: function (modelOrCollection, res, options) {
       // Set props only if there's no silent option
       if (!options.silent)
-        this.setProps({isRequesting: false});
+        this.component.setState({isRequesting: false});
     },
     // Used internally to set `this.collection` or `this.model` on `this.props`. Delegates to
     // `this.setProps`. It listens to `Backbone.Collection` events such as `add`, `remove`,
@@ -221,7 +220,7 @@
       }
       this.setProps.apply(this, arguments);
     },
-    // Sets a model, collection or object into props by delegating to `this.setProps`.
+    // Sets a model, collection or object into props by delegating to `this.component.setProps`.
     setProps: function (modelOrCollection, key, target) {
       var props = {};
       var newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
@@ -240,7 +239,9 @@
         this.nextProps = _.extend(this.nextProps || {}, props);
         _.defer(_.bind(function () {
           if (this.nextProps) {
-            this.component && this.component.setProps(this.nextProps);
+            if (this.component) {
+              this.component.setProps(this.nextProps);
+            }
             delete this.nextProps;
           }
         }, this));
