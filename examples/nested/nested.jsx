@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* globals _:true, document:true */
 (function () {
   'use strict';
   // Our implementation of `Backbone.Model`
@@ -82,5 +83,5 @@
     }
   });
   // Render a `CollectionComponent` with the `collection` into `document.body`
-  React.renderComponent(<CollectionComponent collection={collection} />, document.body);
+  React.render(<CollectionComponent collection={collection} />, document.body);
 }());
