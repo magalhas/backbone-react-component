@@ -50,9 +50,9 @@ exports = module.exports = function (grunt) {
           specs: 'test/specs/**/*.js',
           vendor: [
             'test/helpers/polyfills.js',
-            'node_modules/underscore/underscore-min.js',
-            'node_modules/backbone/backbone-min.js',
-            'node_modules/react/dist/react.min.js'
+            'node_modules/underscore/underscore.js',
+            'node_modules/backbone/backbone.js',
+            'node_modules/react/dist/react.js'
           ]
         }
       }
