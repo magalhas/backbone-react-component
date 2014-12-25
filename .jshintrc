@@ -30,6 +30,7 @@
     "describe": true,
     "it": true,
     "expect": true,
-    "jasmine": true
+    "jasmine": true,
+    "setInterval": true
   }
 }
