@@ -36,12 +36,6 @@ describe('Parent Component', function () {
     expect(mountedComponent.getCollection()).toEqual(collection1);
   });
 
-  it('gets the owner', function () {
-    component = Component();
-    mountedComponent = React.render(component, el);
-    expect(mountedComponent.getOwner()).toEqual(mountedComponent);
-  });
-
   it('binds to a model', function (done) {
     component = Component({model: model1});
     mountedComponent = React.render(component, el);
