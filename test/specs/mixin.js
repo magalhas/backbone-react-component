@@ -1,3 +1,4 @@
+/* global _:true, document:true */
 describe('Parent Component', function () {
   'use strict';
   var Component = React.createClass({
