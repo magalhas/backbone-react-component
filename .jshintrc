@@ -8,7 +8,7 @@
   "esnext": true,
   "immed": true,
   "latedef": false,
-  "newcap": true,
+  "newcap": false,
   "noarg": true,
   "nonew": true,
   "quotmark": false,
