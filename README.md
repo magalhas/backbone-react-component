@@ -19,7 +19,6 @@ When the component is mounted, a wrapper starts listening to models and collecti
     - [$](#$)
     - [getCollection()](#getcollection)
     - [getModel()](#getmodel)
-    - [getOwner()](#getowner)
 - [Examples](#examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
