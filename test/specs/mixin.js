@@ -1,14 +1,18 @@
 describe('Parent Component', function () {
   'use strict';
+  var component, el, mountedComponent, model1, model2, collection1, collection2, spy, initialStateSpy;
+
   var Component = React.createFactory(React.createClass({
     mixins: [Backbone.React.Component.mixin],
+    getInitialState: function () {
+      if (initialStateSpy) initialStateSpy.call(this);
+      return {};
+    },
     render: function () {
       if (spy) spy.call(this);
       return React.DOM.div({}, this.props.hello);
     }
   }));
-
-  var component, el, mountedComponent, model1, model2, collection1, collection2, spy;
 
   beforeEach(function () {
     el = document.createElement('div');
@@ -16,6 +20,7 @@ describe('Parent Component', function () {
     model2 = new Backbone.Model({goodbye: 'other world!'});
     collection1 = new Backbone.Collection([model1, model2]);
     collection2 = new Backbone.Collection([model2, model1]);
+    mountedComponent = component = spy = initialStateSpy = null;
   });
 
   afterEach(function () {
@@ -109,6 +114,32 @@ describe('Parent Component', function () {
       expect(mountedComponent.props.collection[0].hello).toEqual('other world!');
       done();
     });
+  });
+
+  it('grabs the collection instance on `getInitialState`', function (done) {
+    component = Component({
+      collection: collection1
+    });
+
+    initialStateSpy = jasmine.createSpy().and.callFake(function () {
+      expect(this.getCollection()).toEqual(collection1);
+      done();
+    });
+
+    React.render(component, el);
+  });
+
+  it('grabs the model instance on `getInitialState`', function (done) {
+    component = Component({
+      model: model1
+    });
+
+    initialStateSpy = jasmine.createSpy().and.callFake(function () {
+      expect(this.getModel()).toEqual(model1);
+      done();
+    });
+
+    React.render(component, el);
   });
 
   describe('Child Component', function () {
