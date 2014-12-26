@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.8.0-alpha.1
+//     Backbone.React.Component v0.8.0-alpha.2
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -75,6 +75,14 @@
     // Sets `this.el` and `this.$el` when the component updates.
     componentDidUpdate: function () {
       this.setElement(this.getDOMNode());
+    },
+    // When the component gets the initial state, instance a `Wrapper` to take
+    // care of models and collections binding with `this.props`.
+    getInitialState: function () {
+      if (!this.wrapper) {
+        this.wrapper = new Wrapper(this, this.props);
+      }
+      return {};
     },
     // When the component mounts, instance a `Wrapper` to take care
     // of models and collections binding with `this.props`.
