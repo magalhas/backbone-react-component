@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.7.2
+//     Backbone.React.Component v0.7.3
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -25,7 +25,7 @@
 //       }
 //     });
 //     var model = new Backbone.Model({foo: 'bar'});
-//     React.renderComponent(<MyComponent model={model} />, document.body);
+//     React.render(<MyComponent model={model} />, document.body);
 
 (function (root, factory) {
   // Universal module definition
@@ -40,8 +40,12 @@
     factory(root.React, root.Backbone, root._);
 }(this, function (React, Backbone, _) {
   'use strict';
-  !Backbone.React && (Backbone.React = {});
-  !Backbone.React.Component && (Backbone.React.Component = {});
+  if (!Backbone.React) {
+    Backbone.React = {};
+  }
+  if (!Backbone.React.Component) {
+    Backbone.React.Component = {};
+  }
   // Mixin used in all component instances. Exported through `Backbone.React.Component.mixin`.
   Backbone.React.Component.mixin = {
     // Sets `this.el` and `this.$el` when the component mounts.
@@ -51,6 +55,14 @@
     // Sets `this.el` and `this.$el` when the component updates.
     componentDidUpdate: function () {
       this.setElement(this.getDOMNode());
+    },
+    // When the component gets the initial state, instance a `Wrapper` to take
+    // care of models and collections binding with `this.props`.
+    getInitialState: function () {
+      if (!this.wrapper) {
+        this.wrapper = new Wrapper(this, this.props);
+      }
+      return {};
     },
     // When the component mounts, instance a `Wrapper` to take care
     // of models and collections binding with `this.props`.
@@ -145,7 +157,9 @@
         this.$el = el;
       } else if (el) {
         this.el = el;
-        Backbone.$ && (this.$el = Backbone.$(el));
+        if (Backbone.$) {
+          this.$el = Backbone.$(el);
+        }
       }
       return this;
     }
@@ -240,7 +254,9 @@
         this.nextProps = _.extend(this.nextProps || {}, props);
         _.defer(_.bind(function () {
           if (this.nextProps) {
-            this.component && this.component.setProps(this.nextProps);
+            if (this.component) {
+              this.component.setProps(this.nextProps);
+            }
             delete this.nextProps;
           }
         }, this));
