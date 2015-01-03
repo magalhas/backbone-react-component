@@ -111,6 +111,56 @@ var newComponent = MyFactory({
 React.render(newComponent, document.body);
 ```
 
+#### Child Components
+
+This mixin does not work on child components because it relies on [setProps](https://facebook.github.io/react/docs/component-api.html#setprops), which is available only to root components.
+
+If you do wish to use it on a child component, simply remount that child as a new root component, like so:
+
+```js
+var ChildComponent = React.createClass({
+  mixins: [Backbone.React.Component.mixin],
+
+  createEntry: function(entry) {
+    return (
+      <div>{entry.helloWorld}</div>
+    );
+  },
+
+  render: function() {
+    return (
+      <div className='child'>
+        {this.props.collection.map(this.createEntry)}
+      </div>
+    );
+  }
+});
+
+var ParentComponent = React.createClass({
+  componentDidMount: function() {
+    var collection = new Backbone.Collection([{ helloWorld: 'Hello world!' }]);
+
+    // Remount child as a new root component.
+    React.render(
+      <ChildComponent />,
+      this.refs.childContainer.getDOMNode()
+    );
+  },
+
+  render: function() {
+    return (
+      <div className='parent'>
+        <div ref='childContainer' />
+      </div>
+    );
+  }
+});
+
+React.render(<ParentComponent />, document.body);
+```
+
+Now anytime the collection changes (e.g., a fetch occurs, a model is created, a model is updated), the child component will re-render as desired.
+
 ### Usage on the server (Node.js)
 ```js
 var Backbone = require('backbone');
