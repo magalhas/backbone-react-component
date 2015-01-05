@@ -14,6 +14,7 @@ When the component is mounted, a wrapper starts listening to models and collecti
     - [One model](#one-model)
     - [One collection](#one-collection)
     - [Multiple models and collections](#multiple-models-and-collections)
+    - [Child Components](#child-components)
   - [Usage on the server (Node.js)](#usage-on-the-server-nodejs)
   - [API](#api)
     - [$](#$)
