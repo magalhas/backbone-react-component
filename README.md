@@ -113,9 +113,14 @@ React.render(newComponent, document.body);
 
 #### Child Components
 
-This mixin does not work on child components because it relies on [setProps](https://facebook.github.io/react/docs/component-api.html#setprops), which is available only to root components.
+There are many ways of embracing this library when it comes to child components,
+the following are some of the possible patterns:
 
-If you do wish to use it on a child component, simply remount that child as a new root component, like so:
+  - `React` way, pass handlers from your top component through the child
+  components and communicate that way
+  - Simply rely on `@getModel` and `@getCollection` to get your models or
+  collections from the component or it parents (tighter coupling)
+  - Create new root components, like on the example below
 
 ```js
 var ChildComponent = React.createClass({
