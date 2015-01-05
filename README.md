@@ -165,8 +165,6 @@ var ParentComponent = React.createClass({
 React.render(<ParentComponent />, document.body);
 ```
 
-Now anytime the collection changes (e.g., a fetch occurs, a model is created, a model is updated), the child component will re-render as desired.
-
 ### Usage on the server (Node.js)
 ```js
 var Backbone = require('backbone');
