@@ -121,7 +121,7 @@ the following are some of the possible patterns:
   components and communicate that way
   - Simply rely on `@getModel` and `@getCollection` to get your models or
   collections from the component or it parents (tighter coupling)
-  - Create new root components, like on the example below
+  - Create new root components, like on the example below:
 
 ```js
 var ChildComponent = React.createClass({
