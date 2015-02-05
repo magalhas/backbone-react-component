@@ -148,7 +148,7 @@ var ParentComponent = React.createClass({
 
     // Remount child as a new root component.
     React.render(
-      <ChildComponent />,
+      <ChildComponent collection={collection} />,
       this.refs.childContainer.getDOMNode()
     );
   },
