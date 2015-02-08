@@ -15,7 +15,7 @@
     "backbone": "^1.1.2"
   },
   "dependencies": {
-    "react": "^0.13.0-alpha.1",
+    "react": "^0.13.0-beta.1",
     "underscore": "^1.7.0"
   },
   "devDependencies": {
