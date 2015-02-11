@@ -11,7 +11,7 @@ describe('Parent Component', function () {
     },
     render: function () {
       if (spy) spy.call(this);
-      return React.DOM.div({}, this.props.hello);
+      return React.DOM.div({}, this.state.hello);
     }
   }));
 
@@ -45,11 +45,11 @@ describe('Parent Component', function () {
   it('binds to a model', function (done) {
     component = Component({model: model1});
     mountedComponent = React.render(component, el);
-    expect(mountedComponent.props.hello).toEqual('world!');
+    expect(mountedComponent.state.hello).toEqual('world!');
     model1.set('hello', 'again');
-    // Defering because setting props is defered as well
+    // Defering because setting state is defered as well
     _.defer(function () {
-      expect(mountedComponent.props.hello).toEqual('again');
+      expect(mountedComponent.state.hello).toEqual('again');
       done();
     });
   });
@@ -62,18 +62,18 @@ describe('Parent Component', function () {
       }
     });
     mountedComponent = React.render(component, el);
-    expect(mountedComponent.props.firstModel.hello).toEqual('world!');
-    expect(mountedComponent.props.secondModel.goodbye).toEqual('other world!');
+    expect(mountedComponent.state.firstModel.hello).toEqual('world!');
+    expect(mountedComponent.state.secondModel.goodbye).toEqual('other world!');
   });
 
   it('binds to a collection', function (done) {
     component = Component({collection: collection1});
     mountedComponent = React.render(component, el);
-    expect(mountedComponent.props.collection[0].hello).toEqual('world!');
+    expect(mountedComponent.state.collection[0].hello).toEqual('world!');
     mountedComponent.getCollection().at(0).set('hello', 'again');
-    // Defering because setting props is defered as well
+    // Defering because setting state is defered as well
     _.defer(function () {
-      expect(mountedComponent.props.collection[0].hello).toEqual('again');
+      expect(mountedComponent.state.collection[0].hello).toEqual('again');
       done();
     });
   });
@@ -86,14 +86,14 @@ describe('Parent Component', function () {
       }
     });
     mountedComponent = React.render(component, el);
-    expect(mountedComponent.props.firstCollection[0].hello).toEqual('world!');
-    expect(mountedComponent.props.secondCollection[0].goodbye).toEqual('other world!');
+    expect(mountedComponent.state.firstCollection[0].hello).toEqual('world!');
+    expect(mountedComponent.state.secondCollection[0].goodbye).toEqual('other world!');
     mountedComponent.getCollection().firstCollection.at(0).set('hello', 'again');
     mountedComponent.getCollection().secondCollection.at(0).set('goodbye', 'other again');
-    // Defering because setting props is defered as well
+    // Defering because setting state is defered as well
     _.defer(function () {
-      expect(mountedComponent.props.firstCollection[0].hello).toEqual('again');
-      expect(mountedComponent.props.secondCollection[0].goodbye).toEqual('other again');
+      expect(mountedComponent.state.firstCollection[0].hello).toEqual('again');
+      expect(mountedComponent.state.secondCollection[0].goodbye).toEqual('other again');
       done();
     });
   });
@@ -103,10 +103,10 @@ describe('Parent Component', function () {
         collection: collection1
     });
     mountedComponent = React.render(component, el);
-    expect(mountedComponent.props.collection[0].hello).toEqual('world!');
+    expect(mountedComponent.state.collection[0].hello).toEqual('world!');
     collection1.reset({hello: 'other world!'});
     _.defer(function () {
-      expect(mountedComponent.props.collection[0].hello).toEqual('other world!');
+      expect(mountedComponent.state.collection[0].hello).toEqual('other world!');
       done();
     });
   });
@@ -206,29 +206,29 @@ describe('Parent Component', function () {
         expect(spy).toHaveBeenCalled();
       });
 
-      it('has the right JSON data inside the parent props', function () {
+      it('has the right JSON data inside the parent state', function () {
         newSpy = jasmine.createSpy().and.callFake(function () {
-          expect(this.props.collection instanceof Array).toBeTruthy();
-          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+          expect(this.state.collection instanceof Array).toBeTruthy();
+          expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
         mountedComponent = React.render(component, el);
         expect(newSpy).toHaveBeenCalled();
       });
 
-      it('has the right JSON data inside the child props', function () {
+      it('has the right JSON data inside the child state', function () {
         spy = jasmine.createSpy().and.callFake(function () {
-          expect(this.props.collection instanceof Array).toBeTruthy();
-          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+          expect(this.state.collection instanceof Array).toBeTruthy();
+          expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
         mountedComponent = React.render(component, el);
         expect(spy).toHaveBeenCalled();
       });
 
-      it('has the right JSON data inside the parent props after collection changes', function (done) {
+      it('has the right JSON data inside the parent state after collection changes', function (done) {
         newSpy = jasmine.createSpy().and.callFake(function () {
           expect(this.getCollection()).toEqual(collection1);
-          expect(this.props.collection instanceof Array).toBeTruthy();
-          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+          expect(this.state.collection instanceof Array).toBeTruthy();
+          expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
         mountedComponent = React.render(component, el);
         expect(newSpy).toHaveBeenCalled();
@@ -239,11 +239,11 @@ describe('Parent Component', function () {
         });
       });
 
-      it('has the right JSON data inside the child props after collection changes', function (done) {
+      it('has the right JSON data inside the child state after collection changes', function (done) {
         spy = jasmine.createSpy().and.callFake(function () {
           expect(this.getCollection()).toEqual(collection2);
-          expect(this.props.collection instanceof Array).toBeTruthy();
-          expect(this.props.collection).toEqual(this.getCollection().toJSON());
+          expect(this.state.collection instanceof Array).toBeTruthy();
+          expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
         mountedComponent = React.render(component, el);
         expect(spy).toHaveBeenCalled();
