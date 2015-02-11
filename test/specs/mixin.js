@@ -137,6 +137,44 @@ describe('Parent Component', function () {
     React.render(component, el);
   });
 
+  it('updates the collection when a new one is passed', function (done) {
+    component = Component({
+      collection: collection1
+    });
+
+    mountedComponent = React.render(component, el, function () {
+      expect(this.state.collection[0].hello).toEqual('world!');
+
+      component = Component({
+        collection: collection2
+      });
+
+      mountedComponent = React.render(component, el, function () {
+        expect(this.state.collection[0].goodbye).toEqual('other world!');
+        done();
+      });
+    });
+  });
+
+  it('updates the model when a new one is passed', function (done) {
+    component = Component({
+      model: model1
+    });
+
+    mountedComponent = React.render(component, el, function () {
+      expect(this.state.hello).toEqual('world!');
+
+      component = Component({
+        model: model2
+      });
+
+      mountedComponent = React.render(component, el, function () {
+        expect(this.state.goodbye).toEqual('other world!');
+        done();
+      });
+    });
+  });
+
   describe('Child Component', function () {
 
     describe('with nested models', function () {
@@ -255,4 +293,5 @@ describe('Parent Component', function () {
       });
     });
   });
+
 });
