@@ -2,7 +2,7 @@
 
 `Backbone.React.Component` is a mixin that glues [Backbone](http://backbonejs.org/) models and collections into [React](http://facebook.github.io/react/) components.
 
-When the component is mounted, a wrapper starts listening to models and collections changes to automatically set your component props and achieve UI binding through reactive updates.
+When the component is mounted, a wrapper starts listening to models and collections changes to automatically set your component state and achieve UI binding through reactive updates.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -50,7 +50,7 @@ The mixin only works if set on the root component. You can use it on child compo
 var MyComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   render: function () {
-    return <div>{this.props.foo}</div>;
+    return <div>{this.state.foo}</div>;
   }
 });
 
@@ -70,7 +70,7 @@ var MyComponent = React.createClass({
     return <div>{entry.helloWorld}</div>;
   },
   render: function () {
-    return <div>{this.props.collection.map(this.createEntry)}</div>;
+    return <div>{this.state.collection.map(this.createEntry)}</div>;
   }
 });
 var collection = new Backbone.Collection([{helloWorld: 'Hello world!'}]);
@@ -88,10 +88,10 @@ var MyComponent = React.createClass({
   render: function () {
     return (
       <div>
-        {this.props.firstModel.helloWorld}
-        {this.props.secondModel.helloWorld}
-        {this.props.firstCollection.map(this.createEntry)}
-        {this.props.secondCollection.map(this.createEntry)}
+        {this.state.firstModel.helloWorld}
+        {this.state.secondModel.helloWorld}
+        {this.state.firstCollection.map(this.createEntry)}
+        {this.state.secondCollection.map(this.createEntry)}
       </div>
     );
   }
@@ -136,7 +136,7 @@ var ChildComponent = React.createClass({
   render: function() {
     return (
       <div className='child'>
-        {this.props.collection.map(this.createEntry)}
+        {this.state.collection.map(this.createEntry)}
       </div>
     );
   }
@@ -177,7 +177,7 @@ var model = new Backbone.Model({
 var HelloWorld = React.createClass({
   mixins: [backboneMixin],
   render: function () {
-    return React.DOM.div({}, this.props.helloWorld);
+    return React.DOM.div({}, this.state.helloWorld);
   }
 });
 var HelloWorldFactory = React.createFactory(HelloWorld);
