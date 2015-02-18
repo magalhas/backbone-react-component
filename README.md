@@ -194,7 +194,8 @@ React.renderToString(HelloWorldFactory({model: model}));
 The following API is under `Backbone.React.Component.mixin` (`require('backbone-react-component')`):
 
 #### $
-Inspired by Backbone.View, it's a shortcut to this.$el.find method.
+Inspired by Backbone.View, it's a shortcut to this.$el.find method if `jQuery`
+is present, else it fallbacks to native DOM `querySelector`.
 
 #### getCollection()
 Grabs the component's collection(s) or from one of the parents.
