@@ -34,7 +34,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <pre><code>Backbone.React.Component v0<span class="hljs-number">.8</span><span class="hljs-number">.0</span>-alpha<span class="hljs-number">.2</span>
+              <pre><code>Backbone.React.Component v0<span class="hljs-number">.8</span><span class="hljs-number">.0</span>-beta<span class="hljs-number">.1</span>
 
 (c) <span class="hljs-number">2014</span> <span class="hljs-string">"Magalhas"</span> José Magalhães &lt;magalhas@gmail.com&gt;
 Backbone.React.Component can be freely distributed under the MIT license.
@@ -207,15 +207,18 @@ optional.</p>
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>When the component gets the initial state, instance a <code>Wrapper</code> to take
-care of models and collections binding with <code>this.props</code>.</p>
+care of models and collections binding with <code>this.state</code>.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> initialState = {};
+
       <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.wrapper) {
-        <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">this</span>.props);
+        <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, initialState);
       }
-      <span class="hljs-keyword">return</span> {};
+
+      <span class="hljs-keyword">return</span> initialState;
     },</pre></div></div>
             
         </li>
@@ -228,13 +231,13 @@ care of models and collections binding with <code>this.props</code>.</p>
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>When the component mounts, instance a <code>Wrapper</code> to take care
-of models and collections binding with <code>this.props</code>.</p>
+of models and collections binding with <code>this.state</code>.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    componentWillMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
       <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.wrapper) {
-        <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">this</span>.props);
+        <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>);
       }
     },</pre></div></div>
             
@@ -277,27 +280,22 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
       <span class="hljs-keyword">var</span> model = nextProps.model;
       <span class="hljs-keyword">var</span> collection = nextProps.collection;
 
-      <span class="hljs-keyword">var</span> key;
-
       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.model &amp;&amp; model) {
-        <span class="hljs-keyword">delete</span> nextProps.model;
-        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.model.attributes) {
-          <span class="hljs-keyword">this</span>.wrapper.setProps(model, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
-        } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> model) {
-            <span class="hljs-keyword">this</span>.wrapper.setProps(model[key], key, nextProps);
-          }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.model !== model) {
+          <span class="hljs-keyword">this</span>.wrapper.stopListening();
+          <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
         }
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (model) {
+        <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
       }
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.collection &amp;&amp; collection &amp;&amp; !(collection <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>)) {
-        <span class="hljs-keyword">delete</span> nextProps.collection;
-        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.collection.models) {
-          <span class="hljs-keyword">this</span>.wrapper.setProps(collection, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
-        } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> collection) {
-            <span class="hljs-keyword">this</span>.wrapper.setProps(collection[key], key, nextProps);
-          }
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.collection &amp;&amp; collection) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.wrapper.collection !== collection) {
+          <span class="hljs-keyword">this</span>.wrapper.stopListening();
+          <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
         }
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (collection) {
+        <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">new</span> Wrapper(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, nextProps);
       }
     },</pre></div></div>
             
@@ -395,9 +393,7 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Wrapper</span> <span class="hljs-params">(component, props)</span> </span>{
-    props = props || {};
-    <span class="hljs-keyword">var</span> model = props.model, collection = props.collection;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Wrapper</span> <span class="hljs-params">(component, initialState, nextProps)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -408,13 +404,11 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Check if <code>props.model</code> is a <code>Backbone.Model</code> or an hashmap of them</p>
+              <p>1:1 relation with the <code>component</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> model !== <span class="hljs-string">'undefined'</span> &amp;&amp; (model.attributes ||
-        <span class="hljs-keyword">typeof</span> model === <span class="hljs-string">'object'</span> &amp;&amp; _.values(model)[<span class="hljs-number">0</span>].attributes)) {
-      <span class="hljs-keyword">delete</span> props.model;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.component = component;</pre></div></div>
             
         </li>
         
@@ -425,11 +419,13 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>The model(s) bound to this component</p>
+              <p>Use <code>nextProps</code> or <code>component.props</code> and grab <code>model</code> and <code>collection</code>
+from there</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.model = model;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> props = nextProps || component.props || {};
+    <span class="hljs-keyword">var</span> model = props.model, collection = props.collection;</pre></div></div>
             
         </li>
         
@@ -440,12 +436,12 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>Set model(s) attributes on <code>props</code> for the first render</p>
+              <p>Check if <code>props.model</code> is a <code>Backbone.Model</code> or an hashmap of them</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setPropsBackbone(model, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, props);
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> model !== <span class="hljs-string">'undefined'</span> &amp;&amp; (model.attributes ||
+        <span class="hljs-keyword">typeof</span> model === <span class="hljs-string">'object'</span> &amp;&amp; _.values(model)[<span class="hljs-number">0</span>].attributes)) {</pre></div></div>
             
         </li>
         
@@ -456,13 +452,11 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>Check if <code>props.collection</code> is a <code>Backbone.Collection</code> or an hashmap of them</p>
+              <p>The model(s) bound to this component</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> collection !== <span class="hljs-string">'undefined'</span> &amp;&amp; (collection.models ||
-        <span class="hljs-keyword">typeof</span> collection === <span class="hljs-string">'object'</span> &amp;&amp; _.values(collection)[<span class="hljs-number">0</span>].models)) {
-      <span class="hljs-keyword">delete</span> props.collection;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.model = model;</pre></div></div>
             
         </li>
         
@@ -473,11 +467,12 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>The collection(s) bound to this component</p>
+              <p>Set model(s) attributes on <code>initialState</code> for the first render</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.collection = collection;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setStateBackbone(model, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, initialState);
+    }</pre></div></div>
             
         </li>
         
@@ -488,12 +483,12 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Set collection(s) models on props for the first render</p>
+              <p>Check if <code>props.collection</code> is a <code>Backbone.Collection</code> or an hashmap of them</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setPropsBackbone(collection, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, props);
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> collection !== <span class="hljs-string">'undefined'</span> &amp;&amp; (collection.models ||
+        <span class="hljs-keyword">typeof</span> collection === <span class="hljs-string">'object'</span> &amp;&amp; _.values(collection)[<span class="hljs-number">0</span>].models)) {</pre></div></div>
             
         </li>
         
@@ -504,11 +499,11 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <p>1:1 relation with the <code>component</code></p>
+              <p>The collection(s) bound to this component</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.component = component;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.collection = collection;</pre></div></div>
             
         </li>
         
@@ -519,15 +514,12 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>Start listeners if this is a root node and if there’s DOM</p>
+              <p>Set collection(s) models on <code>initialState</code> for the first render</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (!component.context.hasParentBackboneMixin &amp;&amp; <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span> !== <span class="hljs-string">'undefined'</span>) {
-      <span class="hljs-keyword">this</span>.startModelListeners();
-      <span class="hljs-keyword">this</span>.startCollectionListeners();
-    }
-  }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setStateBackbone(collection, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, initialState);
+    }</pre></div></div>
             
         </li>
         
@@ -538,11 +530,13 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>Mixing <code>Backbone.Events</code> into <code>Wrapper.prototype</code></p>
+              <p>Start listeners</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _.extend(Wrapper.prototype, Backbone.Events, {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.startModelListeners();
+    <span class="hljs-keyword">this</span>.startCollectionListeners();
+  }</pre></div></div>
             
         </li>
         
@@ -553,12 +547,11 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p>Sets <code>this.props</code> when a model/collection request results in error. It delegates
-to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> and <code>Backbone.Collection#error</code>.</p>
+              <p>Mixing <code>Backbone.Events</code> into <code>Wrapper.prototype</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    onError: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  _.extend(Wrapper.prototype, Backbone.Events, {</pre></div></div>
             
         </li>
         
@@ -569,17 +562,12 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>Set state only if there’s no silent option</p>
+              <p>Sets <code>this.state</code> when a model/collection request results in error. It delegates
+to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> and <code>Backbone.Collection#error</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent)
-        <span class="hljs-keyword">this</span>.component.setState({
-          isRequesting: <span class="hljs-literal">false</span>,
-          hasError: <span class="hljs-literal">true</span>,
-          error: res
-        });
-    },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    onError: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -589,6 +577,35 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Set state only if there’s no silent option</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent) {
+        <span class="hljs-keyword">this</span>.component.setState({
+          isRequesting: <span class="hljs-literal">false</span>,
+          hasError: <span class="hljs-literal">true</span>,
+          error: res
+        });
+      }
+    },
+    onInvalid: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(model, res, options)</span> </span>{
+      <span class="hljs-keyword">if</span> (!options.silent) {
+        <span class="hljs-keyword">this</span>.component.setState({
+          isInvalid: <span class="hljs-literal">true</span>
+        });
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Sets <code>this.props</code> when a model/collection request starts. It delegates to
 <code>this.setProps</code>. It listens to <code>Backbone.Model#request</code> and <code>Backbone.Collection#request</code>.</p>
@@ -600,38 +617,24 @@ to <code>this.setProps</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-31">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
-              </div>
-              <p>Set props only if there’s no silent option</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent)
-        <span class="hljs-keyword">this</span>.component.setState({
-          isRequesting: <span class="hljs-literal">true</span>,
-          hasError: <span class="hljs-literal">false</span>
-        });
-    },</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Sets <code>this.props</code> when a model/collection syncs. It delegates to <code>this.setProps</code>.
-It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#sync</code></p>
+              <p>Set props only if there’s no silent option</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    onSync: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent) {
+        <span class="hljs-keyword">this</span>.component.setState({
+          isRequesting: <span class="hljs-literal">true</span>,
+          hasError: <span class="hljs-literal">false</span>,
+          isInvalid: <span class="hljs-literal">false</span>
+        });
+      }
+    },</pre></div></div>
             
         </li>
         
@@ -642,13 +645,12 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              <p>Set props only if there’s no silent option</p>
+              <p>Sets <code>this.state</code> when a model/collection syncs. It delegates to <code>this.setState</code>.
+It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#sync</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent)
-        <span class="hljs-keyword">this</span>.component.setState({isRequesting: <span class="hljs-literal">false</span>});
-    },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    onSync: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, res, options)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -659,19 +661,13 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <p>Used internally to set <code>this.collection</code> or <code>this.model</code> on <code>this.props</code>. Delegates to
-<code>this.setProps</code>. It listens to <code>Backbone.Collection</code> events such as <code>add</code>, <code>remove</code>,
-<code>change</code>, <code>sort</code>, <code>reset</code> and to <code>Backbone.Model</code> <code>change</code>.</p>
+              <p>Calls <code>setState</code> only if there’s no silent option</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setPropsBackbone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> </span>{
-      <span class="hljs-keyword">if</span> (!(modelOrCollection.models || modelOrCollection.attributes)) {
-        <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> modelOrCollection)
-            <span class="hljs-keyword">this</span>.setPropsBackbone(modelOrCollection[key], key, target);
-        <span class="hljs-keyword">return</span>;
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent) {
+        <span class="hljs-keyword">this</span>.component.setState({isRequesting: <span class="hljs-literal">false</span>});
       }
-      <span class="hljs-keyword">this</span>.setProps.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
     },</pre></div></div>
             
         </li>
@@ -683,35 +679,19 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
-              <p>Sets a model, collection or object into props by delegating to <code>this.component.setProps</code>.</p>
+              <p>Used internally to set <code>this.collection</code> or <code>this.model</code> on <code>this.state</code>. Delegates to
+<code>this.setState</code>. It listens to <code>Backbone.Collection</code> events such as <code>add</code>, <code>remove</code>,
+<code>change</code>, <code>sort</code>, <code>reset</code> and to <code>Backbone.Model</code> <code>change</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> </span>{
-      <span class="hljs-keyword">var</span> props = {};
-      <span class="hljs-keyword">var</span> newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
-
-      <span class="hljs-keyword">if</span> (key) {
-        props[key] = newProps;
-      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (modelOrCollection <span class="hljs-keyword">instanceof</span> Backbone.Collection) {
-        props.collection = newProps;
-      } <span class="hljs-keyword">else</span> {
-        props = newProps;
+            <div class="content"><div class='highlight'><pre>    setStateBackbone: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> </span>{
+      <span class="hljs-keyword">if</span> (!(modelOrCollection.models || modelOrCollection.attributes)) {
+        <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> modelOrCollection)
+            <span class="hljs-keyword">this</span>.setStateBackbone(modelOrCollection[key], key, target);
+        <span class="hljs-keyword">return</span>;
       }
-
-      <span class="hljs-keyword">if</span> (target) {
-        _.extend(target, props);
-      } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">this</span>.nextProps = _.extend(<span class="hljs-keyword">this</span>.nextProps || {}, props);
-        _.defer(_.bind(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-          <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.nextProps) {
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.component) {
-              <span class="hljs-keyword">this</span>.component.setProps(<span class="hljs-keyword">this</span>.nextProps);
-            }
-            <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.nextProps;
-          }
-        }, <span class="hljs-keyword">this</span>));
-      }
+      <span class="hljs-keyword">this</span>.setState.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
     },</pre></div></div>
             
         </li>
@@ -723,6 +703,74 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
+              <p>Sets a model, collection or object into state by delegating to <code>this.component.setState</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(modelOrCollection, key, target)</span> </span>{
+      <span class="hljs-keyword">var</span> state = {};
+      <span class="hljs-keyword">var</span> newState = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
+
+      <span class="hljs-keyword">if</span> (key) {
+        state[key] = newState;
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (modelOrCollection <span class="hljs-keyword">instanceof</span> Backbone.Collection) {
+        state.collection = newState;
+      } <span class="hljs-keyword">else</span> {
+        state = newState;
+      }
+
+      <span class="hljs-keyword">if</span> (target) {
+        _.extend(target, state);
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">this</span>.component.setState(state);
+        <span class="hljs-comment">/*this.nextState = _.extend(this.nextState || {}, state);
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p><em>.defer(</em>.bind(function () {</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.nextState) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.component &amp;&amp; <span class="hljs-keyword">this</span>.component.isMounted()) {
+              <span class="hljs-keyword">this</span>.component.setState(<span class="hljs-keyword">this</span>.nextState);
+            }
+            <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.nextState;
+          }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>}, this));*/</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
               <p>Binds the component to any collection changes.</p>
 
             </div>
@@ -733,7 +781,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         <span class="hljs-keyword">if</span> (collection.models)
           <span class="hljs-keyword">this</span>
             .listenTo(collection, <span class="hljs-string">'add remove change sort reset'</span>,
-              _.partial(<span class="hljs-keyword">this</span>.setPropsBackbone, collection, key, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>))
+              _.partial(<span class="hljs-keyword">this</span>.setStateBackbone, collection, key, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>))
             .listenTo(collection, <span class="hljs-string">'error'</span>, <span class="hljs-keyword">this</span>.onError)
             .listenTo(collection, <span class="hljs-string">'request'</span>, <span class="hljs-keyword">this</span>.onRequest)
             .listenTo(collection, <span class="hljs-string">'sync'</span>, <span class="hljs-keyword">this</span>.onSync);
@@ -747,11 +795,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-37">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Binds the component to any model changes.</p>
 
@@ -763,10 +811,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         <span class="hljs-keyword">if</span> (model.attributes)
           <span class="hljs-keyword">this</span>
             .listenTo(model, <span class="hljs-string">'change'</span>,
-              _.partial(<span class="hljs-keyword">this</span>.setPropsBackbone, model, key, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>))
+              _.partial(<span class="hljs-keyword">this</span>.setStateBackbone, model, key, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>))
             .listenTo(model, <span class="hljs-string">'error'</span>, <span class="hljs-keyword">this</span>.onError)
             .listenTo(model, <span class="hljs-string">'request'</span>, <span class="hljs-keyword">this</span>.onRequest)
-            .listenTo(model, <span class="hljs-string">'sync'</span>, <span class="hljs-keyword">this</span>.onSync);
+            .listenTo(model, <span class="hljs-string">'sync'</span>, <span class="hljs-keyword">this</span>.onSync)
+            .listenTo(model, <span class="hljs-string">'invalid'</span>, <span class="hljs-keyword">this</span>.onInvalid);
         <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> model === <span class="hljs-string">'object'</span>)
           <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> model)
             <span class="hljs-keyword">this</span>.startModelListeners(model[key], key);
@@ -777,11 +826,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-38">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Expose <code>Backbone.React.Component.mixin</code>.</p>
 
@@ -793,11 +842,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-39">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p><a href="https://github.com/magalhas/backbone-react-component"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
 

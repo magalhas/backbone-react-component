@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.8.0-alpha.2
+//     Backbone.React.Component v0.8.0-beta.1
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -77,18 +77,21 @@
       this.setElement(this.getDOMNode());
     },
     // When the component gets the initial state, instance a `Wrapper` to take
-    // care of models and collections binding with `this.props`.
+    // care of models and collections binding with `this.state`.
     getInitialState: function () {
+      var initialState = {};
+
       if (!this.wrapper) {
-        this.wrapper = new Wrapper(this, this.props);
+        this.wrapper = new Wrapper(this, initialState);
       }
-      return {};
+
+      return initialState;
     },
     // When the component mounts, instance a `Wrapper` to take care
-    // of models and collections binding with `this.props`.
+    // of models and collections binding with `this.state`.
     componentWillMount: function () {
       if (!this.wrapper) {
-        this.wrapper = new Wrapper(this, this.props);
+        this.wrapper = new Wrapper(this);
       }
     },
     // When the component unmounts, dispose listeners and delete
@@ -105,27 +108,22 @@
       var model = nextProps.model;
       var collection = nextProps.collection;
 
-      var key;
-
       if (this.wrapper.model && model) {
-        delete nextProps.model;
-        if (this.wrapper.model.attributes) {
-          this.wrapper.setProps(model, void 0, nextProps);
-        } else {
-          for (key in model) {
-            this.wrapper.setProps(model[key], key, nextProps);
-          }
+        if (this.wrapper.model !== model) {
+          this.wrapper.stopListening();
+          this.wrapper = new Wrapper(this, void 0, nextProps);
         }
+      } else if (model) {
+        this.wrapper = new Wrapper(this, void 0, nextProps);
       }
-      if (this.wrapper.collection && collection && !(collection instanceof Array)) {
-        delete nextProps.collection;
-        if (this.wrapper.collection.models) {
-          this.wrapper.setProps(collection, void 0, nextProps);
-        } else {
-          for (key in collection) {
-            this.wrapper.setProps(collection[key], key, nextProps);
-          }
+
+      if (this.wrapper.collection && collection) {
+        if (this.wrapper.collection !== collection) {
+          this.wrapper.stopListening();
+          this.wrapper = new Wrapper(this, void 0, nextProps);
         }
+      } else if (collection) {
+        this.wrapper = new Wrapper(this, void 0, nextProps);
       }
     },
     // Shortcut to `@$el.find`. Inspired by `Backbone.View`.
@@ -158,101 +156,112 @@
     }
   };
   // Binds models and collections to a `React.Component`. It mixes `Backbone.Events`.
-  function Wrapper (component, props) {
-    props = props || {};
+  function Wrapper (component, initialState, nextProps) {
+    // 1:1 relation with the `component`
+    this.component = component;
+    // Use `nextProps` or `component.props` and grab `model` and `collection`
+    // from there
+    var props = nextProps || component.props || {};
     var model = props.model, collection = props.collection;
     // Check if `props.model` is a `Backbone.Model` or an hashmap of them
     if (typeof model !== 'undefined' && (model.attributes ||
         typeof model === 'object' && _.values(model)[0].attributes)) {
-      delete props.model;
       // The model(s) bound to this component
       this.model = model;
-      // Set model(s) attributes on `props` for the first render
-      this.setPropsBackbone(model, void 0, props);
+      // Set model(s) attributes on `initialState` for the first render
+      this.setStateBackbone(model, void 0, initialState);
     }
     // Check if `props.collection` is a `Backbone.Collection` or an hashmap of them
     if (typeof collection !== 'undefined' && (collection.models ||
         typeof collection === 'object' && _.values(collection)[0].models)) {
-      delete props.collection;
       // The collection(s) bound to this component
       this.collection = collection;
-      // Set collection(s) models on props for the first render
-      this.setPropsBackbone(collection, void 0, props);
+      // Set collection(s) models on `initialState` for the first render
+      this.setStateBackbone(collection, void 0, initialState);
     }
-    // 1:1 relation with the `component`
-    this.component = component;
-    // Start listeners if this is a root node and if there's DOM
-    if (!component.context.hasParentBackboneMixin && typeof document !== 'undefined') {
-      this.startModelListeners();
-      this.startCollectionListeners();
-    }
+
+    // Start listeners
+    this.startModelListeners();
+    this.startCollectionListeners();
   }
   // Mixing `Backbone.Events` into `Wrapper.prototype`
   _.extend(Wrapper.prototype, Backbone.Events, {
-    // Sets `this.props` when a model/collection request results in error. It delegates
-    // to `this.setProps`. It listens to `Backbone.Model#error` and `Backbone.Collection#error`.
+    // Sets `this.state` when a model/collection request results in error. It delegates
+    // to `this.setState`. It listens to `Backbone.Model#error` and `Backbone.Collection#error`.
     onError: function (modelOrCollection, res, options) {
       // Set state only if there's no silent option
-      if (!options.silent)
+      if (!options.silent) {
         this.component.setState({
           isRequesting: false,
           hasError: true,
           error: res
         });
+      }
+    },
+    onInvalid: function (model, res, options) {
+      if (!options.silent) {
+        this.component.setState({
+          isInvalid: true
+        });
+      }
     },
     // Sets `this.props` when a model/collection request starts. It delegates to
     // `this.setProps`. It listens to `Backbone.Model#request` and `Backbone.Collection#request`.
     onRequest: function (modelOrCollection, xhr, options) {
       // Set props only if there's no silent option
-      if (!options.silent)
+      if (!options.silent) {
         this.component.setState({
           isRequesting: true,
-          hasError: false
+          hasError: false,
+          isInvalid: false
         });
+      }
     },
-    // Sets `this.props` when a model/collection syncs. It delegates to `this.setProps`.
+    // Sets `this.state` when a model/collection syncs. It delegates to `this.setState`.
     // It listens to `Backbone.Model#sync` and `Backbone.Collection#sync`
     onSync: function (modelOrCollection, res, options) {
-      // Set props only if there's no silent option
-      if (!options.silent)
+      // Calls `setState` only if there's no silent option
+      if (!options.silent) {
         this.component.setState({isRequesting: false});
+      }
     },
-    // Used internally to set `this.collection` or `this.model` on `this.props`. Delegates to
-    // `this.setProps`. It listens to `Backbone.Collection` events such as `add`, `remove`,
+    // Used internally to set `this.collection` or `this.model` on `this.state`. Delegates to
+    // `this.setState`. It listens to `Backbone.Collection` events such as `add`, `remove`,
     // `change`, `sort`, `reset` and to `Backbone.Model` `change`.
-    setPropsBackbone: function (modelOrCollection, key, target) {
+    setStateBackbone: function (modelOrCollection, key, target) {
       if (!(modelOrCollection.models || modelOrCollection.attributes)) {
         for (key in modelOrCollection)
-            this.setPropsBackbone(modelOrCollection[key], key, target);
+            this.setStateBackbone(modelOrCollection[key], key, target);
         return;
       }
-      this.setProps.apply(this, arguments);
+      this.setState.apply(this, arguments);
     },
-    // Sets a model, collection or object into props by delegating to `this.component.setProps`.
-    setProps: function (modelOrCollection, key, target) {
-      var props = {};
-      var newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
+    // Sets a model, collection or object into state by delegating to `this.component.setState`.
+    setState: function (modelOrCollection, key, target) {
+      var state = {};
+      var newState = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
 
       if (key) {
-        props[key] = newProps;
+        state[key] = newState;
       } else if (modelOrCollection instanceof Backbone.Collection) {
-        props.collection = newProps;
+        state.collection = newState;
       } else {
-        props = newProps;
+        state = newState;
       }
 
       if (target) {
-        _.extend(target, props);
+        _.extend(target, state);
       } else {
-        this.nextProps = _.extend(this.nextProps || {}, props);
-        _.defer(_.bind(function () {
-          if (this.nextProps) {
-            if (this.component) {
-              this.component.setProps(this.nextProps);
+        this.component.setState(state);
+        /*this.nextState = _.extend(this.nextState || {}, state);
+        //_.defer(_.bind(function () {
+          if (this.nextState) {
+            if (this.component && this.component.isMounted()) {
+              this.component.setState(this.nextState);
             }
-            delete this.nextProps;
+            delete this.nextState;
           }
-        }, this));
+        //}, this));*/
       }
     },
     // Binds the component to any collection changes.
@@ -262,7 +271,7 @@
         if (collection.models)
           this
             .listenTo(collection, 'add remove change sort reset',
-              _.partial(this.setPropsBackbone, collection, key, void 0))
+              _.partial(this.setStateBackbone, collection, key, void 0))
             .listenTo(collection, 'error', this.onError)
             .listenTo(collection, 'request', this.onRequest)
             .listenTo(collection, 'sync', this.onSync);
@@ -279,10 +288,11 @@
         if (model.attributes)
           this
             .listenTo(model, 'change',
-              _.partial(this.setPropsBackbone, model, key, void 0))
+              _.partial(this.setStateBackbone, model, key, void 0))
             .listenTo(model, 'error', this.onError)
             .listenTo(model, 'request', this.onRequest)
-            .listenTo(model, 'sync', this.onSync);
+            .listenTo(model, 'sync', this.onSync)
+            .listenTo(model, 'invalid', this.onInvalid);
         else if (typeof model === 'object')
           for (key in model)
             this.startModelListeners(model[key], key);
