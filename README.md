@@ -14,7 +14,6 @@ When the component is mounted, a wrapper starts listening to models and collecti
     - [One model](#one-model)
     - [One collection](#one-collection)
     - [Multiple models and collections](#multiple-models-and-collections)
-    - [Child Components](#child-components)
   - [Usage on the server (Node.js)](#usage-on-the-server-nodejs)
   - [API](#api)
     - [$](#$)
@@ -110,59 +109,6 @@ var newComponent = MyFactory({
   }
 });
 React.render(newComponent, document.body);
-```
-
-#### Child Components
-
-There are many ways of embracing this library when it comes to child components,
-the following are some of the possible patterns:
-
-  - `React` way, pass handlers from your top component through the child
-  components and communicate that way
-  - Simply rely on `@getModel` and `@getCollection` to get your models or
-  collections from the component or it parents (tighter coupling)
-  - Create new root components, like on the example below:
-
-```js
-var ChildComponent = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-
-  createEntry: function(entry) {
-    return (
-      <div>{entry.helloWorld}</div>
-    );
-  },
-
-  render: function() {
-    return (
-      <div className='child'>
-        {this.state.collection.map(this.createEntry)}
-      </div>
-    );
-  }
-});
-
-var ParentComponent = React.createClass({
-  componentDidMount: function() {
-    var collection = new Backbone.Collection([{ helloWorld: 'Hello world!' }]);
-
-    // Remount child as a new root component.
-    React.render(
-      <ChildComponent collection={collection} />,
-      this.refs.childContainer.getDOMNode()
-    );
-  },
-
-  render: function() {
-    return (
-      <div className='parent'>
-        <div ref='childContainer' />
-      </div>
-    );
-  }
-});
-
-React.render(<ParentComponent />, document.body);
 ```
 
 ### Usage on the server (Node.js)
