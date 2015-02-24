@@ -45,11 +45,11 @@ describe('Parent Component', function () {
   it('binds to a model', function (done) {
     component = Component({model: model1});
     mountedComponent = React.render(component, el);
-    expect(mountedComponent.state.hello).toEqual('world!');
+    expect(mountedComponent.state.model.hello).toEqual('world!');
     model1.set('hello', 'again');
     // Defering because setting state is defered as well
     _.defer(function () {
-      expect(mountedComponent.state.hello).toEqual('again');
+      expect(mountedComponent.state.model.hello).toEqual('again');
       done();
     });
   });
@@ -162,14 +162,14 @@ describe('Parent Component', function () {
     });
 
     mountedComponent = React.render(component, el, function () {
-      expect(this.state.hello).toEqual('world!');
+      expect(this.state.model.hello).toEqual('world!');
 
       component = Component({
         model: model2
       });
 
       mountedComponent = React.render(component, el, function () {
-        expect(this.state.goodbye).toEqual('other world!');
+        expect(this.state.model.goodbye).toEqual('other world!');
         done();
       });
     });
