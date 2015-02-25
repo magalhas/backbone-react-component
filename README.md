@@ -49,7 +49,7 @@ The mixin only works if set on the root component. You can use it on child compo
 var MyComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   render: function () {
-    return <div>{this.state.foo}</div>;
+    return <div>{this.state.model.foo}</div>;
   }
 });
 
@@ -123,7 +123,7 @@ var model = new Backbone.Model({
 var HelloWorld = React.createClass({
   mixins: [backboneMixin],
   render: function () {
-    return React.DOM.div({}, this.state.helloWorld);
+    return React.DOM.div({}, this.state.model.helloWorld);
   }
 });
 var HelloWorldFactory = React.createFactory(HelloWorld);
