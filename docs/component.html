@@ -41,13 +41,13 @@ Backbone.React.Component can be freely distributed under the MIT license.
 </code></pre><p><code>Backbone.React.Component</code> is a mixin that glues <a href="http://backbonejs.org/">Backbone</a>
 models and collections into <a href="http://facebook.github.io/react/">React</a> components.</p>
 <p>When the component is mounted, a wrapper starts listening to models and
-collections changes to automatically set your component props and achieve UI
+collections changes to automatically set your component state and achieve UI
 binding through reactive updates.</p>
 <p>Basic Usage</p>
 <pre><code><span class="hljs-keyword">var</span> MyComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{this.props.foo}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{this.state.foo}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
   }
 });
 <span class="hljs-keyword">var</span> model = <span class="hljs-keyword">new</span> Backbone.Model({foo: <span class="hljs-string">'bar'</span>});
@@ -308,12 +308,22 @@ filter <code>nextProps.model</code> and <code>nextProps.collection</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>Shortcut to <code>@$el.find</code>. Inspired by <code>Backbone.View</code>.</p>
+              <p>Shortcut to <code>@$el.find</code> if jQuery ins present, else if fallbacks to DOM
+native <code>querySelector</code>. Inspired by <code>Backbone.View</code>.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    $: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.$el &amp;&amp; <span class="hljs-keyword">this</span>.$el.find.apply(<span class="hljs-keyword">this</span>.$el, <span class="hljs-built_in">arguments</span>);
+      <span class="hljs-keyword">var</span> els;
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.$el) {
+        els = <span class="hljs-keyword">this</span>.$el.find.apply(<span class="hljs-keyword">this</span>.$el, <span class="hljs-built_in">arguments</span>);
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">var</span> el = <span class="hljs-keyword">this</span>.getDOMNode();
+        els = el.querySelector.apply(el, <span class="hljs-built_in">arguments</span>);
+      }
+
+      <span class="hljs-keyword">return</span> els;
     },</pre></div></div>
             
         </li>
@@ -607,8 +617,9 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>Sets <code>this.props</code> when a model/collection request starts. It delegates to
-<code>this.setProps</code>. It listens to <code>Backbone.Model#request</code> and <code>Backbone.Collection#request</code>.</p>
+              <p>Sets <code>this.state</code> when a model/collection request starts. It delegates to
+<code>this.setState</code>. It listens to <code>Backbone.Model#request</code> and
+<code>Backbone.Collection#request</code>.</p>
 
             </div>
             
@@ -623,7 +634,7 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Set props only if there’s no silent option</p>
+              <p>Set <code>state</code> only if there’s no silent option</p>
 
             </div>
             
@@ -716,15 +727,15 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
       } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (modelOrCollection <span class="hljs-keyword">instanceof</span> Backbone.Collection) {
         state.collection = newState;
       } <span class="hljs-keyword">else</span> {
-        state = newState;
+        state.model = newState;
       }
 
       <span class="hljs-keyword">if</span> (target) {
         _.extend(target, state);
       } <span class="hljs-keyword">else</span> {
         <span class="hljs-keyword">this</span>.component.setState(state);
-        <span class="hljs-comment">/*this.nextState = _.extend(this.nextState || {}, state);
-</span></pre></div></div>
+      }
+    },</pre></div></div>
             
         </li>
         
@@ -734,42 +745,6 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-37">&#182;</a>
-              </div>
-              <p><em>.defer(</em>.bind(function () {</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.nextState) {
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.component &amp;&amp; <span class="hljs-keyword">this</span>.component.isMounted()) {
-              <span class="hljs-keyword">this</span>.component.setState(<span class="hljs-keyword">this</span>.nextState);
-            }
-            <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.nextState;
-          }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-38">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
-              </div>
-              <p>}, this));*/</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      }
-    },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-39">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Binds the component to any collection changes.</p>
 
@@ -795,11 +770,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-40">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Binds the component to any model changes.</p>
 
@@ -826,11 +801,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-41">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Expose <code>Backbone.React.Component.mixin</code>.</p>
 
@@ -842,11 +817,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-42">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p><a href="https://github.com/magalhas/backbone-react-component"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
 

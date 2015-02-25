@@ -11,7 +11,7 @@
 // models and collections into [React](http://facebook.github.io/react/) components.
 //
 // When the component is mounted, a wrapper starts listening to models and
-// collections changes to automatically set your component props and achieve UI
+// collections changes to automatically set your component state and achieve UI
 // binding through reactive updates.
 //
 //
@@ -21,7 +21,7 @@
 //     var MyComponent = React.createClass({
 //       mixins: [Backbone.React.Component.mixin],
 //       render: function () {
-//         return <div>{this.props.foo}</div>;
+//         return <div>{this.state.foo}</div>;
 //       }
 //     });
 //     var model = new Backbone.Model({foo: 'bar'});
@@ -126,9 +126,19 @@
         this.wrapper = new Wrapper(this, void 0, nextProps);
       }
     },
-    // Shortcut to `@$el.find`. Inspired by `Backbone.View`.
+    // Shortcut to `@$el.find` if jQuery ins present, else if fallbacks to DOM
+    // native `querySelector`. Inspired by `Backbone.View`.
     $: function () {
-      return this.$el && this.$el.find.apply(this.$el, arguments);
+      var els;
+
+      if (this.$el) {
+        els = this.$el.find.apply(this.$el, arguments);
+      } else {
+        var el = this.getDOMNode();
+        els = el.querySelector.apply(el, arguments);
+      }
+
+      return els;
     },
     // Grabs the collection from `@wrapper.collection` or `@context.parentCollection`
     getCollection: function () {
@@ -205,10 +215,11 @@
         });
       }
     },
-    // Sets `this.props` when a model/collection request starts. It delegates to
-    // `this.setProps`. It listens to `Backbone.Model#request` and `Backbone.Collection#request`.
+    // Sets `this.state` when a model/collection request starts. It delegates to
+    // `this.setState`. It listens to `Backbone.Model#request` and
+    // `Backbone.Collection#request`.
     onRequest: function (modelOrCollection, xhr, options) {
-      // Set props only if there's no silent option
+      // Set `state` only if there's no silent option
       if (!options.silent) {
         this.component.setState({
           isRequesting: true,
@@ -246,22 +257,13 @@
       } else if (modelOrCollection instanceof Backbone.Collection) {
         state.collection = newState;
       } else {
-        state = newState;
+        state.model = newState;
       }
 
       if (target) {
         _.extend(target, state);
       } else {
         this.component.setState(state);
-        /*this.nextState = _.extend(this.nextState || {}, state);
-        //_.defer(_.bind(function () {
-          if (this.nextState) {
-            if (this.component && this.component.isMounted()) {
-              this.component.setState(this.nextState);
-            }
-            delete this.nextState;
-          }
-        //}, this));*/
       }
     },
     // Binds the component to any collection changes.

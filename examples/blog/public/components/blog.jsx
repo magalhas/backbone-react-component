@@ -55,8 +55,8 @@
     // respective model into this.state.
     handleEdit: function (event) {
       var id = event.target.parentNode.getAttribute('data-id');
-      // By getting collection through this.props you get an hash of the collection
-      this.setState(_.findWhere(this.props.collection, {id: id}));
+      // By getting collection through this.state you get an hash of the collection
+      this.setState(_.findWhere(this.state.collection, {id: id}));
     },
     // Getting the id of the post that triggered the remove button and destroying
     // it (local and server).
@@ -87,7 +87,7 @@
     render: function () {
       return (
         <div>
-          {this.this.props.collection && props.collection.map(this.createPost)}
+          {this.state.collection && this.state.collection.map(this.createPost)}
           {this.createForm()}
         </div>
       );
