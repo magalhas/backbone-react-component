@@ -66,13 +66,16 @@ model.set('foo', 'Hello world!');
 var MyComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   createEntry: function (entry) {
-    return <div>{entry.helloWorld}</div>;
+    return <div key={entry.id}>{entry.helloWorld}</div>;
   },
   render: function () {
     return <div>{this.state.collection.map(this.createEntry)}</div>;
   }
 });
-var collection = new Backbone.Collection([{helloWorld: 'Hello world!'}]);
+var collection = new Backbone.Collection([
+  {id: 0, helloWorld: 'Hello world!'},
+  {id: 1, helloWorld: 'Hello world!'}
+]);
 
 React.render(<MyComponent collection={collection} />, document.body);
 ```
