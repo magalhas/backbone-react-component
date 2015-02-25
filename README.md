@@ -72,7 +72,10 @@ var MyComponent = React.createClass({
     return <div>{this.state.collection.map(this.createEntry)}</div>;
   }
 });
-var collection = new Backbone.Collection([{id: 0, helloWorld: 'Hello world!'}, {id: 1, helloWorld: 'Hello world!'}]);
+var collection = new Backbone.Collection([
+  {id: 0, helloWorld: 'Hello world!'},
+  {id: 1, helloWorld: 'Hello world!'}
+]);
 
 React.render(<MyComponent collection={collection} />, document.body);
 ```
