@@ -1,0 +1,24 @@
+{
+  "name": "react-router-usage",
+  "version": "0.1.0",
+  "description": "Backbone-react-component usage with react-router",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ioan Eugen Stan",
+  "license": "MIT",
+  "dependencies": {
+    "backbone": "^1.1.2",
+    "react": "^0.12.2",
+    "react-router": "^0.12.4"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.3",
+    "browser-sync": "^2.2.1",
+    "browserify": "^9.0.3",
+    "gulp": "^3.8.11",
+    "gulp-util": "^3.0.4",
+    "vinyl-source-stream": "^1.0.0"
+  }
+}

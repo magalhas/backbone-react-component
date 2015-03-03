@@ -435,7 +435,7 @@ from there</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> props = nextProps || component.props || {};
-    <span class="hljs-keyword">var</span> model = props.model, collection = props.collection;</pre></div></div>
+    <span class="hljs-keyword">if</span> (component.overrideModel &amp;&amp; <span class="hljs-keyword">typeof</span> component.overrideModel === <span class="hljs-string">'function'</span>){</pre></div></div>
             
         </li>
         
@@ -445,6 +445,42 @@ from there</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Define overrideModel() method on your <code>React class</code> to programatically supply a model object
+Will override <code>this.props.model</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      props.model = component.overrideModel();
+    }
+    <span class="hljs-keyword">if</span> (component.overrideCollection &amp;&amp; <span class="hljs-keyword">typeof</span> component.overrideCollection === <span class="hljs-string">'function'</span>){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Define overrideCollection() method on your <code>React class</code> to programatically supply a collection object
+Will override <code>this.props.collection</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      props.collection = component.overrideCollection();
+    }
+    <span class="hljs-keyword">var</span> model = props.model, collection = props.collection;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Check if <code>props.model</code> is a <code>Backbone.Model</code> or an hashmap of them</p>
 
@@ -456,11 +492,11 @@ from there</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>The model(s) bound to this component</p>
 
@@ -471,11 +507,11 @@ from there</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Set model(s) attributes on <code>initialState</code> for the first render</p>
 
@@ -487,11 +523,11 @@ from there</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Check if <code>props.collection</code> is a <code>Backbone.Collection</code> or an hashmap of them</p>
 
@@ -503,11 +539,11 @@ from there</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>The collection(s) bound to this component</p>
 
@@ -518,11 +554,11 @@ from there</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Set collection(s) models on <code>initialState</code> for the first render</p>
 
@@ -534,11 +570,11 @@ from there</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Start listeners</p>
 
@@ -551,11 +587,11 @@ from there</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Mixing <code>Backbone.Events</code> into <code>Wrapper.prototype</code></p>
 
@@ -566,11 +602,11 @@ from there</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Sets <code>this.state</code> when a model/collection request results in error. It delegates
 to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> and <code>Backbone.Collection#error</code>.</p>
@@ -582,11 +618,11 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-30">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Set state only if there’s no silent option</p>
 
@@ -611,11 +647,11 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-31">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Sets <code>this.state</code> when a model/collection request starts. It delegates to
 <code>this.setState</code>. It listens to <code>Backbone.Model#request</code> and
@@ -628,11 +664,11 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-32">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Set <code>state</code> only if there’s no silent option</p>
 
@@ -650,11 +686,11 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
         </li>
         
         
-        <li id="section-33">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Sets <code>this.state</code> when a model/collection syncs. It delegates to <code>this.setState</code>.
 It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#sync</code></p>
@@ -666,11 +702,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-34">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Calls <code>setState</code> only if there’s no silent option</p>
 
@@ -684,11 +720,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-35">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Used internally to set <code>this.collection</code> or <code>this.model</code> on <code>this.state</code>. Delegates to
 <code>this.setState</code>. It listens to <code>Backbone.Collection</code> events such as <code>add</code>, <code>remove</code>,
@@ -708,11 +744,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-36">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Sets a model, collection or object into state by delegating to <code>this.component.setState</code>.</p>
 
@@ -740,11 +776,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-37">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Binds the component to any collection changes.</p>
 
@@ -770,11 +806,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-38">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Binds the component to any model changes.</p>
 
@@ -801,11 +837,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-39">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Expose <code>Backbone.React.Component.mixin</code>.</p>
 
@@ -817,11 +853,11 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
         </li>
         
         
-        <li id="section-40">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p><a href="https://github.com/magalhas/backbone-react-component"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
 
