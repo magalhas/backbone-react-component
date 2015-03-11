@@ -150,6 +150,19 @@ Grabs the component's collection(s) or from one of the parents.
 #### getModel()
 Grabs the component's model(s) or from one of the parents.
 
+#### overrideModel()
+Hook that can be implemented to return a model or multiple models. This hook is
+executed when the component is initialized. It's useful on cases such as when
+`react-router` is being used.
+
+#### overrideCollection()
+Hook that can be implemented to return a collection or multiple collections.
+This hook is executed when the component is initialized. It's useful on cases
+such as when `react-router` is being used.
+
+#### overrideCollection()
+
+
 ## Examples
 * [Blog](https://github.com/magalhas/backbone-react-component/tree/master/examples/blog)
 * [Nested](https://github.com/magalhas/backbone-react-component/tree/master/examples/nested)
