@@ -19,6 +19,8 @@ When the component is mounted, a wrapper starts listening to models and collecti
     - [$](#$)
     - [getCollection()](#getcollection)
     - [getModel()](#getmodel)
+    - [overrideModel()](#overridemodel)
+    - [overrideCollection()](#overridecollection)
 - [Examples](#examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -159,8 +161,6 @@ executed when the component is initialized. It's useful on cases such as when
 Hook that can be implemented to return a collection or multiple collections.
 This hook is executed when the component is initialized. It's useful on cases
 such as when `react-router` is being used.
-
-#### overrideCollection()
 
 
 ## Examples
