@@ -175,6 +175,38 @@ describe('Parent Component', function () {
     });
   });
 
+  it('overrides the model(s) if hooked', function () {
+    var NewComponent = React.createFactory(React.createClass({
+      mixins: [Backbone.React.Component.mixin],
+      overrideModel: function () {
+        return model2;
+      },
+      render: function () {
+        return React.DOM.div();
+      }
+    }));
+
+    var component = NewComponent({model: model1});
+    var mountedComponent = React.render(component, el);
+    expect(mountedComponent.getModel()).toEqual(model2);
+  });
+
+  it('overrides the collection(s) if hooked', function () {
+    var NewComponent = React.createFactory(React.createClass({
+      mixins: [Backbone.React.Component.mixin],
+      overrideCollection: function () {
+        return collection2;
+      },
+      render: function () {
+        return React.DOM.div();
+      }
+    }));
+
+    var component = NewComponent({collection: collection1});
+    var mountedComponent = React.render(component, el);
+    expect(mountedComponent.getCollection ()).toEqual(collection2);
+  });
+
   describe('Child Component', function () {
 
     describe('with nested models', function () {
