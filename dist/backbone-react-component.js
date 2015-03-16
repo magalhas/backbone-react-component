@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.8.0-beta.1
+//     Backbone.React.Component v0.8.0
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -172,17 +172,24 @@
     // Use `nextProps` or `component.props` and grab `model` and `collection`
     // from there
     var props = nextProps || component.props || {};
+    var model, collection;
+
     if (component.overrideModel && typeof component.overrideModel === 'function'){
       // Define overrideModel() method on your `React class` to programatically supply a model object
       // Will override `this.props.model`
-      props.model = component.overrideModel();
+      model = component.overrideModel();
+    } else {
+      model = props.model;
     }
+
     if (component.overrideCollection && typeof component.overrideCollection === 'function'){
       // Define overrideCollection() method on your `React class` to programatically supply a collection object
       // Will override `this.props.collection`
-      props.collection = component.overrideCollection();
+      collection = component.overrideCollection();
+    } else {
+      collection = props.collection;
     }
-    var model = props.model, collection = props.collection;
+
     // Check if `props.model` is a `Backbone.Model` or an hashmap of them
     if (typeof model !== 'undefined' && (model.attributes ||
         typeof model === 'object' && _.values(model)[0].attributes)) {
