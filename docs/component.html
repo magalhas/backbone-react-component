@@ -34,7 +34,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <pre><code>Backbone.React.Component v0<span class="hljs-number">.8</span><span class="hljs-number">.0</span>-beta<span class="hljs-number">.1</span>
+              <pre><code>Backbone.React.Component v0<span class="hljs-number">.8</span><span class="hljs-number">.0</span>
 
 (c) <span class="hljs-number">2014</span> <span class="hljs-string">"Magalhas"</span> José Magalhães &lt;magalhas@gmail.com&gt;
 Backbone.React.Component can be freely distributed under the MIT license.
@@ -435,6 +435,8 @@ from there</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> props = nextProps || component.props || {};
+    <span class="hljs-keyword">var</span> model, collection;
+
     <span class="hljs-keyword">if</span> (component.overrideModel &amp;&amp; <span class="hljs-keyword">typeof</span> component.overrideModel === <span class="hljs-string">'function'</span>){</pre></div></div>
             
         </li>
@@ -451,8 +453,11 @@ Will override <code>this.props.model</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      props.model = component.overrideModel();
+            <div class="content"><div class='highlight'><pre>      model = component.overrideModel();
+    } <span class="hljs-keyword">else</span> {
+      model = props.model;
     }
+
     <span class="hljs-keyword">if</span> (component.overrideCollection &amp;&amp; <span class="hljs-keyword">typeof</span> component.overrideCollection === <span class="hljs-string">'function'</span>){</pre></div></div>
             
         </li>
@@ -469,9 +474,10 @@ Will override <code>this.props.collection</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      props.collection = component.overrideCollection();
-    }
-    <span class="hljs-keyword">var</span> model = props.model, collection = props.collection;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      collection = component.overrideCollection();
+    } <span class="hljs-keyword">else</span> {
+      collection = props.collection;
+    }</pre></div></div>
             
         </li>
         
