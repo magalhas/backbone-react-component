@@ -1,0 +1,18 @@
+{
+  "name": "BackboneReactDemo",
+  "version": "0.3.0",
+  "description": "Sample react, react-router and backbone-react-component application",
+  "dependencies": {
+    "backbone": "^1.1.2",
+    "backbone-react-component": "git+ssh://git@github.com:ieugen/backbone-react-component.git#programatic-models-and-collections",
+    "react": "^0.12.2",
+    "react-router": "^0.12.4"
+  },
+  "devDependencies": {
+    "broccoli": "^0.15.1",
+    "broccoli-babel-transpiler": "^4.0.1",
+    "broccoli-browserify": "^0.1.0",
+    "broccoli-merge-trees": "^0.2.1",
+    "broccoli-webpack": "^0.1.1"
+  }
+}
