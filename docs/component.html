@@ -34,7 +34,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <pre><code>Backbone.React.Component v0<span class="hljs-number">.8</span><span class="hljs-number">.0</span>
+              <pre><code>Backbone.React.Component v0.8.0
 
 (c) <span class="hljs-number">2014</span> <span class="hljs-string">"Magalhas"</span> José Magalhães &lt;magalhas@gmail.com&gt;
 Backbone.React.Component can be freely distributed under the MIT license.
@@ -177,7 +177,7 @@ optional.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">this</span>.setElement(<span class="hljs-keyword">this</span>.getDOMNode());
+      <span class="hljs-keyword">this</span>.setElement(React.findDOMNode(<span class="hljs-keyword">this</span>));
     },</pre></div></div>
             
         </li>
@@ -194,7 +194,7 @@ optional.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    componentDidUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">this</span>.setElement(<span class="hljs-keyword">this</span>.getDOMNode());
+      <span class="hljs-keyword">this</span>.setElement(React.findDOMNode(<span class="hljs-keyword">this</span>));
     },</pre></div></div>
             
         </li>
@@ -319,7 +319,7 @@ native <code>querySelector</code>. Inspired by <code>Backbone.View</code>.</p>
       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.$el) {
         els = <span class="hljs-keyword">this</span>.$el.find.apply(<span class="hljs-keyword">this</span>.$el, <span class="hljs-built_in">arguments</span>);
       } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">var</span> el = <span class="hljs-keyword">this</span>.getDOMNode();
+        <span class="hljs-keyword">var</span> el = React.findDOMNode(<span class="hljs-keyword">this</span>);
         els = el.querySelector.apply(el, <span class="hljs-built_in">arguments</span>);
       }
 
