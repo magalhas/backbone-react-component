@@ -1,4 +1,4 @@
-/* global document:true */
+/* global _:true, document:true */
 describe('Mixinless component', function () {
   'use strict';
 
@@ -37,24 +37,30 @@ describe('Mixinless component', function () {
         }
       }));
 
-      it('renders', function () {
+      it('renders', function (done) {
         spy = jasmine.createSpy().and.callFake(function () {
           expect(this.state.model.hello).toEqual('world!');
+          done();
         });
 
         component = Component();
         mountedComponent = React.render(component, el);
-        expect(spy).toHaveBeenCalled();
+        _.defer(function () {
+          expect(spy).toHaveBeenCalled();
+        });
       });
 
-      it('binds to a model', function () {
+      it('binds to a model', function (done) {
         component = Component();
         mountedComponent = React.render(component, el);
         spy = jasmine.createSpy().and.callFake(function () {
           expect(this.state.model.hello).toEqual('hell!');
         });
         model1.set('hello', 'hell!');
-        expect(spy).toHaveBeenCalled();
+        _.defer(function () {
+          expect(spy).toHaveBeenCalled();
+          done();
+        });
       });
   });
 
@@ -84,26 +90,32 @@ describe('Mixinless component', function () {
       }
     }));
 
-    it('renders', function () {
+    it('renders', function (done) {
       spy = jasmine.createSpy().and.callFake(function () {
         expect(this.state.collection[0].hello).toEqual(1);
         expect(this.state.collection[1].hello).toEqual(2);
+        done();
       });
 
       component = Component();
       mountedComponent = React.render(component, el);
-      expect(spy).toHaveBeenCalled();
+      _.defer(function () {
+        expect(spy).toHaveBeenCalled();
+      });
     });
 
-    it('binds to a collection', function () {
+    it('binds to a collection', function (done) {
       component = Component();
       mountedComponent = React.render(component, el);
       spy = jasmine.createSpy().and.callFake(function () {
         expect(this.state.collection[0].hello).toEqual(3);
         expect(this.state.collection[1].hello).toEqual(2);
+        done();
       });
       collection1.at(0).set('hello', 3);
-      expect(spy).toHaveBeenCalled();
+      _.defer(function () {
+        expect(spy).toHaveBeenCalled();
+      });
     });
   });
 });

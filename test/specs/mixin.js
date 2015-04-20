@@ -150,8 +150,10 @@ describe('Parent Component', function () {
       });
 
       mountedComponent = React.render(component, el, function () {
-        expect(this.state.collection[0].goodbye).toEqual('other world!');
-        done();
+        _.defer(function () {
+          expect(this.state.collection[0].goodbye).toEqual('other world!');
+          done();
+        }.bind(this));
       });
     });
   });
@@ -169,8 +171,10 @@ describe('Parent Component', function () {
       });
 
       mountedComponent = React.render(component, el, function () {
-        expect(this.state.model.goodbye).toEqual('other world!');
-        done();
+        _.defer(function () {
+          expect(this.state.model.goodbye).toEqual('other world!');
+          done();
+        }.bind(this));
       });
     });
   });
