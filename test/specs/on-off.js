@@ -45,9 +45,6 @@ describe('Mixinless component', function () {
 
         component = Component();
         mountedComponent = React.render(component, el);
-        _.defer(function () {
-          expect(spy).toHaveBeenCalled();
-        });
       });
 
       it('binds to a model', function (done) {
@@ -55,12 +52,9 @@ describe('Mixinless component', function () {
         mountedComponent = React.render(component, el);
         spy = jasmine.createSpy().and.callFake(function () {
           expect(this.state.model.hello).toEqual('hell!');
-        });
-        model1.set('hello', 'hell!');
-        _.defer(function () {
-          expect(spy).toHaveBeenCalled();
           done();
         });
+        model1.set('hello', 'hell!');
       });
   });
 
@@ -99,9 +93,6 @@ describe('Mixinless component', function () {
 
       component = Component();
       mountedComponent = React.render(component, el);
-      _.defer(function () {
-        expect(spy).toHaveBeenCalled();
-      });
     });
 
     it('binds to a collection', function (done) {
@@ -113,9 +104,6 @@ describe('Mixinless component', function () {
         done();
       });
       collection1.at(0).set('hello', 3);
-      _.defer(function () {
-        expect(spy).toHaveBeenCalled();
-      });
     });
   });
 });
