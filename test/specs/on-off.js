@@ -18,7 +18,7 @@ describe('Mixinless component', function () {
 
       var Component = React.createFactory(React.createClass({
         componentWillMount: function () {
-          Backbone.React.Component.mixin.on(this, model1);
+          Backbone.React.Component.mixin.on(this, {models: model1});
         },
         componentDidMount: function () {
           if (spy) spy.call(this);
@@ -63,7 +63,7 @@ describe('Mixinless component', function () {
 
     var Component = React.createFactory(React.createClass({
       componentWillMount: function () {
-        Backbone.React.Component.mixin.on(this, collection1);
+        Backbone.React.Component.mixin.on(this, {collections: collection1});
       },
       componentDidMount: function () {
         if (spy) spy.call(this);
