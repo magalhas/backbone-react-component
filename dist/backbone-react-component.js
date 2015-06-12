@@ -21,7 +21,7 @@
 //     var MyComponent = React.createClass({
 //       mixins: [Backbone.React.Component.mixin],
 //       render: function () {
-//         return <div>{this.state.foo}</div>;
+//         return <div>{this.state.model.foo}</div>;
 //       }
 //     });
 //     var model = new Backbone.Model({foo: 'bar'});
@@ -45,7 +45,7 @@
     Backbone.React.Component = {};
   }
   // Mixin used in all component instances. Exported through `Backbone.React.Component.mixin`.
-  Backbone.React.Component.mixin = {
+  var mixin = Backbone.React.Component.mixin = {
     // Types of the context passed to child components. Only
     // `hasParentBackboneMixin` is required all of the others are optional.
     childContextTypes: {
@@ -167,6 +167,8 @@
   };
   // Binds models and collections to a `React.Component`. It mixes `Backbone.Events`.
   function Wrapper (component, initialState, nextProps) {
+    // Object to store wrapper state (not the component state)
+    this.state = {};
     // 1:1 relation with the `component`
     this.component = component;
     // Use `nextProps` or `component.props` and grab `model` and `collection`
@@ -190,26 +192,8 @@
       collection = props.collection;
     }
 
-    // Check if `props.model` is a `Backbone.Model` or an hashmap of them
-    if (typeof model !== 'undefined' && (model.attributes ||
-        typeof model === 'object' && _.values(model)[0].attributes)) {
-      // The model(s) bound to this component
-      this.model = model;
-      // Set model(s) attributes on `initialState` for the first render
-      this.setStateBackbone(model, void 0, initialState);
-    }
-    // Check if `props.collection` is a `Backbone.Collection` or an hashmap of them
-    if (typeof collection !== 'undefined' && (collection.models ||
-        typeof collection === 'object' && _.values(collection)[0].models)) {
-      // The collection(s) bound to this component
-      this.collection = collection;
-      // Set collection(s) models on `initialState` for the first render
-      this.setStateBackbone(collection, void 0, initialState);
-    }
-
-    // Start listeners
-    this.startModelListeners();
-    this.startCollectionListeners();
+    this.setModels(model, initialState);
+    this.setCollections(collection, initialState);
   }
   // Mixing `Backbone.Events` into `Wrapper.prototype`
   _.extend(Wrapper.prototype, Backbone.Events, {
@@ -253,10 +237,34 @@
         this.component.setState({isRequesting: false});
       }
     },
+    // Check if `models` is a `Backbone.Model` or an hashmap of them, sets them
+    // to the component state and binds to update on any future changes
+    setModels: function (models, initialState, isDeferred) {
+      if (typeof models !== 'undefined' && (models.attributes ||
+          typeof models === 'object' && _.values(models)[0].attributes)) {
+        // The model(s) bound to this component
+        this.model = models;
+        // Set model(s) attributes on `initialState` for the first render
+        this.setStateBackbone(models, void 0, initialState, isDeferred);
+        this.startModelListeners(models);
+      }
+    },
+    // Check if `collections` is a `Backbone.Model` or an hashmap of them,
+    // sets them to the component state and binds to update on any future changes
+    setCollections: function (collections, initialState, isDeferred) {
+      if (typeof collections !== 'undefined' && (collections.models ||
+          typeof collections === 'object' && _.values(collections)[0].models)) {
+        // The collection(s) bound to this component
+        this.collection = collections;
+        // Set collection(s) models on `initialState` for the first render
+        this.setStateBackbone(collections, void 0, initialState, isDeferred);
+        this.startCollectionListeners(collections);
+      }
+    },
     // Used internally to set `this.collection` or `this.model` on `this.state`. Delegates to
     // `this.setState`. It listens to `Backbone.Collection` events such as `add`, `remove`,
     // `change`, `sort`, `reset` and to `Backbone.Model` `change`.
-    setStateBackbone: function (modelOrCollection, key, target) {
+    setStateBackbone: function (modelOrCollection, key, target, isDeferred) {
       if (!(modelOrCollection.models || modelOrCollection.attributes)) {
         for (key in modelOrCollection)
             this.setStateBackbone(modelOrCollection[key], key, target);
@@ -265,13 +273,13 @@
       this.setState.apply(this, arguments);
     },
     // Sets a model, collection or object into state by delegating to `this.component.setState`.
-    setState: function (modelOrCollection, key, target) {
+    setState: function (modelOrCollection, key, target, isDeferred) {
       var state = {};
       var newState = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
 
       if (key) {
         state[key] = newState;
-      } else if (modelOrCollection instanceof Backbone.Collection) {
+      } else if (modelOrCollection.models) {
         state.collection = newState;
       } else {
         state.model = newState;
@@ -279,6 +287,14 @@
 
       if (target) {
         _.extend(target, state);
+      } else if (isDeferred) {
+        this.nextState = _.extend(this.nextState || {}, state);
+        _.defer(_.bind(function () {
+          if (this.nextState) {
+            this.component.setState(this.nextState);
+            this.nextState = null;
+          }
+        }, this));
       } else {
         this.component.setState(state);
       }
@@ -290,7 +306,7 @@
         if (collection.models)
           this
             .listenTo(collection, 'add remove change sort reset',
-              _.partial(this.setStateBackbone, collection, key, void 0))
+              _.partial(this.setStateBackbone, collection, key, void 0, true))
             .listenTo(collection, 'error', this.onError)
             .listenTo(collection, 'request', this.onRequest)
             .listenTo(collection, 'sync', this.onSync);
@@ -307,7 +323,7 @@
         if (model.attributes)
           this
             .listenTo(model, 'change',
-              _.partial(this.setStateBackbone, model, key, void 0))
+              _.partial(this.setStateBackbone, model, key, void 0, true))
             .listenTo(model, 'error', this.onError)
             .listenTo(model, 'request', this.onRequest)
             .listenTo(model, 'sync', this.onSync)
@@ -319,7 +335,51 @@
     }
   });
 
+  // Facade method to bypass the `mixin` usage. For use cases such as ES6
+  // classes or else. It binds any `Backbone.Model` and `Backbone.Collection`
+  // instance found inside `backboneInstances.models` and
+  // `backboneInstances.collections` (single instances or objects of them)
+  mixin.on = function (component, backboneInstances) {
+    var wrapper;
+
+    if (!component.wrapper) {
+      wrapper = new Wrapper(component);
+    } else {
+      wrapper = component.wrapper;
+    }
+
+    if (backboneInstances.models) {
+      wrapper.setModels(backboneInstances.models);
+    }
+    if (backboneInstances.collections) {
+      wrapper.setCollections(backboneInstances.collections);
+    }
+    component.wrapper = wrapper;
+  };
+
+  // Shortcut method to bind a model or multiple models
+  mixin.onModel = function (component, models) {
+    mixin.on(component, {models: models});
+  };
+
+  // Shortcut method to bind a collection or multiple collections
+  mixin.onCollection = function (component, collections) {
+    mixin.on(component, {collections: collections});
+  };
+
+  // Facade method to dispose of a `component.wrapper`
+  mixin.off = function (component, modelOrCollection) {
+    if (arguments.length === 2) {
+      if (component.wrapper) {
+        component.wrapper.stopListening(modelOrCollection);
+        // TODO Remove modelOrCollection from `component.state`?
+      }
+    } else {
+      mixin.componentWillUnmount.call(component);
+    }
+  };
+
   // Expose `Backbone.React.Component.mixin`.
-  return Backbone.React.Component.mixin;
+  return mixin;
 }));
 // <a href="https://github.com/magalhas/backbone-react-component"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
