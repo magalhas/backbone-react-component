@@ -1,7 +1,7 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.8.0
+//     Backbone.React.Component v0.9.0
 //
 //     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
@@ -240,9 +240,20 @@
     // Check if `models` is a `Backbone.Model` or an hashmap of them, sets them
     // to the component state and binds to update on any future changes
     setModels: function (models, initialState, isDeferred) {
-      if (typeof models !== 'undefined' && (models.attributes ||
-          typeof models === 'object' && _.values(models)[0].attributes)) {
-        // The model(s) bound to this component
+      var isValid = typeof models !== 'undefined';
+
+      if (isValid) {
+        if (!models.attributes) {
+          if (typeof models === 'object') {
+            var _values = _.values(models);
+            isValid = _values.length > 0 && _values[0].attributes;
+          } else {
+            isValid = false;
+          }
+        }
+      }
+
+      if (isValid) {
         this.model = models;
         // Set model(s) attributes on `initialState` for the first render
         this.setStateBackbone(models, void 0, initialState, isDeferred);
@@ -262,7 +273,7 @@
       }
     },
     // Used internally to set `this.collection` or `this.model` on `this.state`. Delegates to
-    // `this.setState`. It listens to `Backbone.Collection` events such as `add`, `remove`,
+    // `this.setState`. It listens to `Backbone.Collection` events such as `update`,
     // `change`, `sort`, `reset` and to `Backbone.Model` `change`.
     setStateBackbone: function (modelOrCollection, key, target, isDeferred) {
       if (!(modelOrCollection.models || modelOrCollection.attributes)) {
@@ -305,7 +316,7 @@
       if (collection) {
         if (collection.models)
           this
-            .listenTo(collection, 'add remove change sort reset',
+            .listenTo(collection, 'update change sort reset',
               _.partial(this.setStateBackbone, collection, key, void 0, true))
             .listenTo(collection, 'error', this.onError)
             .listenTo(collection, 'request', this.onRequest)
