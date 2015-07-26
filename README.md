@@ -1,8 +1,8 @@
 # [Backbone.React.Component](http://magalhas.github.io/backbone-react-component/) [![Build Status](https://travis-ci.org/magalhas/backbone-react-component.png)](https://travis-ci.org/magalhas/backbone-react-component)
 
-`Backbone.React.Component` is a mixin that glues [Backbone](http://backbonejs.org/) models and collections into [React](http://facebook.github.io/react/) components.
+`Backbone.React.Component` is a mixin and API that glues [Backbone](http://backbonejs.org/) models and collections into [React](http://facebook.github.io/react/) components.
 
-When the component is mounted, a wrapper starts listening to models and collections changes to automatically set your component state and achieve UI binding through reactive updates.
+When used as a mixin the component is mounted, a wrapper starts listening to models and collections changes to automatically set your component state and achieve UI binding through reactive updates.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -10,13 +10,19 @@ When the component is mounted, a wrapper starts listening to models and collecti
 
 - [Dependencies](#dependencies)
 - [How To](#how-to)
-  - [Usage](#usage)
+  - [API Usage](#api-usage)
+  - [Mixin Usage](#mixin-usage)
     - [One model](#one-model)
     - [One collection](#one-collection)
     - [Multiple models and collections](#multiple-models-and-collections)
   - [Usage on the server (Node.js)](#usage-on-the-server-nodejs)
   - [API](#api)
-    - [$](#$)
+    - [on(component, modelsAndCollectionsObject)](#oncomponent-modelsandcollectionsobject)
+    - [onModel(component, modelsObject)](#onmodelcomponent-modelsobject)
+    - [onCollection(component, collectionsObject](#oncollectioncomponent-collectionsobject)
+    - [off(component)](#offcomponent)
+  - [Mixin API](#mixin-api)
+    - [$](#)
     - [getCollection()](#getcollection)
     - [getModel()](#getmodel)
     - [overrideModel()](#overridemodel)
@@ -41,8 +47,42 @@ npm install backbone-react-component
 ```
 If you're not using [Bower](http://bower.io/) nor [Npm](https://npmjs.org/) download the source from the dist folder or use [CDNJS](http://cdnjs.com/).
 
+### API Usage
 
-### Usage
+```js
+import Backbone from 'backbone';
+import backboneReact from 'backbone-react-component';
+import React from 'react';
+
+var collection1 = new Backbone.Collection([
+  {hello: 1},
+  {hello: 2}
+]);
+
+export default class Component extends React.Component {
+  componentWillMount () {
+    backboneReact.on(this, {
+      collections: {
+        myCollection: collection1
+      }
+    });
+  }
+
+  componentWillUnmount () {
+    backboneReact.off(this);
+  }
+
+  render () {
+    return (
+      <div>
+        {this.state.myCollection.map((model) => model.hello)}
+      </div>
+    );
+  }
+}
+```
+
+### Mixin Usage
 
 #### One model
 ```js
@@ -140,6 +180,34 @@ React.renderToString(HelloWorldFactory({model: model}));
 ```
 
 ### API
+
+#### on(component, modelsAndCollectionsObject)
+Binds all models/collections found inside `modelsAndCollectionsObject` to
+`component`. `modelsAndCollectionsObject` takes the following form:
+
+```js
+{
+  models: {
+    a: new Backbone.Model() // binds to `@state.a`
+  },
+  collections: {
+    b: new Backbone.Collection() // binds to `@state.b`
+  }
+}
+```
+
+#### onModel(component, modelsObject)
+Shortcut method to `#on`. `modelsObject` can either be an object of
+`Backbone.Model`s or a single instance of one.
+
+#### onCollection(component, collectionsObject
+Shortcut method to `#on`. `collectionsObject` can either be an object of
+`Backbone.Collection`s or a single instance of one.
+
+#### off(component)
+Teardown method. Unbinds all models and collections from `component`.
+
+### Mixin API
 The following API is under `Backbone.React.Component.mixin` (`require('backbone-react-component')`):
 
 #### $
