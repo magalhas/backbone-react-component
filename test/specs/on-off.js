@@ -9,7 +9,7 @@ describe('Mixinless component', function () {
   });
 
   afterEach(function () {
-    React.unmountComponentAtNode(el);
+    ReactDOM.unmountComponentAtNode(el);
     spy = void 0;
   });
 
@@ -44,12 +44,12 @@ describe('Mixinless component', function () {
         });
 
         component = Component();
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
       });
 
       it('binds to a model', function (done) {
         component = Component();
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         spy = jasmine.createSpy().and.callFake(function () {
           expect(this.state.model.hello).toEqual('hell!');
           done();
@@ -92,12 +92,12 @@ describe('Mixinless component', function () {
       });
 
       component = Component();
-      mountedComponent = React.render(component, el);
+      mountedComponent = ReactDOM.render(component, el);
     });
 
     it('binds to a collection', function (done) {
       component = Component();
-      mountedComponent = React.render(component, el);
+      mountedComponent = ReactDOM.render(component, el);
       spy = jasmine.createSpy().and.callFake(function () {
         expect(this.state.collection[0].hello).toEqual(3);
         expect(this.state.collection[1].hello).toEqual(2);

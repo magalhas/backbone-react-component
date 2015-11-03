@@ -52,7 +52,8 @@ exports = module.exports = function (grunt) {
             'test/helpers/polyfills.js',
             'node_modules/underscore/underscore.js',
             'node_modules/backbone/backbone.js',
-            'node_modules/react/dist/react.js'
+            'node_modules/react/dist/react.js',
+            'node_modules/react-dom/dist/react-dom.js'
           ]
         }
       }
