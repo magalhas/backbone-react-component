@@ -27,24 +27,24 @@ describe('Parent Component', function () {
   afterEach(function () {
     model1.stopListening();
     collection1.stopListening();
-    React.unmountComponentAtNode(el);
+    ReactDOM.unmountComponentAtNode(el);
   });
 
   it('gets the model(s)', function () {
     component = Component({model: model1});
-    mountedComponent = React.render(component, el);
+    mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.getModel()).toEqual(model1);
   });
 
   it('gets the collection(s)', function () {
     component = Component({collection: collection1});
-    mountedComponent = React.render(component, el);
+    mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.getCollection()).toEqual(collection1);
   });
 
   it('binds to a model', function (done) {
     component = Component({model: model1});
-    mountedComponent = React.render(component, el);
+    mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.state.model.hello).toEqual('world!');
     model1.set('hello', 'again');
     // Defering because setting state is defered as well
@@ -61,14 +61,14 @@ describe('Parent Component', function () {
         secondModel: model2
       }
     });
-    mountedComponent = React.render(component, el);
+    mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.state.firstModel.hello).toEqual('world!');
     expect(mountedComponent.state.secondModel.goodbye).toEqual('other world!');
   });
 
   it('binds to a collection', function (done) {
     component = Component({collection: collection1});
-    mountedComponent = React.render(component, el);
+    mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.state.collection[0].hello).toEqual('world!');
     mountedComponent.getCollection().at(0).set('hello', 'again');
     // Defering because setting state is defered as well
@@ -85,7 +85,7 @@ describe('Parent Component', function () {
         secondCollection: collection2
       }
     });
-    mountedComponent = React.render(component, el);
+    mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.state.firstCollection[0].hello).toEqual('world!');
     expect(mountedComponent.state.secondCollection[0].goodbye).toEqual('other world!');
     mountedComponent.getCollection().firstCollection.at(0).set('hello', 'again');
@@ -102,7 +102,7 @@ describe('Parent Component', function () {
     component = Component({
         collection: collection1
     });
-    mountedComponent = React.render(component, el);
+    mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.state.collection[0].hello).toEqual('world!');
     collection1.reset({hello: 'other world!'});
     _.defer(function () {
@@ -121,7 +121,7 @@ describe('Parent Component', function () {
       done();
     });
 
-    React.render(component, el);
+    ReactDOM.render(component, el);
   });
 
   it('grabs the model instance on `getInitialState`', function (done) {
@@ -134,7 +134,7 @@ describe('Parent Component', function () {
       done();
     });
 
-    React.render(component, el);
+    ReactDOM.render(component, el);
   });
 
   it('updates the collection when a new one is passed', function (done) {
@@ -142,14 +142,14 @@ describe('Parent Component', function () {
       collection: collection1
     });
 
-    mountedComponent = React.render(component, el, function () {
+    mountedComponent = ReactDOM.render(component, el, function () {
       expect(this.state.collection[0].hello).toEqual('world!');
 
       component = Component({
         collection: collection2
       });
 
-      mountedComponent = React.render(component, el, function () {
+      mountedComponent = ReactDOM.render(component, el, function () {
         _.defer(function () {
           expect(this.state.collection[0].goodbye).toEqual('other world!');
           done();
@@ -163,14 +163,14 @@ describe('Parent Component', function () {
       model: model1
     });
 
-    mountedComponent = React.render(component, el, function () {
+    mountedComponent = ReactDOM.render(component, el, function () {
       expect(this.state.model.hello).toEqual('world!');
 
       component = Component({
         model: model2
       });
 
-      mountedComponent = React.render(component, el, function () {
+      mountedComponent = ReactDOM.render(component, el, function () {
         _.defer(function () {
           expect(this.state.model.goodbye).toEqual('other world!');
           done();
@@ -191,7 +191,7 @@ describe('Parent Component', function () {
     }));
 
     var component = NewComponent({model: model1});
-    var mountedComponent = React.render(component, el);
+    var mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.getModel()).toEqual(model2);
   });
 
@@ -207,7 +207,7 @@ describe('Parent Component', function () {
     }));
 
     var component = NewComponent({collection: collection1});
-    var mountedComponent = React.render(component, el);
+    var mountedComponent = ReactDOM.render(component, el);
     expect(mountedComponent.getCollection ()).toEqual(collection2);
   });
 
@@ -228,7 +228,7 @@ describe('Parent Component', function () {
       });
 
       afterEach(function () {
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         if (newSpy) expect(newSpy).toHaveBeenCalled();
         if (spy) expect(spy).toHaveBeenCalled();
       });
@@ -268,7 +268,7 @@ describe('Parent Component', function () {
         newSpy = jasmine.createSpy().and.callFake(function () {
           expect(this.getCollection()).toEqual(collection1);
         });
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         expect(newSpy).toHaveBeenCalled();
       });
 
@@ -276,7 +276,7 @@ describe('Parent Component', function () {
         spy = jasmine.createSpy().and.callFake(function () {
           expect(this.getCollection()).toEqual(collection2);
         });
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         expect(spy).toHaveBeenCalled();
       });
 
@@ -285,7 +285,7 @@ describe('Parent Component', function () {
           expect(this.state.collection instanceof Array).toBeTruthy();
           expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         expect(newSpy).toHaveBeenCalled();
       });
 
@@ -294,7 +294,7 @@ describe('Parent Component', function () {
           expect(this.state.collection instanceof Array).toBeTruthy();
           expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         expect(spy).toHaveBeenCalled();
       });
 
@@ -304,7 +304,7 @@ describe('Parent Component', function () {
           expect(this.state.collection instanceof Array).toBeTruthy();
           expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         expect(newSpy).toHaveBeenCalled();
         collection1.add(new Backbone.Model());
         _.defer(function () {
@@ -319,7 +319,7 @@ describe('Parent Component', function () {
           expect(this.state.collection instanceof Array).toBeTruthy();
           expect(this.state.collection).toEqual(this.getCollection().toJSON());
         });
-        mountedComponent = React.render(component, el);
+        mountedComponent = ReactDOM.render(component, el);
         expect(spy).toHaveBeenCalled();
         collection1.add(new Backbone.Model());
         _.defer(function () {
