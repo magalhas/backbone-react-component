@@ -13,7 +13,7 @@
   },
   "peerDependencies": {
     "backbone": "^1.2.3",
-    "react": "^0.13.3"
+    "react-native": "^0.14.0"
   },
   "dependencies": {
     "underscore": "^1.8.3"
