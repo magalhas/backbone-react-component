@@ -95,7 +95,7 @@ var MyComponent = React.createClass({
 
 var model = new Backbone.Model({foo: 'bar'});
 
-React.render(<MyComponent model={model} />, document.body);
+ReactDOM.render(<MyComponent model={model} />, document.body);
 // Update the UI
 model.set('foo', 'Hello world!');
 ```
@@ -117,7 +117,7 @@ var collection = new Backbone.Collection([
   {id: 1, helloWorld: 'Hello world!'}
 ]);
 
-React.render(<MyComponent collection={collection} />, document.body);
+ReactDOM.render(<MyComponent collection={collection} />, document.body);
 ```
 
 #### Multiple models and collections
@@ -151,7 +151,7 @@ var newComponent = MyFactory({
     secondCollection: new Backbone.Collection([{helloWorld: 'Hello world!'}])
   }
 });
-React.render(newComponent, document.body);
+ReactDOM.render(newComponent, document.body);
 ```
 
 ### Usage on the server (Node.js)
@@ -172,11 +172,11 @@ var HelloWorld = React.createClass({
 var HelloWorldFactory = React.createFactory(HelloWorld);
 
 // Render to an HTML string
-React.renderToString(HelloWorldFactory({model: model}));
+ReactDOM.renderToString(HelloWorldFactory({model: model}));
 // Updating the model
 model.set('helloWorld', 'Hi again!');
 // Rendering to an HTML string again
-React.renderToString(HelloWorldFactory({model: model}));
+ReactDOM.renderToString(HelloWorldFactory({model: model}));
 ```
 
 ### API
