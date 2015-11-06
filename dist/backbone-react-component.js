@@ -1,9 +1,9 @@
 // Backbone React Component
 // ========================
 //
-//     Backbone.React.Component v0.9.0
+//     Backbone.React.Component v0.10.0
 //
-//     (c) 2014 "Magalhas" José Magalhães <magalhas@gmail.com>
+//     (c) 2014, 2015 "Magalhas" José Magalhães <magalhas@gmail.com>
 //     Backbone.React.Component can be freely distributed under the MIT license.
 //
 //
@@ -25,18 +25,18 @@
 //       }
 //     });
 //     var model = new Backbone.Model({foo: 'bar'});
-//     React.render(<MyComponent model={model} />, document.body);
+//     ReactDOM.render(<MyComponent model={model} />, document.body);
 
 (function (root, factory) {
   // Universal module definition
   if (typeof define === 'function' && define.amd) {
-    define(['react', 'backbone', 'underscore'], factory);
+    define(['react', 'react-dom', 'backbone', 'underscore'], factory);
   } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = factory(require('react'), require('backbone'), require('underscore'));
+    module.exports = factory(require('react'), require('react-dom'), require('backbone'), require('underscore'));
   } else {
-    factory(root.React, root.Backbone, root._);
+    factory(root.React, root.ReactDOM, root.Backbone, root._);
   }
-}(this, function (React, Backbone, _) {
+}(this, function (React, ReactDOM, Backbone, _) {
   'use strict';
   if (!Backbone.React) {
     Backbone.React = {};
@@ -70,11 +70,11 @@
     },
     // Sets `this.el` and `this.$el` when the component mounts.
     componentDidMount: function () {
-      this.setElement(React.findDOMNode(this));
+      this.setElement(ReactDOM.findDOMNode(this));
     },
     // Sets `this.el` and `this.$el` when the component updates.
     componentDidUpdate: function () {
-      this.setElement(React.findDOMNode(this));
+      this.setElement(ReactDOM.findDOMNode(this));
     },
     // When the component gets the initial state, instance a `Wrapper` to take
     // care of models and collections binding with `this.state`.
@@ -134,7 +134,7 @@
       if (this.$el) {
         els = this.$el.find.apply(this.$el, arguments);
       } else {
-        var el = React.findDOMNode(this);
+        var el = ReactDOM.findDOMNode(this);
         els = el.querySelector.apply(el, arguments);
       }
 
@@ -283,10 +283,24 @@
       }
       this.setState.apply(this, arguments);
     },
+    // Get the attributes for the collection or model as array or hash
+    getAttributes: function (modelOrCollection){
+      var attrs = [];
+
+      // if a collection, get the attributes of each, otherwise return modelOrCollection
+      if (modelOrCollection instanceof Backbone.Collection) {
+        for (var i = 0; i < modelOrCollection.models.length; i++) {
+          attrs.push(modelOrCollection.models[i].attributes);
+        }
+        return attrs;
+      } else {
+        return modelOrCollection.attributes
+      }
+    },
     // Sets a model, collection or object into state by delegating to `this.component.setState`.
     setState: function (modelOrCollection, key, target, isDeferred) {
       var state = {};
-      var newState = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
+      var newState = this.getAttributes(modelOrCollection);
 
       if (key) {
         state[key] = newState;
