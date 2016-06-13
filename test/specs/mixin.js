@@ -42,6 +42,20 @@ describe('Parent Component', function () {
     expect(mountedComponent.getCollection()).toEqual(collection1);
   });
 
+  it('clones model attributes', function () {
+    component = Component({model: model1});
+    mountedComponent = ReactDOM.render(component, el);
+
+    expect(model1.attributes).not.toBe(mountedComponent.state.model);
+  });
+
+  it('clones attributes from models in collection', function () {
+    component = Component({collection: collection1});
+    mountedComponent = ReactDOM.render(component, el);
+
+    expect(collection1.first().attributes).not.toBe(mountedComponent.state.collection[0]);
+  });
+
   it('binds to a model', function (done) {
     component = Component({model: model1});
     mountedComponent = ReactDOM.render(component, el);
