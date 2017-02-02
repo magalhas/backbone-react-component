@@ -45,13 +45,13 @@ collections changes to automatically set your component state and achieve UI
 binding through reactive updates.</p>
 <p>Basic Usage</p>
 <pre><code><span class="hljs-keyword">var</span> MyComponent = React.createClass({
-  mixins: [Backbone.React.Component.mixin],
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{this.state.model.foo}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+  <span class="hljs-attr">mixins</span>: [Backbone.React.Component.mixin],
+  <span class="hljs-attr">render</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{this.state.model.foo}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
   }
 });
-<span class="hljs-keyword">var</span> model = <span class="hljs-keyword">new</span> Backbone.Model({foo: <span class="hljs-string">'bar'</span>});
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyComponent</span> <span class="hljs-attribute">model</span>=<span class="hljs-value">{model}</span> /&gt;</span>, document.body);</span>
+<span class="hljs-keyword">var</span> model = <span class="hljs-keyword">new</span> Backbone.Model({<span class="hljs-attr">foo</span>: <span class="hljs-string">'bar'</span>});
+ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span> <span class="hljs-attr">model</span>=<span class="hljs-string">{model}</span> /&gt;</span>, document.body);</span>
 </code></pre>
             </div>
             
@@ -79,7 +79,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
     factory(root.React, root.ReactDOM, root.Backbone, root._);
   }
 }(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">React, ReactDOM, Backbone, _</span>) </span>{
-<span class="hljs-pi">  'use strict'</span>;
+<span class="hljs-meta">  'use strict'</span>;
   <span class="hljs-keyword">if</span> (!Backbone.React) {
     Backbone.React = {};
   }
@@ -117,9 +117,9 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
             </div>
             
             <div class="content"><div class='highlight'><pre>    childContextTypes: {
-      hasParentBackboneMixin: React.PropTypes.bool.isRequired,
-      parentModel: React.PropTypes.any,
-      parentCollection: React.PropTypes.any
+      <span class="hljs-attr">hasParentBackboneMixin</span>: React.PropTypes.bool.isRequired,
+      <span class="hljs-attr">parentModel</span>: React.PropTypes.any,
+      <span class="hljs-attr">parentCollection</span>: React.PropTypes.any
     },</pre></div></div>
             
         </li>
@@ -137,9 +137,9 @@ optional.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    contextTypes: {
-      hasParentBackboneMixin: React.PropTypes.bool,
-      parentModel: React.PropTypes.any,
-      parentCollection: React.PropTypes.any
+      <span class="hljs-attr">hasParentBackboneMixin</span>: React.PropTypes.bool,
+      <span class="hljs-attr">parentModel</span>: React.PropTypes.any,
+      <span class="hljs-attr">parentCollection</span>: React.PropTypes.any
     },</pre></div></div>
             
         </li>
@@ -157,9 +157,9 @@ optional.</p>
             
             <div class="content"><div class='highlight'><pre>    getChildContext: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
       <span class="hljs-keyword">return</span> {
-        hasParentBackboneMixin: <span class="hljs-literal">true</span>,
-        parentModel: <span class="hljs-keyword">this</span>.getModel(),
-        parentCollection: <span class="hljs-keyword">this</span>.getCollection()
+        <span class="hljs-attr">hasParentBackboneMixin</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">parentModel</span>: <span class="hljs-keyword">this</span>.getModel(),
+        <span class="hljs-attr">parentCollection</span>: <span class="hljs-keyword">this</span>.getCollection()
       };
     },</pre></div></div>
             
@@ -544,16 +544,16 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent) {
         <span class="hljs-keyword">this</span>.component.setState({
-          isRequesting: <span class="hljs-literal">false</span>,
-          hasError: <span class="hljs-literal">true</span>,
-          error: res
+          <span class="hljs-attr">isRequesting</span>: <span class="hljs-literal">false</span>,
+          <span class="hljs-attr">hasError</span>: <span class="hljs-literal">true</span>,
+          <span class="hljs-attr">error</span>: res
         });
       }
     },
-    onInvalid: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">model, res, options</span>) </span>{
+    <span class="hljs-attr">onInvalid</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">model, res, options</span>) </span>{
       <span class="hljs-keyword">if</span> (!options.silent) {
         <span class="hljs-keyword">this</span>.component.setState({
-          isInvalid: <span class="hljs-literal">true</span>
+          <span class="hljs-attr">isInvalid</span>: <span class="hljs-literal">true</span>
         });
       }
     },</pre></div></div>
@@ -590,9 +590,9 @@ to <code>this.setState</code>. It listens to <code>Backbone.Model#error</code> a
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent) {
         <span class="hljs-keyword">this</span>.component.setState({
-          isRequesting: <span class="hljs-literal">true</span>,
-          hasError: <span class="hljs-literal">false</span>,
-          isInvalid: <span class="hljs-literal">false</span>
+          <span class="hljs-attr">isRequesting</span>: <span class="hljs-literal">true</span>,
+          <span class="hljs-attr">hasError</span>: <span class="hljs-literal">false</span>,
+          <span class="hljs-attr">isInvalid</span>: <span class="hljs-literal">false</span>
         });
       }
     },</pre></div></div>
@@ -627,7 +627,7 @@ It listens to <code>Backbone.Model#sync</code> and <code>Backbone.Collection#syn
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (!options.silent) {
-        <span class="hljs-keyword">this</span>.component.setState({isRequesting: <span class="hljs-literal">false</span>});
+        <span class="hljs-keyword">this</span>.component.setState({<span class="hljs-attr">isRequesting</span>: <span class="hljs-literal">false</span>});
       }
     },</pre></div></div>
             
@@ -786,11 +786,11 @@ sets them to the component state and binds to update on any future changes</p>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (modelOrCollection <span class="hljs-keyword">instanceof</span> Backbone.Collection) {
         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; modelOrCollection.models.length; i++) {
-          attrs.push(modelOrCollection.models[i].attributes);
+          attrs.push(_.clone(modelOrCollection.models[i].attributes));
         }
         <span class="hljs-keyword">return</span> attrs;
       } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">return</span> modelOrCollection.attributes
+        <span class="hljs-keyword">return</span> _.clone(modelOrCollection.attributes);
       }
     },</pre></div></div>
             
@@ -943,7 +943,7 @@ instance found inside <code>backboneInstances.models</code> and
             </div>
             
             <div class="content"><div class='highlight'><pre>  mixin.onModel = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">component, models</span>) </span>{
-    mixin.on(component, {models: models});
+    mixin.on(component, {<span class="hljs-attr">models</span>: models});
   };</pre></div></div>
             
         </li>
@@ -960,7 +960,7 @@ instance found inside <code>backboneInstances.models</code> and
             </div>
             
             <div class="content"><div class='highlight'><pre>  mixin.onCollection = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">component, collections</span>) </span>{
-    mixin.on(component, {collections: collections});
+    mixin.on(component, {<span class="hljs-attr">collections</span>: collections});
   };</pre></div></div>
             
         </li>
